@@ -7,3 +7,4 @@ class StudyCafe(models.Model) :
     price_per_hour = models.CharField
     business_hour_start = models.CharField(max_length=32)
     business_hour_end = models.CharField(max_length=32)
+    img = models.TextField()

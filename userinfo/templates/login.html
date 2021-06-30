@@ -17,6 +17,7 @@
         <button type="submit">로그아웃</button>
     </form>
     {{user.username}} 님이 로그인 중
+    <a href="{% url 'userinfo:BUprofile' user.pk %}">마이페이지</a>
     {% else %}
     <a href="{% provider_login_url 'kakao'  %}">카카오 로그인</a>
     <br>

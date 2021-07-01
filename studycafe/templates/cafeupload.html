@@ -9,7 +9,7 @@
 <body>
     <h1>Cafe Upload Page</h1>
 
-<form action="{% url 'userinfo:' user.pk %}" method="POST" enctype="multipart/form-data">
+<form action="{% url 'userinfo:BUprofile' user.pk %}" method="POST" enctype="multipart/form-data">
     {% csrf_token%}
     <input type="text" name="name" placeholder="카페 이름">
     <input type="text" name="address" placeholder="카페 주소">

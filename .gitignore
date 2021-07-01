@@ -1,5 +1,4 @@
 .env
 venv
-secrets.json
 __pycache__
 db.sqlite3

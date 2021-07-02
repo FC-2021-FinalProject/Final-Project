@@ -131,7 +131,8 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
-SITE_ID = 1
+
+SITE_ID = 2
 
 #social Login redirection
 LOGIN_REDIRECT_URL = '/' 

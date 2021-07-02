@@ -7,9 +7,12 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Cafe List</h1>
+    <ul><h1>Cafe List</h1></ul>
     {% for cafelist in cafelists %}
-    {{cafelist}}
+    <li>{{cafelist.name}}</li>
+    <a href="{% url 'studycafe:cafedetail' cafelist.pk %}">
+        <img src="{{cafelist.img}}" width="300px;" alt="{{cafelist.name}}">
+    </a>
     {% endfor %}
 </body>
 </html>

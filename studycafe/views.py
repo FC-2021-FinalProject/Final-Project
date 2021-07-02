@@ -48,4 +48,13 @@ class CafeUploadView(View) :
             business_hour_end = request.POST['business_hour_end'],
         )
 
-        return redirect('userinfo:BUprofile', kwargs['pk'])
+        return redirect('studycafe:cafelist')
+
+
+class CafeDetailView(generic.DetailView) :
+    model = StudyCafe
+    template_name = 'cafedetail.html'
+    context_object_name = 'cafe'
+
+    def post(self, request, *args, **kwargs) :
+        return render(request, 'cafedetail.html', kwargs['pk'])

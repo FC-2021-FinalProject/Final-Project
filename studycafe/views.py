@@ -13,13 +13,13 @@ from studycafe.models import StudyCafe
 class CafeListView(generic.ListView) :
     model = StudyCafe
     template_name = 'cafelist.html'
-    context_object_name = 'buser'
+    context_object_name = 'cafelists'
 
-    def get(self, request, *args, **kwargs) :
-        return render(request, 'cafelist.html')
+    # def get(self, request, *args, **kwargs) :
+    #     return render(request, 'cafelist.html')
 
     def post(self, request, *args, **kwargs) :
-        return redirect('studycafe:cafelist', kwargs['pk'])
+        return redirect('studycafe:cafelist')
 
 class CafeUploadView(View) :
     def get(self, request, *args, **kwargs) :
@@ -41,7 +41,6 @@ class CafeUploadView(View) :
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
         StudyCafe.objects.create(
             name=request.POST['name'],
-            user = request.user,
             address= request.POST.get('address'),
             img = s3_url+now+file.name,
             price_per_hour = request.POST['price_per_hour'],
@@ -49,4 +48,4 @@ class CafeUploadView(View) :
             business_hour_end = request.POST['business_hour_end'],
         )
 
-        return redirect('social:user_list', kwargs['pk'])
+        return redirect('userinfo:BUprofile', kwargs['pk'])

@@ -5,5 +5,5 @@ app_name = 'studycafe'
 
 urlpatterns = [
     path('cafelist', CafeListView.as_view(), name='cafelist'),
-    path('cafeupload', CafeUploadView.as_view(), name='cafeupload'),
+    path('cafeupload<int:pk>', CafeUploadView.as_view(), name='cafeupload'),
 ]

@@ -1,10 +1,7 @@
 import environ
 import os
 from pathlib import Path
-<<<<<<< HEAD
 from userinfo import views
-=======
->>>>>>> f88f969449ff1e522265fe23a753a7c0979784ef
 
 
 env = environ.Env()
@@ -35,11 +32,7 @@ INSTALLED_APPS = [
     'userinfo',
     'studycafe',
 
-<<<<<<< HEAD
     # social login auth
-=======
-    # allauth
->>>>>>> f88f969449ff1e522265fe23a753a7c0979784ef
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -176,3 +169,4 @@ AWS_SECRET_ACCESS_KEY=env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME=env('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_REGION_NAME='ap-northeast-2'
 AWS_S3_OVERWRITE=False
+ 

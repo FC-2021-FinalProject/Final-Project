@@ -7,7 +7,13 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Cafe List</h1>
-    
+    <ul><h1>Cafe List</h1></ul>
+    <h2>해당하는 지역의 리스트</h2>
+    {% for cafelist in cafelists %}
+    <li>{{cafelist.name}}</li>
+    <a href="{% url 'studycafe:cafedetail' cafelist.pk %}">
+        <img src="{{cafelist.img}}" width="250px;" alt="{{cafelist.name}}">
+    </a>
+    {% endfor %}
 </body>
 </html>

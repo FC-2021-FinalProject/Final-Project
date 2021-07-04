@@ -18,9 +18,9 @@
     </form>
     {{user.username}} 님이 로그인 중
     <a href="{% url 'userinfo:BUprofile' user.pk %}">마이페이지</a><br>
-    <a href="">카페 리스트 보기</a>
+    <a href="{% url 'studycafe:cafelist' %}">카페 리스트 보기</a>
     {% else %}
-    <a href="{% provider_login_url 'kakao'  %}">카카오 로그인</a>
+    <a href="{% provider_login_url 'kakao' method='oauth2' %}">카카오 로그인</a>
     <br>
     <a href="{% provider_login_url 'google' %}">구글 로그인</a>
     {% endif %}

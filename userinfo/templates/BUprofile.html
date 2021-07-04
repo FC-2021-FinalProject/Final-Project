@@ -9,6 +9,6 @@
 <body>
     <h1>Business User My Page</h1>
     메뉴들, 내 정보(여기서 수정 가능), 내 카페(여기서 수정 가능) 등..
-    <a href="{% url 'studycafe:cafeupload' %}">카페 등록하기</a>
+    <a href="{% url 'studycafe:cafeupload' user.pk %}">카페 등록하기</a>
 </body>
 </html>

@@ -1,6 +1,10 @@
 import environ
+import os
 from pathlib import Path
+<<<<<<< HEAD
 from userinfo import views
+=======
+>>>>>>> f88f969449ff1e522265fe23a753a7c0979784ef
 
 
 env = environ.Env()
@@ -8,7 +12,7 @@ environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY=env("SECRET_KEY")
+SECRET_KEY=env('SECRET_KEY')
 
 DEBUG = True
 ALLOWED_HOSTS = []
@@ -31,7 +35,11 @@ INSTALLED_APPS = [
     'userinfo',
     'studycafe',
 
+<<<<<<< HEAD
     # social login auth
+=======
+    # allauth
+>>>>>>> f88f969449ff1e522265fe23a753a7c0979784ef
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -41,7 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.kakao',
 
     #email verificaiton
-    'django_email_verification',
+    # 'django_email_verification',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +144,8 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
-SITE_ID = 1
+
+SITE_ID = 2
 
 #social Login redirection
 LOGIN_REDIRECT_URL = '/' 
@@ -144,7 +153,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_ON_GET = True
 
 #Email Verification
-EMAIL_VERIFIED_CALLBACK = views.verified_callback
+# EMAIL_VERIFIED_CALLBACK = views.verified_callback
 EMAIL_FROM_ADDRESS = 'noreply@aliasaddress.com'
 EMAIL_MAIL_SUBJECT = 'Confirm your email'
 EMAIL_MAIL_HTML = 'mail_body.html'

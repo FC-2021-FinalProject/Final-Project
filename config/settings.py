@@ -1,6 +1,6 @@
 import environ
 from pathlib import Path
-from studycafe import views
+from userinfo import views
 
 
 env = environ.Env()
@@ -24,16 +24,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #debug toolbar
     'debug_toolbar',
+
+    #main app
     'userinfo',
     'studycafe',
 
-    # studycafe
+    # social login auth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
 
-    #Social Login
+    # social login providers
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.kakao',
 
@@ -49,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    #debug toolbar
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 

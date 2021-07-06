@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="{% url 'studycafe:cafeedit' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="카페 이름" value="{{cafe.name}}">
+        <input type="text" name="address" placeholder="카페 주소" value="{{cafe.address}}">
+        <input type="text" name="price_per_hour" placeholder="시간 당 가격" value="{{cafe.price_per_hour}}">
+        <input type="text" name="business_hour_start" placeholder="영업 오픈 시간" value="{{cafe.business_hour_start}}">
+        <input type="text" name="business_hour_end" placeholder="영업 마감 시간" value="{{cafe.business_hour_end}}">
+        
+        <button type="submit">수정하기</button>
+    </form>
+</body>
+</html>

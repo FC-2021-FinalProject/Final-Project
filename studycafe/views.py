@@ -58,3 +58,13 @@ class CafeDetailView(generic.DetailView) :
 
     def post(self, request, *args, **kwargs) :
         return render(request, 'cafedetail.html', kwargs['pk'])
+
+class CafeEditView(generic.View) :
+    model = StudyCafe
+    template_name = 'cafedetail.html'
+    context_object_name = 'cafe'
+
+    def post(self, request, *args, **kwargs) :
+
+
+        return redirect('studycafe:cafedetail')

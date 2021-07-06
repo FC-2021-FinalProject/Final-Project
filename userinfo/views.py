@@ -17,10 +17,11 @@ def logout(request) :
 class BusinessUserDetailView(generic.DeleteView) :
     model = BusinessUser
     template_name = 'BUprofile.html'
-    context_object_name = 'buser'
 
     def get(self, request, *args, **kwargs) :
-        return render(request, 'BUprofile.html')
+        buser = BusinessUser.objects.all()
+        context = {'buser':buser}
+        return render(request, 'BUprofile.html', context)
 
     def post(self, request, *args, **kwargs) :
         return redirect('userinfo:BUprofile', kwargs['pk'])

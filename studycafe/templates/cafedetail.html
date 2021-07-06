@@ -8,6 +8,7 @@
 </head>
 <body>
     <ul><h1>Cafe Detail</h1></ul>
+    <a href="{% url 'studycafe:cafeedit' %}">카페 정보 수정하기</a>
     <li>{{cafe.name}}</li>
     <img src="{{cafe.img}}" alt="cafe.name" width="250px;">
     <p>주소 : {{cafe.address}}</p>

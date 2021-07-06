@@ -1,8 +1,6 @@
 import environ
 import os
 from pathlib import Path
-# from userinfo import views
-
 
 env = environ.Env()
 environ.Env.read_env()
@@ -29,7 +27,6 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     #main app
-    'userinfo',
     'studycafe',
 
     # social login auth

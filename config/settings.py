@@ -1,7 +1,7 @@
 import environ
 import os
 from pathlib import Path
-from userinfo import views
+# from userinfo import views
 
 
 env = environ.Env()

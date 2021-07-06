@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PeresnalUser, BusinessUser
+from .models import PersonalUser, BusinessUser
 # Register your models here.
-admin.site.register(PeresnalUser)
+admin.site.register(PersonalUser)
 admin.site.register(BusinessUser)

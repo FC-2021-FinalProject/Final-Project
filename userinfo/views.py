@@ -4,6 +4,13 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from .models import PersonalUser, BusinessUser
 
+ERROR_MSG = {
+    'EXIST_ID': '이미 존재하는 아이디 입니다.',
+    'NO_EXIST_ID' : '존재하지 않는 아이디 입니다.',
+    'MISSING_INPUT': '필수항목을 작성해주세요.',
+    'PASSWORD_CHECK': '비밀번호를 확인해주세요',
+}
+
 def verified_callback(user):
     user.is_active = True
 

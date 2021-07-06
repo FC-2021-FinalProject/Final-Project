@@ -1,6 +1,7 @@
 import environ
 import os
 from pathlib import Path
+from userinfo import views
 
 
 env = environ.Env()
@@ -24,16 +25,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #debug toolbar
     'debug_toolbar',
+
+    #main app
     'userinfo',
     'studycafe',
 
-    # allauth
+    # social login auth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
 
-    #Social Login
+    # social login providers
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.kakao',
 
@@ -49,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    #debug toolbar
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
@@ -131,7 +137,8 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
-SITE_ID = 1
+
+SITE_ID = 2
 
 #social Login redirection
 LOGIN_REDIRECT_URL = '/' 
@@ -162,3 +169,4 @@ AWS_SECRET_ACCESS_KEY=env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME=env('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_REGION_NAME='ap-northeast-2'
 AWS_S3_OVERWRITE=False
+ 

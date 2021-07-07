@@ -73,16 +73,16 @@ class CafeEditView(generic.View) :
         )
         s3 = session.resource('s3')
         now = datetime.now().strftime('%Y%H%M%S')
-        img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
-            Key=now+file.name,
-            Body=file
-        )
+        # img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+        #     Key=now+file.name,
+        #     Body=file
+        # )
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
 
         StudyCafe.objects.filter(pk=kwargs['pk']).update(
             name=request.POST['name'],
             address= request.POST.get('address'),
-            img = s3_url+now+file.name,
+            # img = s3_url+now+file.name,
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],

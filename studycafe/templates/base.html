@@ -7,11 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Business User My Page</h1>
-    <ul><h2>메뉴들</h2></ul> 
-    <li> 내 정보</li>
-    {{buser}}
-    <li> 내 카페</li>
-    <a href="{% url 'studycafe:cafeupload' user.pk %}">카페 등록하기</a>
+{% block content %}
+
+{% endblock content %}
 </body>
 </html>

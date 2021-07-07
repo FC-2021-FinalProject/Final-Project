@@ -1,5 +1,18 @@
-.env
-venv
-__pycache__
+# General Mac OS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
 db.sqlite3
-migrations
+migrations/
+
+# Environments
+.env
+.venv
+venv/

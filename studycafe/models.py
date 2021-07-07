@@ -19,7 +19,7 @@ class BusinessUser(models.Model):
     name = models.CharField(max_length=64)
     email = models.CharField(max_length=64)
     email_authenticated = models.BooleanField(default=False)
-    registration_number = models.IntegerField(default=null, null=True, blank=True)
+    registration_number = models.IntegerField(null=True, blank=True)
 
 
 class StudyCafe(models.Model) :

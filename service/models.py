@@ -1,5 +1,5 @@
 from django.utils import tree
-from userinfo.models import PersonalUser
+from studycafe.models import PersonalUser
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.base import Model

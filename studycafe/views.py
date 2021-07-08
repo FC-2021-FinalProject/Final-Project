@@ -114,7 +114,7 @@ def logout(request) :
     if request.method == 'POST' :
         auth.logout(request)
         
-    return redirect('userinfo:login')
+    return redirect('login')
 
 
 class BusinessUserDetailView(generic.DeleteView) :
@@ -127,7 +127,7 @@ class BusinessUserDetailView(generic.DeleteView) :
         return render(request, 'BUprofile.html', context)
 
     def post(self, request, *args, **kwargs) :
-        return redirect('userinfo:BUprofile', kwargs['pk'])
+        return redirect('BUprofile', kwargs['pk'])
 
 
 class CafeListView(generic.ListView) :
@@ -136,7 +136,7 @@ class CafeListView(generic.ListView) :
     context_object_name = 'cafelists'
 
     def post(self, request, *args, **kwargs) :
-        return redirect('studycafe:cafelist')
+        return redirect('cafelist')
 
 
 class CafeUploadView(View) :
@@ -166,7 +166,7 @@ class CafeUploadView(View) :
             business_hour_end = request.POST['business_hour_end'],
         )
 
-        return redirect('studycafe:cafelist')
+        return redirect('cafelist')
 
 
 class CafeDetailView(generic.DetailView) :
@@ -210,4 +210,10 @@ class CafeEditView(generic.View) :
             business_hour_end = request.POST['business_hour_end'],
         )
 
-        return redirect('studycafe:cafedetail', kwargs['pk'])
+        return redirect('cafedetail', kwargs['pk'])
+
+def cafedelete(request, cafe_pk) :
+    cafe = StudyCafe.objects.filter(pk=cafe_pk)
+    cafe.update(is_deleted=True)
+
+    return redirect('BUprofile', cafe_pk)

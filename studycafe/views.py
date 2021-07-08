@@ -195,7 +195,7 @@ class BusinessUserDetailView(generic.DeleteView) :
         return render(request, 'BUprofile.html', context)
 
     def post(self, request, *args, **kwargs) :
-        return redirect('userinfo:BUprofile', kwargs['pk'])
+        return redirect('BUprofile', kwargs['pk'])
 
 
 class CafeListView(generic.ListView) :
@@ -279,3 +279,9 @@ class CafeEditView(generic.View) :
         )
 
         return redirect('cafedetail', kwargs['pk'])
+
+def cafedelete(request, cafe_pk) :
+    cafe = StudyCafe.objects.filter(pk=cafe_pk)
+    cafe.update(is_deleted=True)
+
+    return redirect('BUprofile', cafe_pk)

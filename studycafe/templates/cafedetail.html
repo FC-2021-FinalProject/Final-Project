@@ -8,6 +8,7 @@
 </head>
 <body>
     <ul><h1>Cafe Detail</h1></ul>
+    <p>지점 소개  |  사진  |  위치  |  후기</p>
     <a href="{% url 'cafeedit' cafe.pk %}">카페 정보 수정하기</a>
     <li>{{cafe.name}}</li>
     <img src="{{cafe.img}}" alt="cafe.name" width="250px;">

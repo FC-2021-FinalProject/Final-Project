@@ -38,6 +38,7 @@ class StudyCafe(models.Model) :
     business_hour_start = models.CharField(max_length=32)
     business_hour_end = models.CharField(max_length=32)
     img = models.TextField()
+    # is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

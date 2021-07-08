@@ -1,0 +1,33 @@
+{% extends "base.html"%}
+
+
+{% block head %}
+{% load static %}
+<!-- fontawesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+<!-- login modal window -->
+<script defer src="{% static 'login.js' %}"></script>
+{% endblock head%}
+
+{% block content %}
+{% load socialaccount %}
+{% providers_media_js %}
+<section>
+    <h2>로그인 페이지:)</h2>
+        <form  action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            <label for="login-name">username</label>
+            <input type="text" id="login-name" name="login-name" placeholder="Enter your username.">
+            
+            <label for="login-password">password</label>
+            <input type="password" id="login-password" name="login-password" placeholder="Enter your password.">
+            
+            <button type="submit">Login</button>
+        </form>
+        <br>
+        <a href="{% provider_login_url 'kakao' method='oauth2' %}"><i class="fas fa-comment mr-2"></i>카카오 로그인</a>
+        <br>
+        <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>구글 로그인</a>
+</section>
+
+{% endblock content %}

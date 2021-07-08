@@ -35,9 +35,11 @@ def business_signup(request):
 
     if request.method == 'POST':
         userid = request.POST['signup-name']
+        email = request.POST['signup-email']
         password = request.POST['signup-password']
         password_check = request.POST['signup-password-check']
         full_name = request.POST['signup-fullname']
+
 
         if full_name.find(' '):
             first_name=full_name.split()[0]
@@ -53,23 +55,25 @@ def business_signup(request):
             context['error']['state'] = True
             context['error']['msg'] = ERROR_MSG['ID_EXIST']
         
-        if (not userid or not password or not password_check or not full_name):
+        if (not userid or not email or not password or not password_check or not full_name):
             context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['INPUT_MISSING']
+            context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
 
         if (password != password_check):
             context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['PW_CHECK']
+            context['error']['msg'] = ERROR_MSG['PASSWORD_CHECK']
 
         if (context['error']['state'] is False):
             user = User.objects.create_user(
                 username=userid,
+                email=email,
                 password=password,
                 first_name=first_name,
                 last_name=last_name,
             )
-            Profile.objects.create(
+            BusinessUser.objects.create(
                 user=user,
+                email=email,
                 name=full_name,
             )
 
@@ -110,13 +114,13 @@ def personal_signup(request):
             context['error']['state'] = True
             context['error']['msg'] = ERROR_MSG['ID_EXIST']
         
-        if (not userid or not password or not password_check or not full_name):
+        if (not userid or not email or not password or not password_check or not full_name):
             context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['INPUT_MISSING']
+            context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
 
         if (password != password_check):
             context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['PW_CHECK']
+            context['error']['msg'] = ERROR_MSG['PASSWORD_CHECK']
 
         if (context['error']['state'] is False):
             user = User.objects.create_user(
@@ -147,6 +151,7 @@ def login(request) :
             'msg': '',
         }
     }
+
     if request.user.is_authenticated:
         return redirect('index')
 
@@ -156,23 +161,23 @@ def login(request) :
 
         if (not userid or not password):
             context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['ID_PW_MISSING']
-            return render(request, 'login.html', context)
+            context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
+            return render(request, 'index.html', context)
 
         try: 
             user = User.objects.get(username=userid)
         except:
             context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['ID_NOT_EXIST']
-            return render(request, 'login.html', context)
+            context['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
+            return render(request, 'index.html', context)
 
         auth_user = auth.authenticate(username=userid, password=password)
 
-        if(auth_user):
+        if (auth_user):
             auth.login(request, auth_user)
             return redirect('index')
 
-    return render(request, 'index.html')
+    return render(request, 'login.html')
 
 def logout(request) :
     if request.method == 'POST' :
@@ -199,7 +204,7 @@ class CafeListView(generic.ListView) :
     context_object_name = 'cafelists'
 
     def post(self, request, *args, **kwargs) :
-        return redirect('studycafe:cafelist')
+        return redirect('cafelist')
 
 
 class CafeUploadView(View) :
@@ -229,7 +234,7 @@ class CafeUploadView(View) :
             business_hour_end = request.POST['business_hour_end'],
         )
 
-        return redirect('studycafe:cafelist')
+        return redirect('cafelist')
 
 
 class CafeDetailView(generic.DetailView) :
@@ -273,4 +278,4 @@ class CafeEditView(generic.View) :
             business_hour_end = request.POST['business_hour_end'],
         )
 
-        return redirect('studycafe:cafedetail', kwargs['pk'])
+        return redirect('cafedetail', kwargs['pk'])

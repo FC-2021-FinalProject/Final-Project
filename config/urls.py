@@ -11,10 +11,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     #
-    path('', views.index, name="index"),
+    path('', views.index, name='index'),
     
     # auth
-    path('login/', views.login, name="login"),
+    path('signup/join/personal', views.personal_signup, name='personal_signup'),
+    path('signup/join/business', views.business_signup, name='business_signup'),
+    path('', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     
     # social login

@@ -121,44 +121,18 @@ STATIC_ROOT = './static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AUTHENTICATION_BACKENDS = (
-    # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
-
 INTERNAL_IPS = [
     # ...
     '127.0.0.1',
     # ...
 ]
 
-SITE_ID = 2
+SITE_ID = 1
 
 #social Login redirection
 LOGIN_REDIRECT_URL = '/' 
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_ON_GET = True
-
-#Email Verification
-# EMAIL_VERIFIED_CALLBACK = views.verified_callback
-EMAIL_FROM_ADDRESS = 'noreply@aliasaddress.com'
-EMAIL_MAIL_SUBJECT = 'Confirm your email'
-EMAIL_MAIL_HTML = 'mail_body.html'
-EMAIL_MAIL_PLAIN = 'mail_body.txt'
-EMAIL_TOKEN_LIFE = 60 * 60
-EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
-EMAIL_PAGE_DOMAIN = 'http://mydomain.com/'
-
-# For Django Email Backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mymail@gmail.com'
-EMAIL_HOST_PASSWORD = 'mYC00lP4ssw0rd'  # os.environ['password_key'] suggested
-EMAIL_USE_TLS = True
 
 # AWS
 AWS_ACCESS_KEY_ID=env('AWS_ACCESS_KEY_ID')

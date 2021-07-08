@@ -13,7 +13,7 @@ from .models import PersonalUser, BusinessUser
 from studycafe.models import StudyCafe
 
 ERROR_MSG = {
-    'EXIST_ID': '이미 존재하는 아이디 입니다.',
+    'ID_EXIST': '이미 존재하는 아이디 입니다.',
     'NO_EXIST_ID' : '존재하지 않는 아이디 입니다.',
     'MISSING_INPUT': '필수항목을 작성해주세요.',
     'PASSWORD_CHECK': '비밀번호를 확인해주세요',
@@ -26,96 +26,159 @@ def verified_callback(user):
     user.is_active = True
 
 def business_signup(request):
-    if request.method == 'POST': 
-        name = request.POST['signup_name']
-        password = request.POST['signup_password']
-        email = request.POST['signup_email']
+    context = {
+            'error': {
+                'state': False,
+                'msg': '',
+            }
+        }
 
-        user = User.objects.create_user(username=name, password=password, email=email)
-        BusinessUser.objects.create(user=user,name=name)
+    if request.method == 'POST':
+        userid = request.POST['signup-name']
+        password = request.POST['signup-password']
+        password_check = request.POST['signup-password-check']
+        full_name = request.POST['signup-fullname']
+
+        if full_name.find(' '):
+            first_name=full_name.split()[0]
+            last_name=full_name.split()[1]
+
+        else: 
+            first_name=full_name
+            last_name='',
+
+        user = User.objects.filter(username=userid)
+
+        if (len(user) != 0):
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['ID_EXIST']
         
-        user = auth.get_user_model().objects.create(username=name, password=password, email=email)
-        # change is_active to True for testing purposes
-        user.is_active = True
-        # do not send email while testing
+        if (not userid or not password or not password_check or not full_name):
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['INPUT_MISSING']
 
-        # send_email(user, custom_salt=my_custom_key_salt)
-        
-        # email_subject = 'Activate Your Account'
-        # email_body = ''
+        if (password != password_check):
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['PW_CHECK']
 
-        # email = EmailMessage(
-        #     email_subject,
-        #     email_body,
-        #     'from@example.com',
-        #     [email],
-        #     )
-        # email.send(fail_silently=False)
-        auth.login(request, user)
+        if (context['error']['state'] is False):
+            user = User.objects.create_user(
+                username=userid,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+            )
+            Profile.objects.create(
+                user=user,
+                name=full_name,
+            )
 
-        return redirect ('index')
+            auth.login(request, user)
 
-    else:
-        return render(request, 'signup.html')
+            return redirect('index')
+
+    return render(request, 'personal_signup.html', context)
+
 
 
 def personal_signup(request):
-    context = {'error': {'state': False, 'msg': ERROR_MSG}}    
-    if request.method == 'POST': 
-        name = request.POST['signup-name']
-        password = request.POST['signup-password']
+    context = {
+            'error': {
+                'state': False,
+                'msg': '',
+            }
+    }
+
+    if request.method == 'POST':
+        userid = request.POST['signup-username']
         email = request.POST['signup-email']
+        password = request.POST['signup-password']
+        password_check = request.POST['signup-password-check']
+        full_name = request.POST['signup-fullname']
 
-        user = User.objects.create_user(username=name, password=password, email=email)
-        PersonalUser.objects.create(user=user,name=name)
+        if full_name.find(' '):
+            first_name=full_name.split()[0]
+            last_name=full_name.split()[1]
+
+        else: 
+            first_name=full_name
+            last_name='',
+
+        user = User.objects.filter(username=userid)
+
+        if (len(user) != 0):
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['ID_EXIST']
         
-        user = auth.get_user_model().objects.create(username=name, password=password, email=email)
-        # change is_active to True for testing purposes
-        user.is_active = True
-        # do not send email while testing
-        
-        # send_email(user, custom_salt=my_custom_key_salt)
-        # email_subject = 'Activate Your Account'
-        # email_body = ''
+        if (not userid or not password or not password_check or not full_name):
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['INPUT_MISSING']
 
-        # email = EmailMessage(
-        #     email_subject,
-        #     email_body,
-        #     'from@example.com',
-        #     [email],
-        #     )
-        # email.send(fail_silently=False)
-        auth.login(request, user)
+        if (password != password_check):
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['PW_CHECK']
 
-        return redirect ('index')
+        if (context['error']['state'] is False):
+            user = User.objects.create_user(
+                username=userid,
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+            )
+            PersonalUser.objects.create(
+                user=user,
+                email=email,
+                name=full_name,
+            )
 
-    else:
-        return render(request, 'signup.html', context)
+            auth.login(request, user)
+
+            return redirect('index')
+
+    return render(request, 'personal_signup.html', context)
 
 
 def login(request) :
-    context = {'error': {'state': False, 'msg': ERROR_MSG}}
+ 
+    context = {
+        'error': {
+            'state': False,
+            'msg': '',
+        }
+    }
+    if request.user.is_authenticated:
+        return redirect('index')
 
-    name = request.POST['login-name']
-    password = request.POST['login-password']
-    user = auth.authenticate(request, username = name, password = password)
-    
-    if user is not None:
-        auth.login(request, user)
-        return redirect('login')
-    
-    else:
-        context['error']['state'] = True
-        context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
-        return render(request, 'login.html', context)
-    
-    
+    if request.method == 'POST':
+        userid = request.POST['login-name']
+        password = request.POST['login-password']
+
+        if (not userid or not password):
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['ID_PW_MISSING']
+            return render(request, 'login.html', context)
+
+        try: 
+            user = User.objects.get(username=userid)
+        except:
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['ID_NOT_EXIST']
+            return render(request, 'login.html', context)
+
+        auth_user = auth.authenticate(username=userid, password=password)
+
+        if(auth_user):
+            auth.login(request, auth_user)
+            return redirect('index')
+
+    return render(request, 'index.html')
+
 def logout(request) :
     if request.method == 'POST' :
         auth.logout(request)
         
-    return redirect('userinfo:login')
-
+    return redirect('index')
 
 class BusinessUserDetailView(generic.DeleteView) :
     model = BusinessUser

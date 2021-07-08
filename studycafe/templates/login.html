@@ -1,7 +1,4 @@
 {% extends "base.html"%}
-<<<<<<< HEAD
-
-
 {% block head %}
 {% load static %}
 <!-- fontawesome -->
@@ -31,35 +28,4 @@
         <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>구글 로그인</a>
 </section>
 
-=======
-{% block content %}
-{% load socialaccount %}
-{% providers_media_js %}
-
-<h1>Login Page</h1>
-{% if user.is_authenticated %}
-<form action="{% url 'logout' %}" method="POST">
-    {% csrf_token %}
-    <button type="submit">로그아웃</button>
-</form>
-{{user.username}} 님이 로그인 중
-<a href="{% url 'BUprofile' user.pk %}">비즈니스 유저 마이페이지</a><br>
-<a href="{% url 'cafelist' %}">카페 리스트 보기</a>
-
-{% else %}
-
-<form action="{% url 'login' %}" method="POST">
-    <label for="login-name"></label>
-    <input type="text" id="login-name" name="login-name" placeholder="Enter your usename.">
-    <label for="login-password"></label>
-    <input type="password" id="login-name" name="login-password" placeholder="Enter your password.">
-</form>
-
-
-<a href="{% provider_login_url 'kakao' method='oauth2' %}">카카오 로그인</a>
-<br>
-<a href="{% provider_login_url 'google' %}">구글 로그인</a>
-
-{% endif %}
->>>>>>> bde258a128ad628bb18fa6e20efe598ff3d0c03d
 {% endblock content %}

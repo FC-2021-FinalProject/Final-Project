@@ -127,7 +127,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #     # `allauth` specific authentication methods, such as login by e-mail
 #     'allauth.account.auth_backends.AuthenticationBackend',
-    
 # ]
 
 INTERNAL_IPS = [

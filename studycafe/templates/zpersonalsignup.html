@@ -1,0 +1,45 @@
+{% extends "base.html"%}
+
+{% block content %}
+<section class="signup-container">
+    <h2 class="signup-form-header">박도비팀 회원가입:)</h2>
+        <form class="signup-form" action="{% url 'personal_signup' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-control">
+                <label class="a11y-hidden" for="signup-name">username</label>
+                <input class="auth-items auth-items-username" type="text" id="signup-name" name="signup-name" placeholder="Enter your username.">
+                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-exclamation-circle"></i>
+                <small>error message</small>
+            </div>
+            <div>
+                <label for="signup-email">email</label>
+                <input type="text" id="signup-email" name="signup-email" placeholder="Enter your email.">
+                <i class="fas fa-check-circle success"></i>
+                <i class="fas fa-exclamation-circle error"></i>
+                <small>error message</small>
+            </div>
+            <div class="form-control">
+                <label class="a11y-hidden" for="signup-password">password</label>
+                <input class="auth-items auth-items-password" type="password" id="signup-password" name="signup-password" placeholder="Enter your password.">
+                <i class="fas fa-check-circle success"></i>
+                <i class="fas fa-exclamation-circle error"></i>
+                <small>error message</small>
+            </div>
+            <div class="form-control">
+                <label class="a11y-hidden" for="signup-password-check">password check</label>
+                <input class="auth-items auth-items-password" type="password" id="signup-password-check" name="signup-password-check" placeholder="Enter your password.">
+                <i class="fas fa-check-circle success"></i>
+                <i class="fas fa-exclamation-circle error"></i>
+                <small>error message</small>
+            </div>
+            <div>
+                <label for="signup-fullname">full name</label>
+                <input type="text" id="signup-fullname" name="signup-fullname" placeholder="Enter your full name.">
+                <i class="fas fa-check-circle success"></i>
+                <i class="fas fa-exclamation-circle error"></i>
+                <small>error message</small>
+            </div>
+            <button type="submit">Signup</button>
+        </form>
+</section>

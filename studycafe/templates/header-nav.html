@@ -1,2 +1,19 @@
-<h1>I am header NAV!</h1>
-<nav></nav>
+{% block head %}
+{% load static %}
+<script defer src="{% static 'navbar.js' %}"></script>
+{% endblock head %}
+
+<div class="header">
+    <h1>박도비팀 프로젝트</h1>
+    <input id="header-nav-search-bar" type="text" placeholder="스터디 카페 검색하기"/>
+    <div>
+        <ul class="header-nav-menu-list">
+            <li ><a href="#" role="button" class="popup-button">회원가입</a></li>
+            <li ><a href="#" role="button" class="popup-button">로그인</a></li>
+            <li><a href="#" role="button">마이페이지</a></li>
+            <li><a href="#" role="button">예약확인</a></li>
+        </ul>
+    </div>
+    <div>{{user.personal_user.selfie}}</div>
+
+</div>

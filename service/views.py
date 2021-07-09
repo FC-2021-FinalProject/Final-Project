@@ -22,7 +22,7 @@ class ReservationView(generic.View) :
         start_time = request.POST['start_time']
         time = request.POST['time']
         seat_type = request.POST['seat_type']
-        studycafe = StudyCafe.objects.filter(pk=kwargs['pk']).first()
+        studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
 
         if date :
             if (start_time and time) :

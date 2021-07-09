@@ -9,8 +9,7 @@ from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
 from datetime import date, datetime
 
-from .models import PersonalUser, BusinessUser
-from studycafe.models import StudyCafe
+from studycafe.models import PersonalUser, BusinessUser, StudyCafe
 
 ERROR_MSG = {
     'ID_EXIST': '이미 존재하는 아이디 입니다.',
@@ -22,126 +21,95 @@ ERROR_MSG = {
 def index(request):
     return render(request, 'index.html')
 
+# function for email authentication
 def verified_callback(user):
     user.is_active = True
 
 def business_signup(request):
-    context = {
-            'error': {
-                'state': False,
-                'msg': '',
-            }
-        }
+    validation_context  = {'error': {'state': False,'msg': '',}}
 
     if request.method == 'POST':
-        userid = request.POST['signup-name']
-        email = request.POST['signup-email']
-        password = request.POST['signup-password']
+        user_name = request.POST['signup-name']
+        user_email = request.POST['signup-email']
+        user_password = request.POST['signup-password']
         password_check = request.POST['signup-password-check']
-        full_name = request.POST['signup-fullname']
+        registration_number = request.POST['signup-registration-number']
 
-
-        if full_name.find(' '):
-            first_name=full_name.split()[0]
-            last_name=full_name.split()[1]
-
-        else: 
-            first_name=full_name
-            last_name='',
-
-        user = User.objects.filter(username=userid)
-
-        if (len(user) != 0):
-            context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['ID_EXIST']
+        if len(User.objects.filter(username=user_name)) != 0:
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['ID_EXIST']
         
-        if (not userid or not email or not password or not password_check or not full_name):
-            context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
+        if (not user_name or not user_email or not user_password or not password_check):
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
 
-        if (password != password_check):
-            context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['PASSWORD_CHECK']
+        if (user_password != password_check):
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['PASSWORD_CHECK']
 
-        if (context['error']['state'] is False):
+        if (validation_context['error']['state'] is False):
             user = User.objects.create_user(
-                username=userid,
-                email=email,
-                password=password,
-                first_name=first_name,
-                last_name=last_name,
+                username=user_name,
+                email=user_email,
+                password=user_password,
             )
-            BusinessUser.objects.create(
+            new_account = BusinessUser.objects.create(
                 user=user,
-                email=email,
-                name=full_name,
+                email=user_email,
+                name=user_name,
+                registration_number=registration_number,
             )
+            # add logic for email verification
+            new_account.objects.update(email_authenticated=True)
 
             auth.login(request, user)
 
             return redirect('index')
 
-    return render(request, 'personal_signup.html', context)
-
+    return render(request, 'index.html', validation_context)
 
 
 def personal_signup(request):
-    context = {
-            'error': {
-                'state': False,
-                'msg': '',
-            }
-    }
+
+    validation_context  = {'error': {'state': False,'msg': '',}}
 
     if request.method == 'POST':
-        userid = request.POST['signup-username']
-        email = request.POST['signup-email']
-        password = request.POST['signup-password']
+        user_name = request.POST['signup-name']
+        user_email = request.POST['signup-email']
+        user_password = request.POST['signup-password']
         password_check = request.POST['signup-password-check']
-        full_name = request.POST['signup-fullname']
-
-        if full_name.find(' '):
-            first_name=full_name.split()[0]
-            last_name=full_name.split()[1]
-
-        else: 
-            first_name=full_name
-            last_name='',
-
-        user = User.objects.filter(username=userid)
-
-        if (len(user) != 0):
-            context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['ID_EXIST']
+    
+        if len(User.objects.filter(username=user_name)) != 0:
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['ID_EXIST']
         
-        if (not userid or not email or not password or not password_check or not full_name):
-            context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
+        if (not user_name or not user_email or not user_password or not password_check):
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
 
-        if (password != password_check):
-            context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['PASSWORD_CHECK']
+        if (user_password != password_check):
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['PASSWORD_CHECK']
 
-        if (context['error']['state'] is False):
+        if (validation_context['error']['state'] is False):
             user = User.objects.create_user(
-                username=userid,
-                email=email,
-                password=password,
-                first_name=first_name,
-                last_name=last_name,
+                username=user_name,
+                email=user_email,
+                password=user_password,
             )
-            PersonalUser.objects.create(
+            new_account = PersonalUser.objects.create(
                 user=user,
-                email=email,
-                name=full_name,
+                email=user_email,
+                name=user_name,
             )
+            # add logic for email verification
+            new_account.objects.update(email_authenticated=True)
 
             auth.login(request, user)
 
             return redirect('index')
 
-    return render(request, 'personal_signup.html', context)
-
+    return render(request, 'index.html', validation_context)
 
 def login(request) :
  

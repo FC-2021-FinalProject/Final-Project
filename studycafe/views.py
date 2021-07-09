@@ -112,45 +112,37 @@ def personal_signup(request):
     return render(request, 'index.html', validation_context)
 
 def login(request) :
- 
-    context = {
-        'error': {
-            'state': False,
-            'msg': '',
-        }
-    }
+
+    validation_context = {'error': {'state': False,'msg': '',}}
 
     if request.user.is_authenticated:
         return redirect('index')
 
     if request.method == 'POST':
-        userid = request.POST['login-name']
-        password = request.POST['login-password']
+        user_name = request.POST['login-name']
+        user_password = request.POST['login-password']
 
-        if (not userid or not password):
-            context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
-            return render(request, 'index.html', context)
-
+        if (not user_name or not user_password):
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
+            return render(request, 'index.html', validation_context)
         try: 
-            user = User.objects.get(username=userid)
+            user = User.objects.get(username=user_name)
         except:
-            context['error']['state'] = True
-            context['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
-            return render(request, 'index.html', context)
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
+            return render(request, 'index.html', validation_context)
 
-        auth_user = auth.authenticate(username=userid, password=password)
+        auth_user = auth.authenticate(username=user_name, password=user_password)
 
         if (auth_user):
             auth.login(request, auth_user)
             return redirect('index')
-
     return render(request, 'login.html')
 
 def logout(request) :
     if request.method == 'POST' :
         auth.logout(request)
-        
     return redirect('index')
 
 class BusinessUserDetailView(generic.DeleteView) :

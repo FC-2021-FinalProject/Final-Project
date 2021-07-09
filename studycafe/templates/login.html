@@ -14,7 +14,9 @@
 <a href="{% url 'cafelist' %}">카페 리스트 보기</a>
 
 {% else %}
-
+    {% if error.state %}
+<p> {{ error.msg }} </p>
+    {% endif %}
 <form action="{% url 'login' %}" method="POST">
     {% csrf_token %}
     <label for="login-name"></label>

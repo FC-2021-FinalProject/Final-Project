@@ -25,9 +25,9 @@
     {% if user.business_user %}
     <a href="{% url 'BUprofile' user.pk %}">비즈니스 페이지</a>
     <br>
-    <!-- {% else %}
-    <a href="{% url 'PersonalPage' user.pk %}">마이 페이지</a>
-    <br> -->
+    {% elif user.personal_user %}
+    <a href="####">마이 페이지</a>
+    <br>
     {% endif %}
     <a href="{% url 'cafelist' %}">카페 리스트 보기</a>
     

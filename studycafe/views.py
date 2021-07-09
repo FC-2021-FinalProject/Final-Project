@@ -59,15 +59,13 @@ def business_signup(request):
                 email=user_email,
                 name=user_name,
                 registration_number=registration_number,
+        # add logic for email verification
+                email_authenticated=True,
+
             )
-            # add logic for email verification
-            new_account.objects.update(email_authenticated=True)
-
             auth.login(request, user)
-
             return redirect('index')
-
-    return render(request, 'index.html', validation_context)
+        return render(request, 'index.html', validation_context)
 
 
 def personal_signup(request):
@@ -104,15 +102,13 @@ def personal_signup(request):
                 user=user,
                 email=user_email,
                 name=user_name,
-            )
             # add logic for email verification
-            new_account.objects.update(email_authenticated=True)
-
+                email_authenticated=True,
+            )
+ 
             auth.login(request, user)
-
             return redirect('index')
-
-    return render(request, 'index.html', validation_context)
+        return render(request, 'index.html', validation_context)
 
 def login(request) :
 
@@ -141,7 +137,7 @@ def login(request) :
         if (auth_user):
             auth.login(request, auth_user)
             return redirect('index')
-    return render(request, 'login.html')
+    return render(request, 'login.html', validation_context)
 
 def logout(request) :
     if request.method == 'POST' :

@@ -29,6 +29,7 @@ INSTALLED_APPS = [
 
     #main app
     'studycafe',
+    'service',
 
     # social login auth
     'allauth',

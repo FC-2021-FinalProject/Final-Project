@@ -8,6 +8,7 @@ from studycafe import views
 from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete
 from studycafe.views import BusinessUserDetailView
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     
@@ -35,4 +36,7 @@ urlpatterns = [
 
     # django debugger tool
     path('__debug__/', include(debug_toolbar.urls)),
+
+    # service 
+    path('',include('service.urls')),
 ]

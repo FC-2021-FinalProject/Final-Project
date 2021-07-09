@@ -30,16 +30,17 @@ def business_signup(request):
 
     if request.method == 'POST':
         user_name = request.POST['signup-name']
+        user_username=request.POST['signup-username']
         user_email = request.POST['signup-email']
         user_password = request.POST['signup-password']
         password_check = request.POST['signup-password-check']
         registration_number = request.POST['signup-registration-number']
 
-        if len(User.objects.filter(username=user_name)) != 0:
+        if len(User.objects.filter(username=user_username)) != 0:
             validation_context['error']['state'] = True
             validation_context['error']['msg'] = ERROR_MSG['ID_EXIST']
         
-        if (not user_name or not user_email or not user_password or not password_check):
+        if (not user_name or not user_email or not user_password or not password_check or not user_username):
             validation_context['error']['state'] = True
             validation_context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
 
@@ -49,7 +50,7 @@ def business_signup(request):
 
         if (validation_context['error']['state'] is False):
             user = User.objects.create_user(
-                username=user_name,
+                username=user_username,
                 email=user_email,
                 password=user_password,
             )
@@ -74,16 +75,18 @@ def personal_signup(request):
     validation_context  = {'error': {'state': False,'msg': '',}}
 
     if request.method == 'POST':
+
         user_name = request.POST['signup-name']
+        user_username=request.POST['signup-username']
         user_email = request.POST['signup-email']
         user_password = request.POST['signup-password']
         password_check = request.POST['signup-password-check']
-    
+
         if len(User.objects.filter(username=user_name)) != 0:
             validation_context['error']['state'] = True
             validation_context['error']['msg'] = ERROR_MSG['ID_EXIST']
         
-        if (not user_name or not user_email or not user_password or not password_check):
+        if (not user_name or not user_email or not user_password or not password_check or not user_username):
             validation_context['error']['state'] = True
             validation_context['error']['msg'] = ERROR_MSG['MISSING_INPUT']
 
@@ -93,7 +96,7 @@ def personal_signup(request):
 
         if (validation_context['error']['state'] is False):
             user = User.objects.create_user(
-                username=user_name,
+                username=user_username,
                 email=user_email,
                 password=user_password,
             )

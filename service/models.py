@@ -11,10 +11,15 @@ class Reservation(models.Model):
 
 #model fields
     date = models.TextField()
-    start_time = models.TextField()
     seat_type = models.TextField()
-    state = models.TextChoices('state', 'complete None')
+    state = models.BooleanField(default=False)
     time = models.TextField()
+
+    TIME_CHOICE = (
+        ('09:00', '09:00'), ('10:00', '10:00'), ('11:00', '11:00'), ('12:00', '12:00'), ('13:00', '13:00'), ('14:00', '14:00'), ('15:00', '15:00'), ('16:00', '16:00'), ('17:00', '17:00'), ('18:00', '18:00'), ('19:00', '19:00'),('20:00', '20:00'),
+    )
+    start_time = models.CharField(max_length=32, choices=TIME_CHOICE)
+
 
 class Review(models.Model):
 # Review model realtionship
@@ -23,7 +28,7 @@ class Review(models.Model):
 
 # model fields   
     comment = models.TextField()
-    star = models.TextChoices('star', '1 2 3 4 5')
+    star = models.TextField()
 
 class Payment(models.Model):
 # Payment model relationship

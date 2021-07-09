@@ -17,7 +17,6 @@
     <p>오픈 시간 : {{cafe.business_hour_start}}</p>
     <p>마감 시간 : {{cafe.business_hour_end}}</p>
 
-    
     {{reserv}}
     <form action="{% url 'service:reservation' cafe.pk %}" method="POST">
         {% csrf_token %}

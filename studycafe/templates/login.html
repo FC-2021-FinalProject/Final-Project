@@ -16,10 +16,12 @@
 {% else %}
 
 <form action="{% url 'login' %}" method="POST">
+    {% csrf_token %}
     <label for="login-name"></label>
     <input type="text" id="login-name" name="login-name" placeholder="Enter your usename.">
     <label for="login-password"></label>
     <input type="password" id="login-name" name="login-password" placeholder="Enter your password.">
+    <button type="SUBMIT"> LOGIN </button>
 </form>
 
 

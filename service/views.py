@@ -17,7 +17,9 @@ class ReservationView(generic.View) :
         time = request.POST['time']
         seat_type = request.POST['seat_type']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
+        state = Reservation.objects.filter(state=False).update(state=True)
 
+        # is_valid ?
         if date :
             if (start_time and time) :
                 if seat_type :
@@ -27,7 +29,8 @@ class ReservationView(generic.View) :
                         time = time,
                         seat_type = seat_type,
                         user = request.user,
-                        studycafe = studycafe
+                        studycafe = studycafe,
+                        state = state
                     )
 
         return redirect('cafedetail', kwargs['pk'])

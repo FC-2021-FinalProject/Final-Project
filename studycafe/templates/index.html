@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 {% block head %}
+
 {% load static %}
 <!-- fontawesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 {% endblock head%}
+
 {% block content %}
+
 {% include 'header-nav.html' %}
 {% load socialaccount %}
 {% providers_media_js %}
@@ -19,7 +22,13 @@
     </form>
     {{user.username}} 님이 로그인 중
 
-    <a href="{% url 'BUprofile' user.pk %}">마이페이지</a><br>
+    {% if user.business_user %}
+    <a href="{% url 'BUprofile' user.pk %}">비즈니스 페이지</a>
+    <br>
+    <!-- {% else %}
+    <a href="{% url 'PersonalPage' user.pk %}">마이 페이지</a>
+    <br> -->
+    {% endif %}
     <a href="{% url 'cafelist' %}">카페 리스트 보기</a>
     
 {% else %}
@@ -36,7 +45,7 @@
                 </div>
                 <div>
                     <label for="signup-email">email</label>
-                    <input type="text" id="signup-email" name="signup-email" placeholder="Enter your email.">
+                    <input type="email" id="signup-email" name="signup-email" placeholder="Enter your email.">
                 </div>
                 <div>
                     <label for="signup-password">password</label>
@@ -63,7 +72,7 @@
                 </div>
                 <div>
                     <label for="signup-email">email</label>
-                    <input type="text" id="signup-email" name="signup-email" placeholder="Enter your email.">
+                    <input type="email" id="signup-email" name="signup-email" placeholder="Enter your email.">
                 </div>
                 <div>
                     <label for="signup-password">password</label>

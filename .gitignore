@@ -7,13 +7,19 @@
 *.log
 *.pot
 *.pyc
-__pycache__
+__pycache__/
 local_settings.py
 db.sqlite3
 migrations/
 
-# Environments
+# Virtual Environments
 .env
 .venv
 venv/
-studycafe/__pycache__/views.cpython-39.pyc
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py

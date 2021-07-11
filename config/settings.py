@@ -136,7 +136,7 @@ INTERNAL_IPS = [
     # ...
 ]
 
-# SITE_ID = 2
+SITE_ID = 1
 
 
 #social Login redirection

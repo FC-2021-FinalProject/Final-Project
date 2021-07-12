@@ -184,8 +184,10 @@ class CafeUploadView(View) :
             Body=file
         )
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
+        businessuser = BusinessUser.objects.get(user=request.user)
         StudyCafe.objects.create(
             name=request.POST['name'],
+            businessuser = businessuser,
             address= request.POST.get('address'),
             img = s3_url+now+file.name,
             price_per_hour = request.POST['price_per_hour'],

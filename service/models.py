@@ -11,14 +11,18 @@ class Reservation(models.Model):
 
 #model fields
     date = models.TextField()
-    seat_type = models.TextField()
     state = models.BooleanField(default=False)
     time = models.TextField()
 
     TIME_CHOICE = (
         ('09:00', '09:00'), ('10:00', '10:00'), ('11:00', '11:00'), ('12:00', '12:00'), ('13:00', '13:00'), ('14:00', '14:00'), ('15:00', '15:00'), ('16:00', '16:00'), ('17:00', '17:00'), ('18:00', '18:00'), ('19:00', '19:00'),('20:00', '20:00'),
     )
+
+    SEAT_CHOICE = (
+        ('a', 'a'), ('b', 'b'), ('c', 'c'), ('d', 'd'), ('e', 'e'), ('f', 'f'), ('g', 'g'), ('h', 'h'), ('i', 'i'), ('j', 'j'), ('k', 'k'), ('l', 'l'), ('m', 'm'), ('n', 'n'), ('o', 'o'), ('p', 'p'), ('q', 'q'), ('r', 'r'), ('s', 's'), ('t', 't'), ('u', 'u'), ('v', 'v'), ('w', 'w'), ('x', 'x'), ('y', 'y'), ('z', 'z'),
+    )
     start_time = models.CharField(max_length=32, choices=TIME_CHOICE)
+    seat_type = models.CharField(max_length=32, choices=SEAT_CHOICE)
 
 
 class Review(models.Model):

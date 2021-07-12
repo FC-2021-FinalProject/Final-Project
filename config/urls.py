@@ -11,7 +11,7 @@ from studycafe.views import BusinessUserDetailView
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    #
+    # index home
     path('', views.index, name='index'),
     
     # auth

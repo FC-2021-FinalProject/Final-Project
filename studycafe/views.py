@@ -9,7 +9,7 @@ from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
 from datetime import date, datetime
 
-from studycafe.models import PersonalUser, BusinessUser, StudyCafe
+from studycafe.models import PersonalUser, BusinessUser, StudyCafe, Reservation
 
 ERROR_MSG = {
     'ID_EXIST': '이미 존재하는 아이디 입니다.',
@@ -149,7 +149,7 @@ class BusinessUserDetailView(generic.DeleteView) :
     template_name = 'BUprofile.html'
 
     def get(self, request, *args, **kwargs) :
-        buser = BusinessUser.objects.all()
+        buser = BusinessUser.objects.get(user=request.user)
         context = {'buser':buser}
         return render(request, 'BUprofile.html', context)
 
@@ -246,3 +246,33 @@ def cafedelete(request, cafe_pk) :
     cafe.update(is_deleted=True)
 
     return redirect('BUprofile', cafe_pk)
+
+
+class ReservationView(generic.View) :
+    model = Reservation
+    template_name = 'cafedetail.html'
+    context_object_name = 'reserv'
+
+    def post(self, request, *args, **kwargs) :
+        date = request.POST['date']
+        start_time = request.POST['start_time']
+        time = request.POST['time']
+        seat_type = request.POST['seat_type']
+        studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
+        state = Reservation.objects.filter(state=False).update(state=True)
+
+        # is_valid ?
+        if date :
+            if (start_time and time) :
+                if seat_type :
+                    Reservation.objects.create(
+                        date = date,
+                        start_time = start_time,
+                        time = time,
+                        seat_type = seat_type,
+                        user = request.user,
+                        studycafe = studycafe,
+                        state = state
+                    )
+
+        return redirect('cafedetail', kwargs['pk'])

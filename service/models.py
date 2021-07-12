@@ -6,24 +6,26 @@ from studycafe.models import StudyCafe
 
 class Reservation(models.Model):
 #Reservation model relationship
-    studycafe = models.ForeignKey(StudyCafe, on_delete=models.SET_NULL, related_name='reservation', null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='reservation', null=True, blank=True)
+    studycafe = models.ForeignKey(StudyCafe, on_delete=models.SET_NULL, related_name='reservation2', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='reservation2', null=True, blank=True)
 
 #model fields
     date = models.TextField()
     state = models.BooleanField(default=False)
     time = models.TextField()
 
-    TIME_CHOICE = (
-        ('09:00', '09:00'), ('10:00', '10:00'), ('11:00', '11:00'), ('12:00', '12:00'), ('13:00', '13:00'), ('14:00', '14:00'), ('15:00', '15:00'), ('16:00', '16:00'), ('17:00', '17:00'), ('18:00', '18:00'), ('19:00', '19:00'),('20:00', '20:00'),
-    )
+    TIME_CHOICE = []
+    for j in range(24) :
+        if j < 10 :
+            TIME_CHOICE.append(tuple([f'0{j}:00', f'0{j}:00']))
+        else :
+            TIME_CHOICE.append(tuple([f'{j}:00', f'{j}:00']))
 
-    SEAT_CHOICE = (
-        ('a', 'a'), ('b', 'b'), ('c', 'c'), ('d', 'd'), ('e', 'e'), ('f', 'f'), ('g', 'g'), ('h', 'h'), ('i', 'i'), ('j', 'j'), ('k', 'k'), ('l', 'l'), ('m', 'm'), ('n', 'n'), ('o', 'o'), ('p', 'p'), ('q', 'q'), ('r', 'r'), ('s', 's'), ('t', 't'), ('u', 'u'), ('v', 'v'), ('w', 'w'), ('x', 'x'), ('y', 'y'), ('z', 'z'),
-    )
-    start_time = models.CharField(max_length=32, choices=TIME_CHOICE)
-    seat_type = models.CharField(max_length=32, choices=SEAT_CHOICE)
-
+    SEAT_CHOICE = []
+    for i in range(1, 101) :
+        SEAT_CHOICE.append(tuple([f'{i}', f'{i}']))
+    start_time = models.CharField(max_length=32, choices=tuple(TIME_CHOICE))
+    seat_type = models.CharField(max_length=32, choices=tuple(SEAT_CHOICE))
 
 class Review(models.Model):
 # Review model realtionship

@@ -1,4 +1,12 @@
 {% extends "base.html"%}
+{% block head %}
+{% load static %}
+<!-- fontawesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+<!-- login modal window -->
+<script defer src="{% static 'login.js' %}"></script>
+{% endblock head%}
+
 {% block content %}
 {% load socialaccount %}
 {% providers_media_js %}
@@ -32,4 +40,4 @@
 <a href="{% provider_login_url 'google' %}">구글 로그인</a>
 
 {% endif %}
-{% endblock content %}
+{% endblock content %} 

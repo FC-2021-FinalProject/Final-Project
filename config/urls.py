@@ -1,12 +1,11 @@
-from os import name
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 import debug_toolbar
 
 from studycafe import views
-from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete
-from studycafe.views import BusinessUserDetailView
+from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, BusinessUserDetailView, ReservationView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,7 +31,9 @@ urlpatterns = [
     path('cafedetail/<int:pk>', CafeDetailView.as_view(), name='cafedetail'),
     path('cafeedit/<int:pk>', CafeEditView.as_view(), name='cafeedit'),
     path('cafedelete/<int:cafe_pk>', views.cafedelete, name='cafedelete'),
+    path('reserve<int:pk>',ReservationView.as_view(), name='reservation'),
 
     # django debugger tool
     path('__debug__/', include(debug_toolbar.urls)),
+
 ]

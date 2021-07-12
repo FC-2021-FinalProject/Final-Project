@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("login connected!")
+    console.log("<<-----app.js----->> connected!")
 
 // login pop up modal
     

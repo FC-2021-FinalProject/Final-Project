@@ -1,67 +1,38 @@
-{% extends "base.html"%}
-<<<<<<< HEAD
-{% block head %}
-{% load static %}
-<!-- fontawesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-<!-- login modal window -->
-<script defer src="{% static 'login.js' %}"></script>
-{% endblock head%}
-
-{% block content %}
-{% load socialaccount %}
-{% providers_media_js %}
-<section>
-    <h2>로그인 페이지:)</h2>
-        <form  action="{% url 'login' %}" method="POST">
+<!-- 템플릿 페이지 구분용 div (지울거임) -->
+<div class="to-delete">로그인 템플릿 포함됨</div>
+<!-- login은 따로 페이지가 없고 다른 페이지에서 모달창으로 뜨도록 만들어짐 -->
+<!-- 모달창 작동 전에는 시현 때 처럼 index.html에 포함 -->
+<!-- load socialaccount 랑 provider_media_js 는 다른 템플릿에서도 user 모델 불러올때 필요하면 base로 이동하는게 좋을듯!-->
+{% load socialaccount %}{% providers_media_js %}
+<!-- 모달창 뒷배경 modal window background body overlay -->
+<div class="body-blackout"></div>
+<!-- 모달창 컨텐츠 (로그인양식과 회원가입링크) -->
+<section class="auth-popup login-container">
+    <i class="fas fa-window-close popup-modal__close"></i>
+    <h2 class="auth-popup-header">박도비팀 로그인:)</h2>
+        <form class="auth-form" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
-            <label for="login-name">username</label>
-            <input type="text" id="login-name" name="login-name" placeholder="Enter your username.">
-            
-            <label for="login-password">password</label>
-            <input type="password" id="login-password" name="login-password" placeholder="Enter your password.">
-            
-            <button type="submit">Login</button>
+            <div class="form-control">
+                <label class="a11y-hidden" for="login-name">username</label>
+                <input class="auth-items auth-items-username" type="text" id="login-name" name="login-name" placeholder="Enter your username.">
+                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-exclamation-circle"></i>
+                {% if error.state %}
+                <small>{{ error.msg }}</small>
+                {% endif %}
+            </div>
+            <div class="form-control">
+                <label class="a11y-hidden" for="login-password">password</label>
+                <input class="auth-items auth-items-password" type="password" id="login-password" name="login-password" placeholder="Enter your password.">
+                <i class="fas fa-check-circle success"></i>
+                <i class="fas fa-exclamation-circle error"></i>
+                {% if error.state %}
+                <small>{{ error.msg }}</small>
+                {% endif %}
+            </div>
+            <button type="submit">LOGIN</button>
         </form>
-        <br>
+
         <a href="{% provider_login_url 'kakao' method='oauth2' %}"><i class="fas fa-comment mr-2"></i>카카오 로그인</a>
-        <br>
         <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>구글 로그인</a>
 </section>
-
-=======
-{% block content %}
-{% load socialaccount %}
-{% providers_media_js %}
-
-<h1>Login Page</h1>
-{% if user.is_authenticated %}
-<form action="{% url 'logout' %}" method="POST">
-    {% csrf_token %}
-    <button type="submit">로그아웃</button>
-</form>
-{{ user.username }} 님이 로그인 중
-<a href="{% url 'BUprofile' user.pk %}">비즈니스 유저 마이페이지</a><br>
-<a href="{% url 'cafelist' %}">카페 리스트 보기</a>
-
-{% else %}
-    {% if error.state %}
-<p> {{ error.msg }} </p>
-    {% endif %}
-<form action="{% url 'login' %}" method="POST">
-    {% csrf_token %}
-    <label for="login-name"></label>
-    <input type="text" id="login-name" name="login-name" placeholder="Enter your usename.">
-    <label for="login-password"></label>
-    <input type="password" id="login-name" name="login-password" placeholder="Enter your password.">
-    <button type="SUBMIT"> LOGIN </button>
-</form>
-
-
-<a href="{% provider_login_url 'kakao' method='oauth2' %}">카카오 로그인</a>
-<br>
-<a href="{% provider_login_url 'google' %}">구글 로그인</a>
-
-{% endif %}
->>>>>>> ae52e37cf3ac5d50e389bd2ac709484e31af0d7b
-{% endblock content %}

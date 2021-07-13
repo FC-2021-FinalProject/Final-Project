@@ -59,13 +59,12 @@ def business_signup(request):
                 email=user_email,
                 name=user_name,
                 registration_number=registration_number,
-        # add logic for email verification
                 email_authenticated=True,
-
             )
+ 
             auth.login(request, user)
             return redirect('index')
-        return render(request, 'index.html', validation_context)
+    return render(request, 'business_signup.html', validation_context)
 
 
 def personal_signup(request):
@@ -102,13 +101,13 @@ def personal_signup(request):
                 user=user,
                 email=user_email,
                 name=user_name,
-            # add logic for email verification
                 email_authenticated=True,
             )
  
             auth.login(request, user)
             return redirect('index')
-        return render(request, 'index.html', validation_context)
+
+    return render(request, 'personal_signup.html', validation_context)
 
 def login(request) :
 

@@ -12,7 +12,7 @@ class PersonalUser(models.Model):
 
 
     def __str__(self):
-        return self.user.username
+        return self.name
 
 class BusinessUser(models.Model):
     # relationship
@@ -25,7 +25,7 @@ class BusinessUser(models.Model):
     registration_number = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.user.username
+        return self.name
 
 class StudyCafe(models.Model) :
     #relationship

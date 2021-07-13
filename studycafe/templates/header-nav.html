@@ -2,7 +2,7 @@
 <div class="to-delete">헤더네브 포함됨</div>
 {% if user.is_authenticated %}
     <header>
-        <h1>박도비팀 프로젝트</h1>
+        <h1><a href="{% url 'index' %}">박도비팀 프로젝트</a></h1>
         <input id="header-nav-search-bar" type="text" placeholder="스터디 카페 검색하기"/>
         <div>
             <ul class="header-nav-menu-list">
@@ -16,7 +16,7 @@
                 </li>
                 {% elif user.personal_user %}
                 <li><a href="#" role="button">마이페이지</a></li>
-                <li><a href="#" role="button"></a></li>
+                <li><a href="#" role="button">예약확인</a></li>
                 <li>
                     <form action="{% url 'logout' %}" method="POST">
                     {% csrf_token %}
@@ -32,11 +32,11 @@
         <h1>박도비팀 프로젝트</h1>
         <input id="header-nav-search-bar" type="text" placeholder="스터디 카페 검색하기"/>
         <div>
-            <!-- <ul class="header-nav-menu-list">
-                <li ><a href="#" role="button" class="popup-button">회원가입</a></li>
-                <li ><a href="#" role="button" class="popup-button">로그인</a></li>
-            </ul> -->
+            <ul class="header-nav-menu-list">
+                <li ><a href="{% url 'personal_signup' %}" role="button" class="popup-button">개인회원가입</a></li>
+                <li ><a href="{% url 'business_signup' %}" role="button" class="popup-button">기업회원가입</a></li>
+                <li ><a href="{% url 'login' %}" role="button" class="popup-button">로그인</a></li>
+            </ul>
         </div>
     </header>
-    {% include 'login.html' %}
 {% endif %}

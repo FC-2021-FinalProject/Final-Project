@@ -1,8 +1,5 @@
-<!-- 템플릿 페이지 구분용 div (지울거임) -->
-<div class="to-delete">로그인 템플릿 포함됨</div>
-<!-- login은 따로 페이지가 없고 다른 페이지에서 모달창으로 뜨도록 만들어짐 -->
-<!-- 모달창 작동 전에는 시현 때 처럼 index.html에 포함 -->
-<!-- load socialaccount 랑 provider_media_js 는 다른 템플릿에서도 user 모델 불러올때 필요하면 base로 이동하는게 좋을듯!-->
+{% extends "base.html" %}
+{% block content %}
 {% load socialaccount %}{% providers_media_js %}
 <!-- 모달창 뒷배경 modal window background body overlay -->
 <div class="body-blackout"></div>
@@ -36,3 +33,4 @@
         <a href="{% provider_login_url 'kakao' method='oauth2' %}"><i class="fas fa-comment mr-2"></i>카카오 로그인</a>
         <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>구글 로그인</a>
 </section>
+{% endblock content %}

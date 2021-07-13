@@ -4,12 +4,12 @@
 {% include 'header-nav.html' %}
 {% load socialaccount %}
 {% providers_media_js %}
+
 <!-- 템플릿 페이지 구분용 div (지울거임) -->
 <div class="to-delete">메인 인덱스 페이지</div>
 
-<main>
-
 {% if user.is_authenticated %}
+<main>
 <h2>LOGGED IN!!! </h2>
 <form action="{% url 'logout' %}" method="POST">
     {% csrf_token %}
@@ -25,65 +25,7 @@
     <br>
     {% endif %}
     <a href="{% url 'cafelist' %}">카페 리스트 보기</a>
-    
-{% else %}
-    <section>
-        <h2>개인 회원가입 페이지:)</h2>
-            <form action="{% url 'personal_signup' %}" method="POST">
-                {% csrf_token %}
-                <div>
-                    <label for="signup-name">Name</label>
-                    <input type="text" id="signup-name" name="signup-name" placeholder="Enter your full name here.">
-                </div>
-                <div>
-                    <label for="signup-username">username</label>
-                    <input type="text" id="signup-username" name="signup-username" placeholder="Enter your username.">
-                </div>
-                <div>
-                    <label for="signup-email">email</label>
-                    <input type="email" id="signup-email" name="signup-email" placeholder="Enter your email.">
-                </div>
-                <div>
-                    <label for="signup-password">password</label>
-                    <input type="password" id="signup-password" name="signup-password" placeholder="Enter your password.">
-                </div>
-                <div>
-                    <label for="signup-password-check">password check</label>
-                    <input type="password" id="signup-password-check" name="signup-password-check" placeholder="Enter your password.">
-                </div>
-                <button type="submit">Signup</button>
-            </form>
-    </section>
-    <section>
-        <h2>기업 회원가입:)</h2>
-            <form action="{% url 'business_signup' %}" method="POST">
-                {% csrf_token %}
-                <div>
-                    <label for="signup-name">Name</label>
-                    <input type="text" id="signup-name" name="signup-name" placeholder="Enter your full name here.">
-                </div>
-                <div>
-                    <label for="signup-name">username</label>
-                    <input type="text" id="signup-username" name="signup-username" placeholder="Enter your username.">
-                </div>
-                <div>
-                    <label for="signup-email">email</label>
-                    <input type="email" id="signup-email" name="signup-email" placeholder="Enter your email.">
-                </div>
-                <div>
-                    <label for="signup-password">password</label>
-                    <input type="password" id="signup-password" name="signup-password" placeholder="Enter your password.">
-                </div>
-                <div >
-                    <label for="signup-password-check">password check</label>
-                    <input type="password" id="signup-password-check" name="signup-password-check" placeholder="Enter your password.">
-                </div>
-                <div>
-                    <label for="signup-registration-number">business registration number</label>
-                    <input type="number" id="signup-registration-number" name="signup-registration-number" placeholder="Enter your Business Registration Number.">
-                </div>
-                <button type="submit">Signup</button>
-            </form>
-    </section>
+  
 {% endif %}
+</main>
 {% endblock content %}

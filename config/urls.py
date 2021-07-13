@@ -4,7 +4,7 @@ from django.urls.conf import include
 import debug_toolbar
 
 from studycafe import views
-from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, BusinessUserDetailView, ReservationView
+from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, BusinessUserDetailView, ReservationView, personal_signup, business_signup
 
 
 urlpatterns = [
@@ -14,9 +14,9 @@ urlpatterns = [
     path('', views.index, name='index'),
     
     # auth
-    path('signup/join/personal', views.personal_signup, name='personal_signup'),
-    path('signup/join/business', views.business_signup, name='business_signup'),
-    path('', views.login, name='login'),
+    path('personal_signup/', views.personal_signup, name='personal_signup'),
+    path('business_signup/', views.business_signup, name='business_signup'),
+    path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     
     # social login

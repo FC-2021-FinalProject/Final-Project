@@ -9,7 +9,7 @@ from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
 from datetime import date, datetime
 
-from studycafe.models import PersonalUser, BusinessUser, StudyCafe
+from studycafe.models import PersonalUser, BusinessUser, StudyCafe, Reservation
 
 ERROR_MSG = {
     'ID_EXIST': '이미 존재하는 아이디 입니다.',
@@ -59,13 +59,12 @@ def business_signup(request):
                 email=user_email,
                 name=user_name,
                 registration_number=registration_number,
-        # add logic for email verification
                 email_authenticated=True,
-
             )
+ 
             auth.login(request, user)
             return redirect('index')
-        return render(request, 'index.html', validation_context)
+    return render(request, 'business_signup.html', validation_context)
 
 
 def personal_signup(request):
@@ -102,13 +101,13 @@ def personal_signup(request):
                 user=user,
                 email=user_email,
                 name=user_name,
-            # add logic for email verification
                 email_authenticated=True,
             )
  
             auth.login(request, user)
             return redirect('index')
-        return render(request, 'index.html', validation_context)
+
+    return render(request, 'personal_signup.html', validation_context)
 
 def login(request) :
 
@@ -149,7 +148,7 @@ class BusinessUserDetailView(generic.DeleteView) :
     template_name = 'BUprofile.html'
 
     def get(self, request, *args, **kwargs) :
-        buser = BusinessUser.objects.all()
+        buser = BusinessUser.objects.get(user=request.user)
         context = {'buser':buser}
         return render(request, 'BUprofile.html', context)
 
@@ -184,8 +183,10 @@ class CafeUploadView(View) :
             Body=file
         )
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
+        businessuser = BusinessUser.objects.get(user=request.user)
         StudyCafe.objects.create(
             name=request.POST['name'],
+            businessuser = businessuser,
             address= request.POST.get('address'),
             img = s3_url+now+file.name,
             price_per_hour = request.POST['price_per_hour'],
@@ -244,3 +245,33 @@ def cafedelete(request, cafe_pk) :
     cafe.update(is_deleted=True)
 
     return redirect('BUprofile', cafe_pk)
+
+
+class ReservationView(generic.View) :
+    model = Reservation
+    template_name = 'cafedetail.html'
+    context_object_name = 'reserv'
+
+    def post(self, request, *args, **kwargs) :
+        date = request.POST['date']
+        start_time = request.POST['start_time']
+        time = request.POST['time']
+        seat_type = request.POST['seat_type']
+        studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
+        state = Reservation.objects.filter(state=False).update(state=True)
+
+        # is_valid ?
+        if date :
+            if (start_time and time) :
+                if seat_type :
+                    Reservation.objects.create(
+                        date = date,
+                        start_time = start_time,
+                        time = time,
+                        seat_type = seat_type,
+                        user = request.user,
+                        studycafe = studycafe,
+                        state = state
+                    )
+
+        return redirect('cafedetail', kwargs['pk'])

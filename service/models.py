@@ -1,4 +1,3 @@
-from django.utils import tree
 from studycafe.models import PersonalUser
 from django.db import models
 from django.contrib.auth.models import User
@@ -7,15 +6,26 @@ from studycafe.models import StudyCafe
 
 class Reservation(models.Model):
 #Reservation model relationship
-    studycafe = models.ForeignKey(StudyCafe, on_delete=models.SET_NULL, related_name='reservation', null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='reservation', null=True, blank=True)
+    studycafe = models.ForeignKey(StudyCafe, on_delete=models.SET_NULL, related_name='reservation2', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='reservation2', null=True, blank=True)
 
 #model fields
     date = models.TextField()
-    start_time = models.TextField()
-    seat_type = models.TextField()
-    state = models.TextChoices()
-    time = models.TextChoices()
+    state = models.BooleanField(default=False)
+    time = models.TextField()
+
+    TIME_CHOICE = []
+    for j in range(24) :
+        if j < 10 :
+            TIME_CHOICE.append(tuple([f'0{j}:00', f'0{j}:00']))
+        else :
+            TIME_CHOICE.append(tuple([f'{j}:00', f'{j}:00']))
+
+    SEAT_CHOICE = []
+    for i in range(1, 101) :
+        SEAT_CHOICE.append(tuple([f'{i}', f'{i}']))
+    start_time = models.CharField(max_length=32, choices=tuple(TIME_CHOICE))
+    seat_type = models.CharField(max_length=32, choices=tuple(SEAT_CHOICE))
 
 class Review(models.Model):
 # Review model realtionship
@@ -24,23 +34,23 @@ class Review(models.Model):
 
 # model fields   
     comment = models.TextField()
-    star = models.TextChoices()
+    star = models.TextField()
 
 class Payment(models.Model):
 # Payment model relationship
     reservation = models.ForeignKey(Reservation, on_delete=models.SET_NULL, related_name='payment', null=True, blank=True)
 
 # model fields
-    status = models.TextChoices()
+    status = models.TextChoices('status', 'complete None')
 
 class BookmarkedCafe(models.Model):
 # BookmarkedCafe models relationship
     studycafe = models.OneToOneField(StudyCafe, on_delete=models.CASCADE, related_name='bookmark')
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='bookmark', null=True, blank=tree)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='bookmark', null=True, blank=True)
 
 class Chatbot(models.Model) :
 # Chatbot models relationship
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='chatbot', null=True, blank=tree)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='chatbot', null=True, blank=True)
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='chatbot')
 # model fields
     context = models.TextField()

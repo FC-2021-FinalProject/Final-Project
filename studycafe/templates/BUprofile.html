@@ -3,7 +3,13 @@
 <h1>Business User My Page</h1>
 <ul><h2>메뉴들</h2></ul> 
 <li> 내 정보</li>
-
+<p>{{buser.name}}</p>
+<p>{{buser.email}}</p>
+<p>{{buser.registration_number}}</p>
 <li> 내 카페</li>
+{% for i in buser.studycafe.all%}
+{{i}}
+<img src="{{i.img}}" alt="" width="250px;">
+{% endfor%}
 <a href="{% url 'cafeupload' user.pk %}">카페 등록하기</a>
 {% endblock content %}

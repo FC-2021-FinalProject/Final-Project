@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+<div class="to-delete">카페수정 템플릿</div>
+{% include 'header-nav.html' %}
+
+<main>
+<h2>Cafe Edit</h2>
     <form action="{% url 'cafeedit' cafe.pk %}" method="POST">
         {% csrf_token %}
         <input type="text" name="name" placeholder="카페 이름" value="{{cafe.name}}">
@@ -18,5 +16,5 @@
         <img src="{{cafe.img}}" alt="cafe.name" width="250px;">
         <button type="submit">수정하기</button>
     </form>
-</body>
-</html>
+</main>
+{% endblock content%}

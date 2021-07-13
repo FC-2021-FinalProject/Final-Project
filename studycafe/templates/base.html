@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>박도비프로젝트</title>
     {% load static %}
+    <!-- style reset link commented out temporarily -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"> -->
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-
+    <!-- fontawesome for social login logos (로그인 부분에만 해당하는 링크)-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+    <!-- 로그인 팝업과 드랍다운 메뉴 관련 자바스크립트 -->
+    <!-- <script defer src="{% static 'app.js' %}"></script> -->
     {% block head %}{% endblock head%}
-    
-    <title>Document</title>
 </head>
 <body>
 {% block content %}

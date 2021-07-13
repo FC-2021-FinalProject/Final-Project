@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 import boto3
 from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 from studycafe.models import PersonalUser, BusinessUser, StudyCafe, Reservation
 
@@ -259,20 +259,36 @@ class ReservationView(generic.View) :
         time = request.POST['time']
         seat_type = request.POST['seat_type']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
-        state = Reservation.objects.filter(state=False).update(state=True)
-
+        reservation = Reservation.objects.all()
         # is_valid ?
-        if date :
-            if (start_time and time) :
-                if seat_type :
-                    Reservation.objects.create(
-                        date = date,
-                        start_time = start_time,
-                        time = time,
-                        seat_type = seat_type,
-                        user = request.user,
-                        studycafe = studycafe,
-                        state = state
-                    )
+        # 날짜 중복 체크
+        for reserv in reservation :
+            if date not in reserv.date :
+                print(date)
+                print('날짜 중복 x')
+                # 시작시간(이용 시간) 중복 체크
+                if start_time not in reserv.start_time :
+                    print('시작시간 중복 x')
+                    # 좌석 중복 체크
+                    if seat_type not in reserv.seat_type :
+                        print('좌석 중복 x')
+                        Reservation.objects.create(
+                            date = date,
+                            start_time = start_time,
+                            time = time,
+                            seat_type = seat_type,
+                            user = request.user,
+                            studycafe = studycafe,
+                            state = True
+                            # end_time = start_time + timedelta(hours=+time)
+                        )
+                    else :
+                        print('좌석 중복')
+
+                else :
+                    print('시작 시간 중복')
+
+            else :
+                print('날짜 중복')
 
         return redirect('cafedetail', kwargs['pk'])

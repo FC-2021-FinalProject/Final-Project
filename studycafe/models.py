@@ -54,7 +54,8 @@ class Reservation(models.Model):
 #model fields
     date = models.TextField()
     state = models.BooleanField(default=False)
-    time = models.TextField()
+    time = models.IntegerField()
+    end_time = models.TextField()
 
     TIME_CHOICE = []
     for j in range(24) :
@@ -66,6 +67,7 @@ class Reservation(models.Model):
     SEAT_CHOICE = []
     for i in range(1, 101) :
         SEAT_CHOICE.append(tuple([f'{i}', f'{i}']))
+
     start_time = models.CharField(max_length=32, choices=tuple(TIME_CHOICE))
     seat_type = models.CharField(max_length=32, choices=tuple(SEAT_CHOICE))
 

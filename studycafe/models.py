@@ -54,7 +54,7 @@ class Reservation(models.Model):
 #model fields
     date = models.TextField()
     state = models.BooleanField(default=False)
-    time = models.IntegerField()
+    use_time = models.TextField()
     end_time = models.TextField()
 
     TIME_CHOICE = []

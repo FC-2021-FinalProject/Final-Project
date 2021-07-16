@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 import boto3
 from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta,time
 
 from studycafe.models import PersonalUser, BusinessUser, StudyCafe, Reservation
 
@@ -255,39 +255,25 @@ class ReservationView(generic.View) :
     def post(self, request, *args, **kwargs) :
         date = request.POST['date']
         start_time = request.POST['start_time']
-        time = request.POST['time']
+        use_time = request.POST['time']
         seat_type = request.POST['seat_type']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
-        reservation = Reservation.objects.all()
-        # is_valid ?
-        # 날짜 중복 체크
-        for reserv in reservation :
-            if date not in reserv.date :
-                print(date)
-                print('날짜 중복 x')
-                # 시작시간(이용 시간) 중복 체크
-                if start_time not in reserv.start_time :
-                    print('시작시간 중복 x')
-                    # 좌석 중복 체크
-                    if seat_type not in reserv.seat_type :
-                        print('좌석 중복 x')
-                        Reservation.objects.create(
-                            date = date,
-                            start_time = start_time,
-                            time = time,
-                            seat_type = seat_type,
-                            user = request.user,
-                            studycafe = studycafe,
-                            state = True
-                            # end_time = start_time + timedelta(hours=+time)
-                        )
-                    else :
-                        print('좌석 중복')
 
-                else :
-                    print('시작 시간 중복')
 
-            else :
-                print('날짜 중복')
+        # is_valid 
+        if len(Reservation.objects.filter(date=date).filter(start_time=start_time).filter(seat_type=seat_type)) == 0 :
+            print('날짜 중복 X & 시작 시간 중복 X & 좌석 중복 X')
+            Reservation.objects.create(
+                date = date,
+                start_time = start_time,
+                use_time = time(int(use_time)),
+                seat_type = seat_type,
+                user = request.user,
+                studycafe = studycafe,
+                state = True,
+                end_time = time(int(start_time).split(' ')) + time(int(use_time)) 
+            )
+        else :
+            print('중복 O')
 
         return redirect('cafedetail', kwargs['pk'])

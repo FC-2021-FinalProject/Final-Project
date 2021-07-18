@@ -1,6 +1,7 @@
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import request
+from django.utils import tree
 from django.views import generic, View
 from django.shortcuts import get_object_or_404, render, redirect
 
@@ -9,7 +10,7 @@ from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
 from datetime import date, datetime, timedelta,time
 
-from studycafe.models import PersonalUser, BusinessUser, StudyCafe, Reservation
+from studycafe.models import Date, HourTime, PersonalUser, BusinessUser, Seats, StudyCafe, Reservations
 
 ERROR_MSG = {
     'ID_EXIST': '이미 존재하는 아이디 입니다.',
@@ -248,7 +249,7 @@ def cafedelete(request, cafe_pk) :
 
 
 class ReservationView(generic.View) :
-    model = Reservation
+    model = Reservations
     template_name = 'cafedetail.html'
     context_object_name = 'reserv'
 
@@ -256,24 +257,35 @@ class ReservationView(generic.View) :
         date = request.POST['date']
         start_time = request.POST['start_time']
         use_time = request.POST['time']
-        seat_type = request.POST['seat_type']
+        seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
 
+        if len(Reservations.objects.filter(state=True)) == 0 :
+            print('@@@@@@@@@@@@@예약 가능')
 
-        # is_valid 
-        if len(Reservation.objects.filter(date=date).filter(start_time=start_time).filter(seat_type=seat_type)) == 0 :
-            print('날짜 중복 X & 시작 시간 중복 X & 좌석 중복 X')
-            Reservation.objects.create(
-                date = date,
-                start_time = start_time,
-                use_time = time(int(use_time)),
-                seat_type = seat_type,
-                user = request.user,
-                studycafe = studycafe,
-                state = True,
-                end_time = time(int(start_time).split(' ')) + time(int(use_time)) 
+            date1 = Date.objects.create(
+                content = date,
+                studycafe = studycafe
             )
-        else :
-            print('중복 O')
+
+            hour = HourTime.objects.create(
+                date = date1,
+                start_time = start_time
+            )
+
+            seat1 = Seats.objects.create(
+                hour_time = hour,
+                content = seat
+            )
+
+            Reservations.objects.create(
+                personal_user = request.user,
+                studycafe = studycafe,
+                date = date1,
+                start_time = hour,
+                seat = seat1,
+                state = False
+            )
+
 
         return redirect('cafedetail', kwargs['pk'])

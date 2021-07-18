@@ -25,7 +25,6 @@ class Reservation(models.Model):
     for i in range(1, 101) :
         SEAT_CHOICE.append(tuple([f'{i}', f'{i}']))
     start_time = models.CharField(max_length=32, choices=tuple(TIME_CHOICE))
-    seat_type = models.CharField(max_length=32, choices=tuple(SEAT_CHOICE))
 
 class Review(models.Model):
 # Review model realtionship

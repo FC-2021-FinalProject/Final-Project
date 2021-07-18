@@ -1,15 +1,15 @@
+from contextlib import contextmanager
+from typing import ContextManager
 from django.contrib.auth.models import User
 from django.db import models
 
 class PersonalUser(models.Model):
     # relationship
     user = models.OneToOneField(User, on_delete=models.SET_NULL, related_name='personal_user', null=True, blank=True)
-    
     # model fields
     name = models.CharField(max_length=64)
     email = models.CharField(max_length=64)
     email_authenticated = models.BooleanField(default=False)
-
 
     def __str__(self):
         return self.name
@@ -43,19 +43,12 @@ class StudyCafe(models.Model) :
     def __str__(self):
         return self.name
 
-# PositiveIntegerField MEMO
-# Like an IntegerField, but must be either positive or zero (0). Values from 0 to 2147483647 are safe in all databases supported by Django. The value 0 is accepted for backward compatibility reasons.
+class Date(models.Model): 
+    studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='date', null=True, blank=True)
+    content = models.TextField()
 
-class Reservation(models.Model):
-#Reservation model relationship
-    studycafe = models.ForeignKey(StudyCafe, on_delete=models.SET_NULL, related_name='reservation', null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='reservation', null=True, blank=True)
-
-#model fields
-    date = models.TextField()
-    state = models.BooleanField(default=False)
-    use_time = models.TextField()
-    end_time = models.TextField()
+class HourTime(models.Model):
+    date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name='hour_time', null=True, blank=True )
 
     TIME_CHOICE = []
     for j in range(24) :
@@ -64,10 +57,25 @@ class Reservation(models.Model):
         else :
             TIME_CHOICE.append(tuple([f'{j}:00', f'{j}:00']))
 
+    start_time = models.CharField(max_length=32, choices=tuple(TIME_CHOICE))
+    end_time = models.TextField()
+
+class Seats(models.Model):
+    hour_time = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='seat', null=True,blank=True)
+
     SEAT_CHOICE = []
     for i in range(1, 101) :
         SEAT_CHOICE.append(tuple([f'{i}', f'{i}']))
 
-    start_time = models.CharField(max_length=32, choices=tuple(TIME_CHOICE))
-    seat_type = models.CharField(max_length=32, choices=tuple(SEAT_CHOICE))
+    content = models.CharField(max_length=32, choices=tuple(SEAT_CHOICE))
 
+class Reservations(models.Model):
+    personal_user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='reservation')
+    studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
+  
+    date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
+    start_time = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
+    seat = models.ForeignKey(Seats, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
+    
+    # state를 기준으로 예약이 가능한지 판단   로직 -> if .state == False라면 예약 가능
+    state = models.BooleanField(default=True)

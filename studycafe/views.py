@@ -270,7 +270,9 @@ class ReservationView(generic.View) :
 
             hour = HourTime.objects.create(
                 date = date1,
-                start_time = start_time
+                start_time = time(int(start_time)),
+                use_time = time(int(use_time)),
+                end_time = time(int(int(start_time) + int(use_time)))
             )
 
             seat1 = Seats.objects.create(

@@ -57,8 +57,10 @@ class HourTime(models.Model):
         else :
             TIME_CHOICE.append(tuple([f'{j}:00', f'{j}:00']))
 
-    start_time = models.CharField(max_length=32, choices=tuple(TIME_CHOICE))
-    end_time = models.TextField()
+    start_time = models.CharField(max_length=32)
+    use_time = models.CharField(max_length=32)
+    end_time = models.CharField(max_length=32
+)
 
 class Seats(models.Model):
     hour_time = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='seat', null=True,blank=True)

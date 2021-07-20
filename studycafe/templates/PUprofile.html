@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Personal User My Page</h1>
+
+<h2>내 정보</h2>
+
+    <ul>
+        <li>내이름: {{puser.name}}</li>
+        <li>아이디: {{puser.user.username}}</li>
+        <li>이메일: {{puser.email}}</li>
+    </ul>
+
+<h2>예약확인</h2>
+
+{% endblock content %}

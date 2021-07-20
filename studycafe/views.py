@@ -143,6 +143,18 @@ def logout(request) :
         auth.logout(request)
     return redirect('index')
 
+class PersonalUserDetailView(generic.DeleteView) :
+    model = PersonalUser
+    template_name = 'PUprofile.html'
+
+    def get(self, request, *args, **kwargs) :
+        puser = PersonalUser.objects.get(user=request.user)
+        context = {'puser': puser}
+        return render(request, 'PUprofile.html', context)
+
+    def post(self, request, *args, **kwargs) :
+        return redirect('PUprofile', kwargs['pk'])
+
 class BusinessUserDetailView(generic.DeleteView) :
     model = BusinessUser
     template_name = 'BUprofile.html'

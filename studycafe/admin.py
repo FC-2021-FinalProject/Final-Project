@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import PersonalUser, BusinessUser, StudyCafe, Reservations, Date, HourTime, Seats
+from .models import PersonalUser, BusinessUser, StudyCafe, Reservations, Date, HourTime, Seats, Review
 
 # Register your models here.
 admin.site.register(PersonalUser)
@@ -10,3 +10,4 @@ admin.site.register(Reservations)
 admin.site.register(Date)
 admin.site.register(HourTime)
 admin.site.register(Seats)
+admin.site.register(Review)

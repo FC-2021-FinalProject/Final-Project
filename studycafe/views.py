@@ -1,7 +1,7 @@
+import studycafe
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import request
-from django.utils import tree
 from django.views import generic, View
 from django.shortcuts import get_object_or_404, render, redirect
 
@@ -10,7 +10,7 @@ from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
 from datetime import date, datetime, timedelta,time
 
-from studycafe.models import Date, HourTime, PersonalUser, BusinessUser, Seats, StudyCafe, Reservations
+from studycafe.models import Date, HourTime, PersonalUser, BusinessUser, Seats, StudyCafe, Reservations, Review
 
 ERROR_MSG = {
     'ID_EXIST': '이미 존재하는 아이디 입니다.',
@@ -201,7 +201,14 @@ class CafeUploadView(View) :
 class CafeDetailView(generic.DetailView) :
     model = StudyCafe
     template_name = 'cafedetail.html'
-    context_object_name = 'cafe'
+
+    def get(self, request, *args, **kwargs) :
+        cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
+        reviews = Review.objects.filter(studycafe=cafe)
+
+        context = {'cafe':cafe, 'reviews':reviews}
+
+        return render(request, 'cafedetail.html', context)
 
     def post(self, request, *args, **kwargs) :
         return render(request, 'cafedetail.html', kwargs['pk'])
@@ -302,4 +309,22 @@ class ReservationView(generic.View) :
             print(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time))))
             print(Date.objects.filter(content=date))
 
+        return redirect('cafedetail', kwargs['pk'])
+
+
+class ReviewView(generic.View) :
+    model = Review
+    template_name = 'cafedetail.html'
+    context_object_name = 'review'
+
+
+    def post(self, request, *args, **kwargs) :
+        content = request.POST['review']
+        studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
+
+        Review.objects.create(
+            studycafe = studycafe,
+            writer = request.user,
+            content= content
+        )
         return redirect('cafedetail', kwargs['pk'])

@@ -88,4 +88,8 @@ class Reservations(models.Model):
     hours = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     seat = models.ForeignKey(Seats, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     
-    
+class Review(models.Model):
+# Review model realtionship
+    studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='review')
+    writer = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='writer', null=True, blank=True)
+    content = models.TextField()

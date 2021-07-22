@@ -2,6 +2,7 @@ from contextlib import contextmanager
 from typing import ContextManager
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.fields import BooleanField
 
 class PersonalUser(models.Model):
     # relationship
@@ -47,6 +48,9 @@ class Date(models.Model):
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='date', null=True, blank=True)
     content = models.TextField()
 
+    def __str__(self) :
+        return self.content
+
 class HourTime(models.Model):
     date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name='hour_time', null=True, blank=True )
 
@@ -59,25 +63,29 @@ class HourTime(models.Model):
 
     start_time = models.CharField(max_length=32)
     use_time = models.CharField(max_length=32)
-    end_time = models.CharField(max_length=32
-)
+    end_time = models.CharField(max_length=32)
+    state = models.BooleanField(default=False)
+
+    def __str__(self) :
+        return (f"시작시간:{self.start_time}, 이용시간:{self.use_time}, 종료시간:{self.end_time}")
 
 class Seats(models.Model):
     hour_time = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='seat', null=True,blank=True)
-
+    state = models.BooleanField(default=False)
     SEAT_CHOICE = []
     for i in range(1, 101) :
         SEAT_CHOICE.append(tuple([f'{i}', f'{i}']))
 
     content = models.CharField(max_length=32, choices=tuple(SEAT_CHOICE))
 
+    def __str__(self) :
+        return self.content
+
 class Reservations(models.Model):
     personal_user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='reservation')
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
-  
     date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
-    start_time = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
+    hours = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     seat = models.ForeignKey(Seats, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     
-    # state를 기준으로 예약이 가능한지 판단   로직 -> if .state == False라면 예약 가능
-    state = models.BooleanField(default=True)
+    

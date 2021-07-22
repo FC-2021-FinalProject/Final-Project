@@ -259,9 +259,15 @@ class ReservationView(generic.View) :
         use_time = request.POST['time']
         seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
+        end_time = HourTime.objects.filter(end_time=time(int(int(start_time) + int(use_time))))
 
-        if len(Reservations.objects.filter(state=True)) == 0 :
-            print('@@@@@@@@@@@@@예약 가능')
+
+        if len(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time)))and Date.objects.filter(content=date)) == 0 :
+            print("-------------에약 가능")
+            print(Seats.objects.filter(content=seat).filter(state=True))
+            print(HourTime.objects.filter(start_time=time(int(start_time))))
+            print(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time))))
+            print(Date.objects.filter(content=date))
 
             date1 = Date.objects.create(
                 content = date,
@@ -272,22 +278,28 @@ class ReservationView(generic.View) :
                 date = date1,
                 start_time = time(int(start_time)),
                 use_time = time(int(use_time)),
-                end_time = time(int(int(start_time) + int(use_time)))
+                end_time = time(int(int(start_time) + int(use_time))),
+                state = True
             )
 
             seat1 = Seats.objects.create(
                 hour_time = hour,
-                content = seat
+                content = seat,
+                state = True
             )
 
             Reservations.objects.create(
                 personal_user = request.user,
                 studycafe = studycafe,
                 date = date1,
-                start_time = hour,
+                hours = hour,
                 seat = seat1,
-                state = False
             )
-
+        else :
+            print("중복")
+            print(Seats.objects.filter(content=seat).filter(state=True))
+            print(HourTime.objects.filter(start_time=time(int(start_time))))
+            print(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time))))
+            print(Date.objects.filter(content=date))
 
         return redirect('cafedetail', kwargs['pk'])

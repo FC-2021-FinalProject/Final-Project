@@ -1,4 +1,3 @@
-import studycafe
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import request
@@ -10,7 +9,7 @@ from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
 from datetime import date, datetime, timedelta,time
 
-from studycafe.models import Date, HourTime, PersonalUser, BusinessUser, Seats, StudyCafe, Reservations, Review
+from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
 ERROR_MSG = {
     'ID_EXIST': '이미 존재하는 아이디 입니다.',
@@ -278,15 +277,11 @@ class ReservationView(generic.View) :
         use_time = request.POST['time']
         seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
-        end_time = HourTime.objects.filter(end_time=time(int(int(start_time) + int(use_time))))
+        end_time = time(int(int(start_time) + int(use_time)))
+        
 
 
         if len(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time)))and Date.objects.filter(content=date)) == 0 :
-            print("-------------에약 가능")
-            print(Seats.objects.filter(content=seat).filter(state=True))
-            print(HourTime.objects.filter(start_time=time(int(start_time))))
-            print(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time))))
-            print(Date.objects.filter(content=date))
 
             date1 = Date.objects.create(
                 content = date,
@@ -315,20 +310,12 @@ class ReservationView(generic.View) :
                 seat = seat1,
             )
         else :
-            print("중복")
-            print(Seats.objects.filter(content=seat).filter(state=True))
-            print(HourTime.objects.filter(start_time=time(int(start_time))))
-            print(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time))))
-            print(Date.objects.filter(content=date))
+            print("사용시간 중복")
 
         return redirect('cafedetail', kwargs['pk'])
 
 
 class ReviewView(generic.View) :
-    model = Review
-    template_name = 'cafedetail.html'
-    context_object_name = 'review'
-
 
     def post(self, request, *args, **kwargs) :
         content = request.POST['review']

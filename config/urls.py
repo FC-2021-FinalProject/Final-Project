@@ -4,7 +4,7 @@ from django.urls.conf import include
 import debug_toolbar
 
 from studycafe import views
-from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, ReservationView, personal_signup, business_signup
+from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, ReservationView, personal_signup, business_signup, ReviewView
 
 
 urlpatterns = [
@@ -33,7 +33,8 @@ urlpatterns = [
     path('cafedetail/<int:pk>', CafeDetailView.as_view(), name='cafedetail'),
     path('cafeedit/<int:pk>', CafeEditView.as_view(), name='cafeedit'),
     path('cafedelete/<int:cafe_pk>', views.cafedelete, name='cafedelete'),
-    path('reserve<int:pk>',ReservationView.as_view(), name='reservation'),
+    path('reserve/<int:pk>',ReservationView.as_view(), name='reservation'),
+    path('review/<int:pk>', ReviewView.as_view(), name='review'),
 
     # django debugger tool
     path('__debug__/', include(debug_toolbar.urls)),

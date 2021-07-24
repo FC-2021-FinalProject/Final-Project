@@ -14,14 +14,22 @@
     <p>오픈 시간 : {{cafe.business_hour_start}}</p>
     <p>마감 시간 : {{cafe.business_hour_end}}</p>
 
-    {{reserv}}
     <form action="{% url 'reservation' cafe.pk %}" method="POST">
         {% csrf_token %}
-        <input type="text" name="date" placeholder="날짜를 선택하세요">
+        <input type="date" name="date" placeholder="날짜를 선택하세요">
         <input type="text" name="start_time" placeholder="시작 시간">
         <input type="text" name="time" placeholder="이용 시간">
-        <input type="text" name="seat_type" placeholder="좌석을 선택하세요" value="{{reserv.seat_type.choices}}">
-        <button type="submit" onclick="return confirm('예약하시겠습니다?');">예약하기</button>
+        <input type="text" name="seat" placeholder="좌석을 선택하세요">
+        <button type="submit" onclick="return confirm('예약하시겠습니까?');">예약하기</button>
     </form>
+    
+    <form action="{% url 'review' user.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="review" placeholder="리뷰를 작성하세요">
+        <button>리뷰 쓰기</button>
+    </form>
+{% for review in reviews %}
+    <p>{{review.content}} -- 작성자 : {{review.writer}}</p>
+{% endfor %}
 </main>
 {% endblock content %}

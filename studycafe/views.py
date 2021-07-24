@@ -7,9 +7,9 @@ from django.shortcuts import get_object_or_404, render, redirect
 import boto3
 from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
-from datetime import date, datetime
+from datetime import date, datetime, timedelta,time
 
-from studycafe.models import PersonalUser, BusinessUser, StudyCafe, Reservation
+from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
 ERROR_MSG = {
     'ID_EXIST': '이미 존재하는 아이디 입니다.',
@@ -212,7 +212,14 @@ class CafeUploadView(View) :
 class CafeDetailView(generic.DetailView) :
     model = StudyCafe
     template_name = 'cafedetail.html'
-    context_object_name = 'cafe'
+
+    def get(self, request, *args, **kwargs) :
+        cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
+        reviews = Review.objects.filter(studycafe=cafe)
+
+        context = {'cafe':cafe, 'reviews':reviews}
+
+        return render(request, 'cafedetail.html', context)
 
     def post(self, request, *args, **kwargs) :
         return render(request, 'cafedetail.html', kwargs['pk'])
@@ -260,30 +267,63 @@ def cafedelete(request, cafe_pk) :
 
 
 class ReservationView(generic.View) :
-    model = Reservation
+    model = Reservations
     template_name = 'cafedetail.html'
     context_object_name = 'reserv'
 
     def post(self, request, *args, **kwargs) :
         date = request.POST['date']
         start_time = request.POST['start_time']
-        time = request.POST['time']
-        seat_type = request.POST['seat_type']
+        use_time = request.POST['time']
+        seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
-        state = Reservation.objects.filter(state=False).update(state=True)
+        end_time = time(int(int(start_time) + int(use_time)))
+        
 
-        # is_valid ?
-        if date :
-            if (start_time and time) :
-                if seat_type :
-                    Reservation.objects.create(
-                        date = date,
-                        start_time = start_time,
-                        time = time,
-                        seat_type = seat_type,
-                        user = request.user,
-                        studycafe = studycafe,
-                        state = state
-                    )
 
+        if len(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time)))and Date.objects.filter(content=date)) == 0 :
+
+            date1 = Date.objects.create(
+                content = date,
+                studycafe = studycafe
+            )
+
+            hour = HourTime.objects.create(
+                date = date1,
+                start_time = time(int(start_time)),
+                use_time = time(int(use_time)),
+                end_time = time(int(int(start_time) + int(use_time))),
+                state = True
+            )
+
+            seat1 = Seats.objects.create(
+                hour_time = hour,
+                content = seat,
+                state = True
+            )
+
+            Reservations.objects.create(
+                personal_user = request.user,
+                studycafe = studycafe,
+                date = date1,
+                hours = hour,
+                seat = seat1,
+            )
+        else :
+            print("사용시간 중복")
+
+        return redirect('cafedetail', kwargs['pk'])
+
+
+class ReviewView(generic.View) :
+
+    def post(self, request, *args, **kwargs) :
+        content = request.POST['review']
+        studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
+
+        Review.objects.create(
+            studycafe = studycafe,
+            writer = request.user,
+            content= content
+        )
         return redirect('cafedetail', kwargs['pk'])

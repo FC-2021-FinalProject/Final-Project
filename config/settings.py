@@ -29,7 +29,6 @@ INSTALLED_APPS = [
 
     #main app
     'studycafe',
-    'service',
 
     # social login auth
     'allauth',
@@ -128,7 +127,7 @@ INTERNAL_IPS = [
     # ...
 ]
 
-# SITE_ID = 1
+SITE_ID = 1
 
 # AUTHENTICATION_BACKENDS = [
 #     # Needed to login by username in Django admin, regardless of `allauth`
@@ -138,7 +137,7 @@ INTERNAL_IPS = [
 #     'allauth.account.auth_backends.AuthenticationBackend',
 # ]
 
-#social Login redirection
+# Social Login Redirection for django-allauth
 LOGIN_REDIRECT_URL = '/' 
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_ON_GET = True
@@ -149,4 +148,33 @@ AWS_SECRET_ACCESS_KEY=env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME=env('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_REGION_NAME='ap-northeast-2'
 AWS_S3_OVERWRITE=False
- 
+
+# Kakao Login API
+KAKAO_REST_API_KEY=env('KAKAO_REST_API_KEY')
+KAKAO_SECRET_KEY=env('KAKAO_SECRET_KEY')
+KAKAO_APP_ADMIN_KEY=env('KAKAO_APP_ADMIN_KEY')
+KAKAO_REDIRECT_URI=env('KAKAO_REDIRECT_URI')
+KAKAO_LOGOUT_REDIRECT_URI=env('KAKAO_LOGOUT_REDIRECT_URI')
+
+# MEMO TO DELETE
+        # kakao_user returned 
+        #{"id":1********9,
+        # "connected_at":"2021-07-02T07:53:44Z",
+        # "properties":{
+            # "nickname":"",
+            # "profile_image":"http://k.kakaocdn.net/img_640x640.jpg",
+            # "thumbnail_image":"http://k.kakaocdn.net/img_110x110.jpg"},
+        # "kakao_account":{
+            # "profile_nickname_needs_agreement":false,
+            # "profile_image_needs_agreement":false,
+                # "profile":{
+                    # "nickname":"",
+                    # "thumbnail_image_url":"http://k.kakaocdn.net/img_110x110.jpg",
+                    # "profile_image_url":"http://k.kakaocdn.net/img_640x640.jpg",
+                    # "is_default_image":false},
+            # "has_email":true,
+            # "email_needs_agreement":false,
+            # "is_email_valid":true,
+            # "is_email_verified":true,
+            # "email":""}
+        #}

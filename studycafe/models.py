@@ -1,17 +1,23 @@
+# Standard Library Imports
 from contextlib import contextmanager
 from typing import ContextManager
+
+# Core Django Imports
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.fields import BooleanField
 
+
 class PersonalUser(models.Model):
     # relationship
     user = models.OneToOneField(User, on_delete=models.SET_NULL, related_name='personal_user', null=True, blank=True)
+
     # model fields
     name = models.CharField(max_length=64)
     email = models.CharField(max_length=64)
     email_authenticated = models.BooleanField(default=False)
-
+    unique_id = models.IntegerField(null=True, blank=True)
+    
     def __str__(self):
         return self.name
 

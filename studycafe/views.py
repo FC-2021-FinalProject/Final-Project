@@ -351,6 +351,7 @@ class Payment(request):
     amountVat = 0                       # VAt amount
     productDesc = f"{product_name}"     # name of content purchased
     amountServiceFee = 0                # service fee
+    expired time = datetime.date()      # default is 10 mins but can be 60mins max      
     cashReceipt = True                  # Boolean value
 
     headers = { "Content-Type": "application/json"}

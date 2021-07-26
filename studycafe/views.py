@@ -219,17 +219,6 @@ def kakao_logout(request):
   
     return redirect('index')
 
-# def kakao_logout(request):
-# # USING LOGOUT OF SERVICE ALONG WITH KAKAO ACCOUNT
-#     REST_API_KEY=KAKAO_REST_API_KEY
-#     LOGOUT_REDIRECT_URI=KAKAO_LOGOUT_REDIRECT_URI
-  
-#     url = f"https://kauth.kakao.com/oauth/logout?client_id={REST_API_KEY}&logout_redirect_uri={LOGOUT_REDIRECT_URI}"
-
-#     response=requests.get(url)
-#     print(f"*************{response}")
-
-#     return redirect('index')
 
 class PersonalUserDetailView(generic.DeleteView) :
     model = PersonalUser

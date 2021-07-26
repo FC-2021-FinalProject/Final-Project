@@ -9,39 +9,44 @@
 
 {% block content %}
 {% include 'header-nav.html' %}
-<section class="container">
-    <!-- 모달창 뒷배경 modal window background body overlay -->
-    <div class="body-blackout"></div>
-    <!-- 모달창 컨텐츠 (로그인양식과 회원가입링크) -->
-    <section class="auth-popup">
-        <i class="fas fa-window-close popup-modal__close"></i>
-        <h2 class="auth-popup-header">Login or Signup</h2>
-            <form class="auth-form" action="{% url 'login' %}" method="POST" novalidate>
+<section class="login-page-container">
+    <section class="login-page-wrapper">
+        <section class="login-form-container">
+            <!-- <i class="fas fa-window-close popup-modal__close"></i> -->
+            <h2 class="login-form-header">Login</h2>
+            <form class="login-form" action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
                 <div class="form-control">
                     <label class="visually-hidden" for="login-name">username</label>
-                    <input class="auth-items auth-items-username" type="text" id="login-name" name="login-name" placeholder="Enter your username.">
+                    <input class="login-items" type="text" id="login-name" name="login-name" placeholder="Enter your username.">
                     {% if error.state %}
                     <small>{{ error.msg }}</small>
                     {% endif %}
                 </div>
                 <div class="form-control">
                     <label class="visually-hidden" for="login-password">password</label>
-                    <input class="auth-items auth-items-password" type="password" id="login-password" name="login-password" placeholder="Enter your password.">
+                    <input class="login-items" type="password" id="login-password" name="login-password" placeholder="Enter your password.">
                     {% if error.state %}
                     <small>{{ error.msg }}</small>
                     {% endif %}
                 </div>
-                <button type="submit">LOGIN</button>
+                <button class="login-submit-button" type="submit">Login</button>
             </form>
-            <div class="idpw-search-container">
-                <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot your username?</a>
-                <a href="{% url 'IdPwSearch' %}" class="pw-search">Forgot your Password?</a>
-            </div>
-            <article class="social-login-container">
-                <a href="{% url 'kakao_login' %}"><i class="fas fa-comment mr-2"></i>카카오 로그인</a>
-                <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>구글 로그인</a>
+            <article class="idpw-search-container">
+                <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot username?</a>
+                <a href="{% url 'IdPwSearch' %}" class="pw-search">Forgot Password?</a>
             </article>
+            <article class="social-login-container">
+                <a href="{% url 'kakao_login' %}" class="social-login-wrapper">
+                    <i class="fas fa-comment mr-2"></i>
+                    Login with Kakao Account
+                </a>
+                <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
+                    <i class="fab fa-google"></i>
+                    Login with Google Account
+                </a>
+            </article>
+        </section>
     </section>
 </section>
 {% endblock content%}

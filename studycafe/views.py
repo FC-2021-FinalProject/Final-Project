@@ -510,11 +510,39 @@ def pw_random_generator(length):
 
 def PwSearch(request):
     result_msg = {'error': {'state': False, 'msg': ''}}
-    verification_email = ""
-         
+
+    if request.method == 'POST':
+        verification_email == request.POST['verification-email']
+        user_id == request.POST['verification-id']
+
+        if PersonalUser.objects.filter(email=verification_email).user == User.objects.filter(username=user_id):
+            random_pw = pw_random_generator(16)
+            filtered_user = User.objects.filter(username=user_id)
+            filtered_user.objects.update(
+                password = random_pw
+            )
+            # send pw to email()
+            
+            result_msg['error']['msg'] = "Your new password has been sent to your email."
+
+            return render(request, "IdPwSearch.html", result_msg)
+        
+        if BusinessUser.objects.filter(email=verification_email).user == User.objects.filter(username=user_id):
+            random_pw = pw_random_generator(16)
+            filtered_user = User.objects.filter(username=user_id)
+            filtered_user.objects.update(
+                password = random_pw
+            )
+            # send pw to email()
+            
+            result_msg['error']['msg'] = "Your new password has been sent to your email."
+            return render(request, "IdPwSearch.html", result_msg)
+        
+        else:
+            result_msg['error']['state'] = True
+            result_msg['error']['msg'] = "No matching user with that ID and email."
+
+            return render ("IdPwSearch.html", result_msg)   
 
     return(request, "IdPwSearch.html", result_msg)
-
-
-
 

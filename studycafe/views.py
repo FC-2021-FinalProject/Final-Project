@@ -1,14 +1,20 @@
+# Standard Library Imports
+from datetime import datetime, time
+import requests
+
+# Core Django Imports
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import request
 from django.views import generic, View
 from django.shortcuts import get_object_or_404, render, redirect
 
+# Third-Party App Imports
 import boto3
 from boto3.session import Session
-from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
-from datetime import datetime,time
 
+# Imports from Apps
+from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
 import requests
@@ -142,9 +148,80 @@ def login(request) :
     return render(request, 'login.html', validation_context)
 
 def logout(request) :
-    if request.method == 'POST' :
-        auth.logout(request)
+    # if request.method == 'POST' :
+    auth.logout(request)
     return redirect('index')
+
+def kakao_login(request):
+    REST_API_KEY=KAKAO_REST_API_KEY
+    REDIRECT_URI=KAKAO_REDIRECT_URI
+     
+    return redirect(f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code")
+
+def kakao_callback(request):
+#KEYS
+    REST_API_KEY=KAKAO_REST_API_KEY
+    SECRET_KEY=KAKAO_SECRET_KEY
+    REDIRECT_URI=KAKAO_REDIRECT_URI
+
+#GET CODE FOR ACCESS TOKEN REQUEST
+    AUTHORIZATION_CODE=request.GET.get("code")
+
+    response = requests.post(f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={AUTHORIZATION_CODE}&client_secret={SECRET_KEY}",headers={"Accept": "application/json"},)
+    user_data = response.json()
+    ACCESS_TOKEN = user_data['access_token']
+    
+#REQUEST TO GET KAKAO UNIQUE_ID INFORMATION
+    url = "https://kapi.kakao.com/v2/user/me"
+    headers = {"Authorization": "Bearer {}".format(user_data["access_token"])}
+    response = requests.post(url, headers=headers)
+    kakao_user = response.json()
+
+    target_id = kakao_user['id']
+    returning_user = PersonalUser.objects.filter(unique_id=target_id)
+
+    if (len(returning_user) != 0):
+        user = returning_user[0].user
+        auth.login(request, user)
+        return redirect('index')
+
+    elif (len(returning_user) == 0):
+
+        target_nickname = kakao_user['properties']['nickname']
+        target_email = kakao_user['kakao_account']['email']
+
+    # CREATE USER & PERSONAL USER INSTANCES
+        user = User.objects.create_user(
+            username=f"kakao{target_id}",
+            email=target_email,
+        )
+        new_account = PersonalUser.objects.create(
+            user=user,
+            email=target_email,
+            name=target_nickname,
+            email_authenticated=True,
+            unique_id=target_id,
+        )
+        user.set_unusable_password()
+        user.save()
+        auth.login(request, user)
+        return redirect('index')
+
+    return redirect('index')
+
+def kakao_logout(request):
+# USING ACCESS TOKEN
+    ACCESS_TOKEN=request.GET.get('access_token')
+    url = "https://kauth.kakao.com/v1/user/logout"
+    headers = {"Authorization": "Bearer {}".format(ACCESS_TOKEN)}
+
+    response=requests.post(url, headers=headers)
+   
+    print(response)
+    auth.logout(request)
+  
+    return redirect('index')
+
 
 class PersonalUserDetailView(generic.DeleteView) :
     model = PersonalUser
@@ -157,6 +234,7 @@ class PersonalUserDetailView(generic.DeleteView) :
 
     def post(self, request, *args, **kwargs) :
         return redirect('PUprofile', kwargs['pk'])
+
 
 class BusinessUserDetailView(generic.DeleteView) :
     model = BusinessUser
@@ -262,6 +340,7 @@ class CafeEditView(generic.View) :
 
         return redirect('cafedetail', kwargs['pk'])
 
+
 def cafedelete(request, cafe_pk) :
     cafe = StudyCafe.objects.filter(pk=cafe_pk)
     cafe.update(is_deleted=True)
@@ -282,8 +361,6 @@ class ReservationView(generic.View) :
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
         end_time = time(int(int(start_time) + int(use_time)))
         
-
-
         if len(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time)))and Date.objects.filter(content=date)) == 0 :
 
             date1 = Date.objects.create(

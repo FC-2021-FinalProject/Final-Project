@@ -1,84 +1,177 @@
-.to-delete{
-    background-color: yellow;
+/* ----------------- reset css -------------------- */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
 }
-/* HIDDEN CONTENTS */
-.a11y-hidden, legend{
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: polygon(0 0, 0 0, 0 0);
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
 }
 body {
-    padding: 0 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+	line-height: 1;
 }
-/* HEADER */
-header{
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+button {
+    border:0;
+    background: transparent;
+}
+.visually-hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+/* ----------------- header -------------------- */
+h1 {
+    color: #fff;
+}
+.header-container {
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+    padding: 20px 0;
+}
+.header-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
-    align-items: baseline;
     justify-content: space-between;
-}
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.form-control {
-    margin-bottom: 10px;
-    padding-bottom: 20px;
+    flex-direction: row;
+    padding: 0 20px;
     position: relative;
 }
-.form-control label {
-    display: inline-block;
-    margin-bottom: 5px;
+.header-wrapper ul {
+    display: flex;
+    justify-content: space-around;
 }
-.form-control i {
+.search-form {
     position: absolute;
-    top: 40px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.search-form input {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #fff;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    color: #fff;
+}
+.header-nav-menu-container {
+    box-sizing: border-box;
+    display: none;
+    position: absolute;
+    width: 130px;
+    top: 20px;
     right: 10px;
-    visibility: hidden;
+    box-shadow: 1px 1px 5px 1px black;
+    background: #fff;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
 }
-.form-control.success i.fa-check-circle{
-    color: green;
-    visibility: visible;
-}
-.form-control.error i.fa-exclamation-circle{
-    color: red;
-    visibility: visible;
-}
-.form-control small {
-    color: green;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    visibility: hidden;
-}
-.form-control.error small{
-    visibility: visible;
-}
-.auth-items {
-    display: block;
-    font-size: 14px;
-    padding: 10px;
+.header-nav-menu-list {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     width: 100%;
+}
+.header-nav-menu-list li {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 20px 10px;
+}
+.header-nav-menu-list li:hover {
+    /* border: 1px solid #fff; */
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .9)
+}
+.header-nav-menu-list a {
+    text-decoration: none;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+.mobile-menu {
+    transition: all 2s;
+}
+.mobile-open {
+    display: block;
+}
 
+/* ----------------- index.html -------------------- */
+.user-info-wrapper, 
+.cafe-wrapper{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
-.auth-form button {
-    background-color: lightgray;
-    border-color: lightgray;
-    display: block;
-    border-radius: 4px;
+.cafe-wrapper h3 {
+    font-style: bold;
+    font-size: large;
+    border-bottom: 1px solid black;
+    padding-bottom: 5px;
+    display: inline-block;
+}
+.cafe-content-list {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.cafe-content-list li{
+    border: 1px solid rgba(0,0,0,0.3)
+}
+.cafe-content-list li:hover{
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,0.7);
+    /* changed from border to box-shadow to avoid movement of elements upon hover */
+    /* border: 2px solid rgba(0,0,0,0.7) */
+}
+.cafe-content-list button {
     width: 100%;
+    height: 100%;
+    padding: 50px;
+    border:0;
+    background: transparent;
 }
-.popup-modal__close {
+
+/* ----------------- login.html -------------------- */
+/* .popup-modal__close {
     position: absolute;
     right: -5px;
     top: -5px;
     cursor: pointer;
     padding: 10px;
 }
-

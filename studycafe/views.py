@@ -292,7 +292,7 @@ class ReservationView(generic.View) :
                 date = date1,
                 start_time = time(int(start_time)),
                 use_time = time(int(use_time)),
-                end_time = time(int(int(start_time) + int(use_time))),
+                end_time = end_time,
                 state = True
             )
 
@@ -310,7 +310,7 @@ class ReservationView(generic.View) :
                 seat = seat1,
             )
         else :
-            print("사용시간 중복")
+            print("중복")
 
         return redirect('cafedetail', kwargs['pk'])
 

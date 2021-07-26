@@ -1,30 +1,54 @@
 {% extends "base.html" %}
+{% block head %}
+<!-- javascript link -->
+{% load static %}
+<script defer src="{% static 'index.js' %}"></script>
+{% endblock head %}
+
 {% block content %}
-
 {% include 'header-nav.html' %}
-{% load socialaccount %}
-{% providers_media_js %}
-
-<!-- 템플릿 페이지 구분용 div (지울거임) -->
-<div class="to-delete">메인 인덱스 페이지</div>
-
-{% if user.is_authenticated %}
-<main>
-<h2>LOGGED IN!!! </h2>
-
-    {% if user.business_user %}
-        {{user.business_user.name}} 님이 로그인 중
-        <br>
-        <a href="{% url 'BUprofile' user.pk %}">비즈니스 페이지</a>
-        <br>
-    {% elif user.personal_user %}
-        {{user.personal_user.name}} 님이 로그인 중
-        <br>
-        <a href="{% url 'PUprofile' user.pk %}">마이 페이지</a>
-        <br>
-    {% endif %}
+<main class="main-container">
+    <section class="user-info-wrapper">
+    {% if user.is_authenticated %}
+        {% if user.business_user %}
+            {{user.business_user.name}} 님이 로그인 중
+            <br>
+            <a href="{% url 'BUprofile' user.pk %}">비즈니스 페이지</a>
+            <br>
+        {% elif user.personal_user %}
+            {{user.personal_user.name}} 님이 로그인 중
+            <br>
+            <a href="{% url 'PUprofile' user.pk %}">마이 페이지</a>
+            <br>
+        {% endif %}
         <a href="{% url 'cafelist' %}">카페 리스트 보기</a>
-  
-{% endif %}
+    {% endif %}
+    </section>
+    <section class="cafe-wrapper">
+        <h3>지역별 스터디 카페</h3>
+        <ul class="cafe-content-list">
+            <li>
+                <button>
+                    성수
+                </button>
+            </li>
+            <li>
+                <button>
+                    건대
+                </button>
+            </li>
+            <li>
+                <button>
+                    뚝섬
+                </button>
+            </li>
+            <li>
+                <button>
+                    강남
+                </button>
+            </li>
+        </ul>
+    </section>
 </main>
+
 {% endblock content %}

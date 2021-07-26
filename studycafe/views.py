@@ -332,55 +332,55 @@ class ReviewView(generic.View) :
         return redirect('cafedetail', kwargs['pk'])
 
 
-class Payment(request):
-    # url Collection
-    actual_url = "https://pay.toss.im/api/v2/payments"
-    testing_url = ""        # fake web that responds --> TOSS
-    service_url = ""        # our service url
+# class Payment(request):
+#     # url Collection
+#     actual_url = "https://pay.toss.im/api/v2/payments"
+#     testing_url = ""        # fake web that responds --> TOSS
+#     service_url = ""        # our service url
 
-    apiKey = apiKey         # testkey for api
-    retUrl = ""             # for successful redirection
-    retCancelUrl = ""       # for failed redirection
+#     apiKey = apiKey         # testkey for api
+#     retUrl = ""             # for successful redirection
+#     retCancelUrl = ""       # for failed redirection
 
-    #Product information
-    orderNo = 1                         # requires nonconflicting ascending order numbering
-    payment_amount = 1000               # total price payed
-    tax_free_amount = 0                 # Duty free amount
-    amountTaxable = 0                   # actual price without VAT
-    amountVat = 0                       # VAt amount
-    productDesc = f"{product_name}"     # name of content purchased
-    amountServiceFee = 0                # service fee
-    expired time = datetime.date()      # default is 10 mins but can be 60mins max      
-    cashReceipt = True                  # Boolean value
+#     #Product information
+#     orderNo = 1                         # requires nonconflicting ascending order numbering
+#     payment_amount = 1000               # total price payed
+#     tax_free_amount = 0                 # Duty free amount
+#     amountTaxable = 0                   # actual price without VAT
+#     amountVat = 0                       # VAt amount
+#     productDesc = f"{product_name}"     # name of content purchased
+#     amountServiceFee = 0                # service fee
+#     expired time = datetime.date()      # default is 10 mins but can be 60mins max      
+#     cashReceipt = True                  # Boolean value
 
-    headers = { "Content-Type": "application/json"}
-    params = {
-        "orderNo":orderNo,                                       # 토스몰 고유의 주문번호 (필수)
-        "amount":payment_amount,                                 # 결제 금액 (필수)
-        "amountTaxFree":tax_free_amount,                         # 비과세 금액 (필수)
-        "productDesc":productDesc,                               # 상품 정보 (필수)
-        "apiKey":apiKey,                                         # 상점의 API Key (필수)
-        "retUrl":f"{service_url}/ORDER-CHECK?orderno={orderNo}", # 결제 완료 후 연결할 웹 URL (필수)
-        "retCancelUrl":f"{service_url}/close",                   # 결제 취소 시 연결할 웹 URL (필수)
-        "autoExecute":true,                                      # 자동 승인 설정 (필수)
-        "resultCallback":f"{service_url}/callback",              # 결제 결과 callback 웹 URL (필수-자동승인설정 true의 경우)
-        "callbackVersion":"V2",                                  # callback 버전 (필수-자동승인설정 true의 경우)
-        "amountTaxable":amountTaxable,                           # 결제 금액 중 과세금액
-        "amountVat":amountVat,                                   # 결제 금액 중 부가세
-        "amountServiceFee":0,                                    # 결제 금액 중 봉사료
-        "expiredTime":"2019-06-17 12:47:35",                     # 결제 만료 예정 시각
-        "cashReceipt":cashReceipt,                               # 현금영수증 발급 가능 여부
-        }
+#     headers = { "Content-Type": "application/json"}
+#     params = {
+#         "orderNo":orderNo,                                       # 토스몰 고유의 주문번호 (필수)
+#         "amount":payment_amount,                                 # 결제 금액 (필수)
+#         "amountTaxFree":tax_free_amount,                         # 비과세 금액 (필수)
+#         "productDesc":productDesc,                               # 상품 정보 (필수)
+#         "apiKey":apiKey,                                         # 상점의 API Key (필수)
+#         "retUrl":f"{service_url}/ORDER-CHECK?orderno={orderNo}", # 결제 완료 후 연결할 웹 URL (필수)
+#         "retCancelUrl":f"{service_url}/close",                   # 결제 취소 시 연결할 웹 URL (필수)
+#         "autoExecute":true,                                      # 자동 승인 설정 (필수)
+#         "resultCallback":f"{service_url}/callback",              # 결제 결과 callback 웹 URL (필수-자동승인설정 true의 경우)
+#         "callbackVersion":"V2",                                  # callback 버전 (필수-자동승인설정 true의 경우)
+#         "amountTaxable":amountTaxable,                           # 결제 금액 중 과세금액
+#         "amountVat":amountVat,                                   # 결제 금액 중 부가세
+#         "amountServiceFee":0,                                    # 결제 금액 중 봉사료
+#         "expiredTime":"2019-06-17 12:47:35",                     # 결제 만료 예정 시각
+#         "cashReceipt":cashReceipt,                               # 현금영수증 발급 가능 여부
+#         }
 
-    response = requests.post(actual_url, headers=headers, params=params)
-    # expected result for response:
-    # {"code":0,"checkoutPage":"https://pay.toss.im/payfront/auth?payToken=test_token1234567890", 
-    # "payToken":"example-payToken"}
+#     response = requests.post(actual_url, headers=headers, params=params)
+#     # expected result for response:
+#     # {"code":0,"checkoutPage":"https://pay.toss.im/payfront/auth?payToken=test_token1234567890", 
+#     # "payToken":"example-payToken"}
     
-    #after successful payment:
-    # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
-    # any status except for status=PAY_COMPLETE means unsuccesful payment
+#     #after successful payment:
+#     # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
+#     # any status except for status=PAY_COMPLETE means unsuccesful payment
 
-    #if status != PAY_COMPLETE:
-    #    return
+#     #if status != PAY_COMPLETE:
+#     #    return
 

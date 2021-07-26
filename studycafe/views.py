@@ -17,7 +17,7 @@ from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
-import requests
+import requests, random, string
 
 
 ERROR_MSG = {
@@ -409,7 +409,7 @@ class ReviewView(generic.View) :
         return redirect('cafedetail', kwargs['pk'])
 
 
-class Payment(request):
+def Payment(request):
     # url Collection
     actual_url = "https://pay.toss.im/api/v2/payments"
     testing_url = ""        # fake web that responds --> TOSS
@@ -425,9 +425,9 @@ class Payment(request):
     tax_free_amount = 0                 # Duty free amount
     amountTaxable = 0                   # actual price without VAT
     amountVat = 0                       # VAt amount
-    productDesc = f"{product_name}"     # name of content purchased
+    productDesc = ""     # name of content purchased
     amountServiceFee = 0                # service fee
-    expired time = datetime.date()      # default is 10 mins but can be 60mins max      
+    expired_time = datetime.date()      # default is 10 mins but can be 60mins max      
     cashReceipt = True                  # Boolean value
 
     headers = { "Content-Type": "application/json"}
@@ -444,8 +444,8 @@ class Payment(request):
         "callbackVersion":"V2",                                  # callback 버전 (필수-자동승인설정 true의 경우)
         "amountTaxable":amountTaxable,                           # 결제 금액 중 과세금액
         "amountVat":amountVat,                                   # 결제 금액 중 부가세
-        "amountServiceFee":0,                                    # 결제 금액 중 봉사료
-        "expiredTime":"2019-06-17 12:47:35",                     # 결제 만료 예정 시각
+        "amountServiceFee": amountServiceFee,                                    # 결제 금액 중 봉사료
+        "expiredTime":expired_time,                     # 결제 만료 예정 시각
         "cashReceipt":cashReceipt,                               # 현금영수증 발급 가능 여부
         }
 
@@ -460,4 +460,89 @@ class Payment(request):
 
     #if status != PAY_COMPLETE:
     #    return
+    
 
+def IdPwSearch(request):
+    return render(request, "IdPwSearch.html")
+
+
+def IdSearch(request):
+    result_msg = {'error': {'state': False, 'msg': ''}}
+    
+    if request.method == 'POST':
+
+        verification_email == request.POST['verification-email1']
+
+        if len(PersonalUser.objects.filter(email=verification_email)) != 0: 
+            user_id = PersonalUser.objects.filter(email=verification_email).user.username
+            partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
+            result_msg['error']['msg'] = partial_user_id
+
+            return render(request, "IdPwSearch.html", result_msg)            
+
+        elif len(BusinessUser.objects.filter(email=verification_email)) != 0 :
+            user_id = BusinessUser.objects.filter(email=verification_email).user.username
+            partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
+            result_msg['error']['msg'] = partial_user_id
+        
+            return render(request, "IdPwSearch.html", result_msg)            
+
+        else:
+            result_msg['error']['state'] = True
+            result_msg['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
+
+            return render(request, "IdPwSearch.html", result_msg)
+    
+    return render(request, "IdPwSearch.html", result_msg)
+
+def pw_random_generator(length):
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase
+    digit = string.digits
+    symbol = string.punctuation
+    
+    pw_parameters = lower + upper + digit + symbol
+    
+    temp = random.sample(pw_parameters, length)
+    generated_pw = "".join(temp)
+    
+    return generated_pw
+
+def PwSearch(request):
+    result_msg = {'error': {'state': False, 'msg': ''}}
+
+    if request.method == 'POST':
+        verification_email == request.POST['verification-email2']
+        user_id == request.POST['verification-id']
+
+        if PersonalUser.objects.filter(email=verification_email).user == User.objects.filter(username=user_id):
+            random_pw = pw_random_generator(16)
+            filtered_user = User.objects.filter(username=user_id)
+            filtered_user.objects.update(
+                password = random_pw
+            )
+            # send pw to email()
+            
+            result_msg['error']['msg'] = "Your new password has been sent to your email."
+
+            return render(request, "IdPwSearch.html", result_msg)
+        
+        if BusinessUser.objects.filter(email=verification_email).user == User.objects.filter(username=user_id):
+            random_pw = pw_random_generator(16)
+            filtered_user = User.objects.filter(username=user_id)
+            filtered_user.objects.update(
+                password = random_pw
+            )
+            # send pw to email()
+            
+            result_msg['error']['msg'] = "Your new password has been sent to your email."
+    
+            return render(request, "IdPwSearch.html", result_msg)
+        
+        else:
+            result_msg['error']['state'] = True
+            result_msg['error']['msg'] = "No matching user with that ID and email."
+
+            return render ("IdPwSearch.html", result_msg)   
+
+    return(request, "IdPwSearch.html", result_msg)

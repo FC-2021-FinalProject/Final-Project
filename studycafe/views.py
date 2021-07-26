@@ -425,9 +425,9 @@ def Payment(request):
     tax_free_amount = 0                 # Duty free amount
     amountTaxable = 0                   # actual price without VAT
     amountVat = 0                       # VAt amount
-    productDesc = f"{product_name}"     # name of content purchased
+    productDesc = ""     # name of content purchased
     amountServiceFee = 0                # service fee
-    expired time = datetime.date()      # default is 10 mins but can be 60mins max      
+    expired_time = datetime.date()      # default is 10 mins but can be 60mins max      
     cashReceipt = True                  # Boolean value
 
     headers = { "Content-Type": "application/json"}
@@ -444,8 +444,8 @@ def Payment(request):
         "callbackVersion":"V2",                                  # callback 버전 (필수-자동승인설정 true의 경우)
         "amountTaxable":amountTaxable,                           # 결제 금액 중 과세금액
         "amountVat":amountVat,                                   # 결제 금액 중 부가세
-        "amountServiceFee":0,                                    # 결제 금액 중 봉사료
-        "expiredTime":"2019-06-17 12:47:35",                     # 결제 만료 예정 시각
+        "amountServiceFee": amountServiceFee,                                    # 결제 금액 중 봉사료
+        "expiredTime":expired_time,                     # 결제 만료 예정 시각
         "cashReceipt":cashReceipt,                               # 현금영수증 발급 가능 여부
         }
 
@@ -463,29 +463,27 @@ def Payment(request):
     
 
 def IdPwSearch(request):
-
     return render(request, "IdPwSearch.html")
 
 
 def IdSearch(request):
     result_msg = {'error': {'state': False, 'msg': ''}}
-    verification_email = ""
     
     if request.method == 'POST':
 
-        verification_email == request.POST['verification-email']
+        verification_email == request.POST['verification-email1']
 
         if len(PersonalUser.objects.filter(email=verification_email)) != 0: 
             user_id = PersonalUser.objects.filter(email=verification_email).user.username
             partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
-            result_msg['error']['msg'] = partial_user_id}
+            result_msg['error']['msg'] = partial_user_id
 
             return render(request, "IdPwSearch.html", result_msg)            
 
         elif len(BusinessUser.objects.filter(email=verification_email)) != 0 :
             user_id = BusinessUser.objects.filter(email=verification_email).user.username
             partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
-            result_msg['error']['msg'] = partial_user_id}
+            result_msg['error']['msg'] = partial_user_id
         
             return render(request, "IdPwSearch.html", result_msg)            
 
@@ -493,6 +491,8 @@ def IdSearch(request):
             result_msg['error']['state'] = True
             result_msg['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
 
+            return render(request, "IdPwSearch.html", result_msg)
+    
     return render(request, "IdPwSearch.html", result_msg)
 
 def pw_random_generator(length):
@@ -512,7 +512,7 @@ def PwSearch(request):
     result_msg = {'error': {'state': False, 'msg': ''}}
 
     if request.method == 'POST':
-        verification_email == request.POST['verification-email']
+        verification_email == request.POST['verification-email2']
         user_id == request.POST['verification-id']
 
         if PersonalUser.objects.filter(email=verification_email).user == User.objects.filter(username=user_id):
@@ -536,6 +536,7 @@ def PwSearch(request):
             # send pw to email()
             
             result_msg['error']['msg'] = "Your new password has been sent to your email."
+    
             return render(request, "IdPwSearch.html", result_msg)
         
         else:
@@ -545,4 +546,3 @@ def PwSearch(request):
             return render ("IdPwSearch.html", result_msg)   
 
     return(request, "IdPwSearch.html", result_msg)
-

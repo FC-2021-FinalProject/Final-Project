@@ -17,7 +17,7 @@ from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
-import requests
+import requests, random, string
 
 
 ERROR_MSG = {
@@ -480,29 +480,41 @@ def IdSearch(request):
             partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
             result_msg['error']['msg'] = partial_user_id}
 
-            return render ("IdPwSearch.html", result_msg)            
+            return render(request, "IdPwSearch.html", result_msg)            
 
         elif len(BusinessUser.objects.filter(email=verification_email)) != 0 :
             user_id = BusinessUser.objects.filter(email=verification_email).user.username
             partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
             result_msg['error']['msg'] = partial_user_id}
         
-            return render ("IdPwSearch.html", result_msg)            
+            return render(request, "IdPwSearch.html", result_msg)            
 
         else:
             result_msg['error']['state'] = True
             result_msg['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
 
+    return render(request, "IdPwSearch.html", result_msg)
+
+def pw_random_generator(length):
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase
+    digit = string.digits
+    symbol = string.punctuation
+    
+    pw_parameters = lower + upper + digit + symbol
+    
+    temp = random.sample(pw_parameters, length)
+    generated_pw = "".join(temp)
+    
+    return generated_pw
+
+def PwSearch(request):
+    result_msg = {'error': {'state': False, 'msg': ''}}
+    verification_email = ""
+         
+
     return(request, "IdPwSearch.html", result_msg)
 
 
-def PwSearch(request):
 
-
-
-
-    context = {
-
-    }
-    return(request, "IdPwSearch.html", context)
 

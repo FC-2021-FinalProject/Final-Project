@@ -7,11 +7,10 @@ from django.shortcuts import get_object_or_404, render, redirect
 import boto3
 from boto3.session import Session
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
-from datetime import date, datetime, timedelta,time
+from datetime import datetime,time
 
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
-import json
 import requests
 
 

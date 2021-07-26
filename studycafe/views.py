@@ -409,7 +409,7 @@ class ReviewView(generic.View) :
         return redirect('cafedetail', kwargs['pk'])
 
 
-class Payment(request):
+def Payment(request):
     # url Collection
     actual_url = "https://pay.toss.im/api/v2/payments"
     testing_url = ""        # fake web that responds --> TOSS
@@ -460,4 +460,49 @@ class Payment(request):
 
     #if status != PAY_COMPLETE:
     #    return
+    
+
+def IdPwSearch(request):
+
+    return render(request, "IdPwSearch.html")
+
+
+def IdSearch(request):
+    result_msg = {'error': {'state': False, 'msg': ''}}
+    verification_email = ""
+    
+    if request.method == 'POST':
+
+        verification_email == request.POST['verification-email']
+
+        if len(PersonalUser.objects.filter(email=verification_email)) != 0: 
+            user_id = PersonalUser.objects.filter(email=verification_email).user.username
+            partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
+            result_msg['error']['msg'] = partial_user_id}
+
+            return render ("IdPwSearch.html", result_msg)            
+
+        elif len(BusinessUser.objects.filter(email=verification_email)) != 0 :
+            user_id = BusinessUser.objects.filter(email=verification_email).user.username
+            partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
+            result_msg['error']['msg'] = partial_user_id}
+        
+            return render ("IdPwSearch.html", result_msg)            
+
+        else:
+            result_msg['error']['state'] = True
+            result_msg['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
+
+    return(request, "IdPwSearch.html", result_msg)
+
+
+def PwSearch(request):
+
+
+
+
+    context = {
+
+    }
+    return(request, "IdPwSearch.html", context)
 

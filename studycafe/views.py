@@ -1,6 +1,6 @@
 # Standard Library Imports
 from datetime import datetime, time
-import requests
+import requests, random, string
 
 # Core Django Imports
 from django.contrib import auth
@@ -16,8 +16,6 @@ from boto3.session import Session
 # Imports from Apps
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
-
-import requests, random, string
 
 
 ERROR_MSG = {
@@ -454,9 +452,9 @@ def Payment(request):
     # {"code":0,"checkoutPage":"https://pay.toss.im/payfront/auth?payToken=test_token1234567890", 
     # "payToken":"example-payToken"}
     
-    #after successful payment:
-    # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
-    # any status except for status=PAY_COMPLETE means unsuccesful payment
+#     #after successful payment:
+#     # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
+#     # any status except for status=PAY_COMPLETE means unsuccesful payment
 
     #if status != PAY_COMPLETE:
     #    return

@@ -29,7 +29,6 @@ INSTALLED_APPS = [
 
     #main app
     'studycafe',
-    'service',
 
     # social login auth
     'allauth',
@@ -128,17 +127,17 @@ INTERNAL_IPS = [
     # ...
 ]
 
-# SITE_ID = 1
+SITE_ID = 1
 
-# AUTHENTICATION_BACKENDS = [
-#     # Needed to login by username in Django admin, regardless of `allauth`
-#     'django.contrib.auth.backends.ModelBackend',
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
 
 #     # `allauth` specific authentication methods, such as login by e-mail
 #     'allauth.account.auth_backends.AuthenticationBackend',
-# ]
+]
 
-#social Login redirection
+# Social Login Redirection for django-allauth
 LOGIN_REDIRECT_URL = '/' 
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_ON_GET = True
@@ -149,4 +148,10 @@ AWS_SECRET_ACCESS_KEY=env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME=env('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_REGION_NAME='ap-northeast-2'
 AWS_S3_OVERWRITE=False
- 
+
+# Kakao Login API
+KAKAO_REST_API_KEY=env('KAKAO_REST_API_KEY')
+KAKAO_SECRET_KEY=env('KAKAO_SECRET_KEY')
+KAKAO_APP_ADMIN_KEY=env('KAKAO_APP_ADMIN_KEY')
+KAKAO_REDIRECT_URI=env('KAKAO_REDIRECT_URI')
+KAKAO_LOGOUT_REDIRECT_URI=env('KAKAO_LOGOUT_REDIRECT_URI')

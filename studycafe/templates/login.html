@@ -1,36 +1,43 @@
 {% extends "base.html" %}
-{% block content %}
-{% load socialaccount %}{% providers_media_js %}
-<!-- 모달창 뒷배경 modal window background body overlay -->
-<div class="body-blackout"></div>
-<!-- 모달창 컨텐츠 (로그인양식과 회원가입링크) -->
-<section class="auth-popup login-container">
-    <i class="fas fa-window-close popup-modal__close"></i>
-    <h2 class="auth-popup-header">박도비팀 로그인:)</h2>
-        <form class="auth-form" action="{% url 'login' %}" method="POST">
-            {% csrf_token %}
-            <div class="form-control">
-                <label class="a11y-hidden" for="login-name">username</label>
-                <input class="auth-items auth-items-username" type="text" id="login-name" name="login-name" placeholder="Enter your username.">
-                <i class="fas fa-check-circle"></i>
-                <i class="fas fa-exclamation-circle"></i>
-                {% if error.state %}
-                <small>{{ error.msg }}</small>
-                {% endif %}
-            </div>
-            <div class="form-control">
-                <label class="a11y-hidden" for="login-password">password</label>
-                <input class="auth-items auth-items-password" type="password" id="login-password" name="login-password" placeholder="Enter your password.">
-                <i class="fas fa-check-circle success"></i>
-                <i class="fas fa-exclamation-circle error"></i>
-                {% if error.state %}
-                <small>{{ error.msg }}</small>
-                {% endif %}
-            </div>
-            <button type="submit">LOGIN</button>
-        </form>
+{% block head %}
+{% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
+<!-- javascript link -->
+<script defer src="{% static 'login.js' %}"></script>
+{% endblock head %}
 
-        <a href="{% provider_login_url 'kakao' method='oauth2' %}"><i class="fas fa-comment mr-2"></i>카카오 로그인</a>
-        <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>구글 로그인</a>
+{% block content %}
+{% include 'header-nav.html' %}
+<section class="container">
+    <!-- 모달창 뒷배경 modal window background body overlay -->
+    <div class="body-blackout"></div>
+    <!-- 모달창 컨텐츠 (로그인양식과 회원가입링크) -->
+    <section class="auth-popup">
+        <i class="fas fa-window-close popup-modal__close"></i>
+        <h2 class="auth-popup-header">Login or Signup</h2>
+            <form class="auth-form" action="{% url 'login' %}" method="POST" novalidate>
+                {% csrf_token %}
+                <div class="form-control">
+                    <label class="visually-hidden" for="login-name">username</label>
+                    <input class="auth-items auth-items-username" type="text" id="login-name" name="login-name" placeholder="Enter your username.">
+                    {% if error.state %}
+                    <small>{{ error.msg }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-control">
+                    <label class="visually-hidden" for="login-password">password</label>
+                    <input class="auth-items auth-items-password" type="password" id="login-password" name="login-password" placeholder="Enter your password.">
+                    {% if error.state %}
+                    <small>{{ error.msg }}</small>
+                    {% endif %}
+                </div>
+                <button type="submit">LOGIN</button>
+            </form>
+            <article class="social-login-container">
+                <a href="{% url 'kakao_login' %}"><i class="fas fa-comment mr-2"></i>카카오 로그인</a>
+                <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>구글 로그인</a>
+            </article>
+    </section>
 </section>
-{% endblock content %}
+{% endblock content%}

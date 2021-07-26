@@ -34,6 +34,10 @@
                 </div>
                 <button type="submit">LOGIN</button>
             </form>
+            <div class="idpw-search-container">
+                <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot your username?</a>
+                <a href="{% url 'IdPwSearch' %}" class="pw-search">Forgot your Password?</a>
+            </div>
             <article class="social-login-container">
                 <a href="{% url 'kakao_login' %}"><i class="fas fa-comment mr-2"></i>카카오 로그인</a>
                 <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>구글 로그인</a>

@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
 {% block content %}
+{% include 'header-nav.html' %}
 <section class="signup-container">
     <h2 class="signup-form-header">기업 회원가입:)</h2>
     <form action="{% url 'business_signup' %}" method="POST">

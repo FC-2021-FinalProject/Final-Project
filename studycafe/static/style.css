@@ -180,14 +180,15 @@ button {
     background: transparent;
 }
 
-/* ----------------- login.html -------------------- */
-.login-page-wrapper {
+
+/* ------- Login, Personal User and Business User Common------- */
+.auth-page-wrapper {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     position: relative;
 }
-.login-form-container {
+.auth-form-container {
     margin: 0 auto;
     margin-top: 50px;
     position: absolute;
@@ -202,43 +203,35 @@ button {
     width: 400px;
     box-shadow: 3px 3px 3px rgb(176, 176, 176);
 }
-.login-form-header {
+.auth-form-header {
     margin: 20px 0;
 }
-.login-form {
+.auth-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
 }
-.login-input-control{
+.auth-input-controls{
     width: 100%;
     position: relative;
 }
-.login-labels{
+.auth-labels{
     position: absolute;
     top: 15px;
     margin-left: 20px;
     font-size: large;
     color: rgb(176, 176, 176)
 }
-.login-items {
+.auth-input-items {
     box-sizing: border-box;
     border: 1px solid rgb(176, 176, 176);
     outline: none;
     padding-left: 20px;
     width: 100%;
     height: 50px;
-    font-size: small;
 }
-#login-name{
-    border-radius: 8px 8px 0 0 ;
-}
-#login-password{
-    border-radius: 0 0 8px 8px;
-    border-top: none;
-}
-#login-submit-button{
+.auth-submit-buttons{
     background: #d80a63;
     box-sizing: border-box;
     text-decoration: none;
@@ -252,6 +245,29 @@ button {
     margin-top: 15px;
     cursor: pointer;
 }
+
+/* ----------------- login.html -------------------- */
+#login-name{
+    border-radius: 8px 8px 0 0 ;
+}
+#login-password{
+    border-radius: 0 0 8px 8px;
+    border-top: none;
+}
+/* ----------------- personal_signup.html -------------------- */
+/* ----------------- business_signup.html -------------------- */
+.pu-signup-inputs,
+.bu-signup-inputs {
+    border-bottom: none;
+}
+#signup-name{
+    border-radius: 8px 8px 0 0 ;
+}
+#signup-password-check{
+    border-bottom: 1px solid rgb(176, 176, 176);
+    border-radius: 0 0 8px 8px;
+}
+/* ----------------- id/pw search  -------------------- */
 .idpw-search-container{
     width: 100%;
     margin-top: 15px;
@@ -262,6 +278,7 @@ button {
     font-size: x-small;
     color: rgb(140, 140, 140);
 }
+/* ----------------- social logins-------------------- */
 .social-login-container {
     display: flex;
     flex-direction: column;
@@ -290,76 +307,4 @@ button {
 .fa-comment, .fa-google {
     position: absolute;
     left: 20px;
-}
-/* ----------------- personal_signup.html -------------------- */
-.signup-page-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    position: relative;
-}
-.signup-form-container {
-    margin: 0 auto;
-    margin-top: 50px;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
-    border: 1px solid rgb(176, 176, 176);
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 400px;
-    box-shadow: 3px 3px 3px rgb(176, 176, 176);
-}
-.signup-form-header {
-    margin: 20px 0;
-}
-.signup-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-.pu-signup-input-controls{
-    width: 100%;
-    position: relative;
-}
-.pu-signup-labels{
-    position: absolute;
-    top: 15px;
-    margin-left: 20px;
-    font-size: large;
-    color: rgb(176, 176, 176)
-}
-.pu-signup-inputs {
-    box-sizing: border-box;
-    border: 1px solid rgb(176, 176, 176);
-    border-bottom: none;
-    outline: none;
-    padding-left: 20px;
-    width: 100%;
-    height: 50px;
-}
-#signup-name{
-    border-radius: 8px 8px 0 0 ;
-}
-#signup-password-check{
-    border-bottom: 1px solid rgb(176, 176, 176);
-    border-radius: 0 0 8px 8px;
-}
-#pu-signup-submit-button{
-    background: #d80a63;
-    box-sizing: border-box;
-    text-decoration: none;
-    color: #fff;
-    font-size: small;
-    border-radius: 5px;
-    padding: 10px 5px;
-    width: 100%;
-    height: 50px;
-    text-align: center;
-    margin-top: 15px;
-    cursor: pointer;
 }

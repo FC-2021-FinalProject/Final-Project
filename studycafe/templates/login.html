@@ -9,28 +9,28 @@
 
 {% block content %}
 {% include 'header-nav.html' %}
-<section class="login-page-container">
+<section class="auth-page-wrapper">
     <section class="login-page-wrapper">
-        <section class="login-form-container">
+        <section class="auth-form-container">
             <!-- <i class="fas fa-window-close popup-modal__close"></i> -->
-            <h2 class="login-form-header">Login</h2>
-            <form class="login-form" action="{% url 'login' %}" method="POST">
+            <h2 class="auth-form-header">Login</h2>
+            <form class="auth-form" action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
-                <div class="login-input-control">
-                    <label class="login-labels username-focused" for="login-name">Username</label>
-                    <input class="login-items" type="text" id="login-name" name="login-name">
+                <div class="auth-input-controls">
+                    <label class="auth-labels username-focused" for="login-name">Username</label>
+                    <input class="auth-input-items" type="text" id="login-name" name="login-name">
                     {% if error.state %}
                     <small class="error-msg">{{ error.msg }}error!</small>
                     {% endif %}
                 </div>
-                <div class="login-input-control">
-                    <label class="login-labels password-focused" for="login-password">Password</label>
-                    <input class="login-items" type="password" id="login-password" name="login-password">
+                <div class="auth-input-controls">
+                    <label class="auth-labels password-focused" for="login-password">Password</label>
+                    <input class="auth-input-items" type="password" id="login-password" name="login-password">
                     {% if error.state %}
                     <small>{{ error.msg }}</small>
                     {% endif %}
                 </div>
-                <button id="login-submit-button" type="submit">Login</button>
+                <button class="auth-submit-buttons" type="submit">Login</button>
             </form>
             <article class="idpw-search-container">
                 <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot username?</a>

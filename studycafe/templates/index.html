@@ -1,13 +1,9 @@
-{% extends "base.html" %}
-{% block head %}
-<!-- javascript link -->
-{% load static %}
-<script defer src="{% static 'index.js' %}"></script>
-{% endblock head %}
-
+{% extends 'base.html' %}
 {% block content %}
 {% include 'header-nav.html' %}
 <main class="main-container">
+
+    <section class="visual-wrapper"></section>
     <section class="user-info-wrapper">
     {% if user.is_authenticated %}
         {% if user.business_user %}
@@ -27,6 +23,8 @@
     <section class="cafe-wrapper">
         <h3>지역별 스터디 카페</h3>
         <ul class="cafe-content-list">
+
+            
             <li>
                 <button>
                     성수

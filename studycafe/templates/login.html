@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block head %}
 {% load static %}
 {% load socialaccount %}
@@ -16,16 +16,16 @@
             <h2 class="login-form-header">Login</h2>
             <form class="login-form" action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
-                <div class="form-control">
-                    <label class="visually-hidden" for="login-name">username</label>
-                    <input class="login-items" type="text" id="login-name" name="login-name" placeholder="Enter your username.">
+                <div class="input-control">
+                    <label class="login-placeholder username-focused" for="login-name">Username</label>
+                    <input class="login-items" type="text" id="login-name" name="login-name">
                     {% if error.state %}
-                    <small>{{ error.msg }}</small>
+                    <small class="error-msg">{{ error.msg }}error!</small>
                     {% endif %}
                 </div>
-                <div class="form-control">
-                    <label class="visually-hidden" for="login-password">password</label>
-                    <input class="login-items" type="password" id="login-password" name="login-password" placeholder="Enter your password.">
+                <div class="input-control">
+                    <label class="login-placeholder password-focused" for="login-password">Password</label>
+                    <input class="login-items" type="password" id="login-password" name="login-password">
                     {% if error.state %}
                     <small>{{ error.msg }}</small>
                     {% endif %}

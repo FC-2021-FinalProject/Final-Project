@@ -1,7 +1,7 @@
 {% if user.is_authenticated %}
 <header class="header-container">
     <section class="header-wrapper">
-        <h1>박도비팀 프로젝트</h1>
+        <h1><a href="{% url 'index' %}">박도비팀 프로젝트</a></h1>
         <form class="search-form">
             <fieldset>
                 <legend class="visually-hidden">Search form</legend>
@@ -24,7 +24,7 @@
                         <li><a href="{% url 'PUprofile' user.pk %}" role="button">마이페이지</a></li>
                         <li><a href="#" role="button">예약확인</a></li>
                         {% if request.user.personal_user.unique_id %}
-                        <li><a href="{% url 'kakao_logout' %}">카카오 로그아웃</a></li>
+                        <li><a href="{% url 'kakao_logout' %}">로그아웃</a></li>
                         {% else %}
                         <li><a href="{% url 'logout' %}">로그아웃</a></li>
                         {% endif %}
@@ -37,7 +37,7 @@
 {% elif user.is_anonymous %}
 <header class="header-container">
     <section class="header-wrapper">
-        <h1>박도비팀 프로젝트</h1>
+        <h1><a href="{% url 'index' %}">박도비팀 프로젝트</a></h1>
         <form class="search-form">
             <fieldset>
                 <legend class="visually-hidden">Search form</legend>

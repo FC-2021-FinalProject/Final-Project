@@ -1,31 +1,52 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
 {% block content %}
 {% include 'header-nav.html' %}
 <section class="signup-container">
-    <h2 class="signup-form-header">Personal User Signup</h2>
-    <form action="{% url 'personal_signup' %}" method="POST">
-        {% csrf_token %}
-        <div>
-            <label for="signup-name">Name</label>
-            <input type="text" id="signup-name" name="signup-name" placeholder="Enter your full name here.">
-        </div>
-        <div>
-            <label for="signup-username">username</label>
-            <input type="text" id="signup-username" name="signup-username" placeholder="Enter your username.">
-        </div>
-        <div>
-            <label for="signup-email">email</label>
-            <input type="email" id="signup-email" name="signup-email" placeholder="Enter your email.">
-        </div>
-        <div>
-            <label for="signup-password">password</label>
-            <input type="password" id="signup-password" name="signup-password" placeholder="Enter your password.">
-        </div>
-        <div>
-            <label for="signup-password-check">password check</label>
-            <input type="password" id="signup-password-check" name="signup-password-check" placeholder="Enter your password.">
-        </div>
-        <button type="submit">Signup</button>
-    </form>
+    <section class="signup-page-wrapper">
+        <section class="signup-form-container">
+            <h2 class="signup-form-header">Personal User Signup</h2>
+            <form class="signup-form" action="{% url 'personal_signup' %}" method="POST">
+                {% csrf_token %}
+                <div class="pu-signup-input-controls">
+                    <label class="pu-signup-labels" for="signup-name">Name</label>
+                    <input class="pu-signup-inputs" type="text" id="signup-name" name="signup-name">
+                </div>
+                <div class="pu-signup-input-controls">
+                    <label class="pu-signup-labels"  for="signup-username">Username</label>
+                    <input class="pu-signup-inputs" type="text" id="signup-username" name="signup-username">
+                </div>
+                <div class="pu-signup-input-controls">
+                    <label class="pu-signup-labels"  for="signup-email">Email</label>
+                    <input class="pu-signup-inputs"  type="email" id="signup-email" name="signup-email">
+                </div>
+                <div class="pu-signup-input-controls">
+                    <label class="pu-signup-labels"  for="signup-password">Password</label>
+                    <input class="pu-signup-inputs"  type="password" id="signup-password" name="signup-password">
+                </div>
+                <div class="pu-signup-input-controls">
+                    <label class="pu-signup-labels"  for="signup-password-check">Confirm Password</label>
+                    <input class="pu-signup-inputs"  type="password" id="signup-password-check" name="signup-password-check">
+                </div>
+                <button id="pu-signup-submit-button" type="submit">Signup</button>
+            </form>
+            <article class="idpw-search-container">
+                <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot username?</a>
+                <a href="{% url 'IdPwSearch' %}" class="pw-search">Forgot Password?</a>
+            </article>
+            <article class="social-login-container">
+                <a href="{% url 'kakao_login' %}" class="social-login-wrapper">
+                    <i class="fas fa-comment mr-2"></i>
+                    Login with Kakao Account
+                </a>
+                <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
+                    <i class="fab fa-google"></i>
+                    Login with Google Account
+                </a>
+            </article>
+        </section>
+    </section>
 </section>
 {% endblock content %}

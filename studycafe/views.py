@@ -1,20 +1,14 @@
-# Standard Library Imports
-from datetime import datetime, time
-import requests
-
-# Core Django Imports
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import request
 from django.views import generic, View
 from django.shortcuts import get_object_or_404, render, redirect
 
-# Third-Party App Imports
 import boto3
 from boto3.session import Session
+from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
+from datetime import datetime,time
 
-# Imports from Apps
-from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
 import requests
@@ -148,80 +142,9 @@ def login(request) :
     return render(request, 'login.html', validation_context)
 
 def logout(request) :
-    # if request.method == 'POST' :
-    auth.logout(request)
+    if request.method == 'POST' :
+        auth.logout(request)
     return redirect('index')
-
-def kakao_login(request):
-    REST_API_KEY=KAKAO_REST_API_KEY
-    REDIRECT_URI=KAKAO_REDIRECT_URI
-     
-    return redirect(f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code")
-
-def kakao_callback(request):
-#KEYS
-    REST_API_KEY=KAKAO_REST_API_KEY
-    SECRET_KEY=KAKAO_SECRET_KEY
-    REDIRECT_URI=KAKAO_REDIRECT_URI
-
-#GET CODE FOR ACCESS TOKEN REQUEST
-    AUTHORIZATION_CODE=request.GET.get("code")
-
-    response = requests.post(f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={AUTHORIZATION_CODE}&client_secret={SECRET_KEY}",headers={"Accept": "application/json"},)
-    user_data = response.json()
-    ACCESS_TOKEN = user_data['access_token']
-    
-#REQUEST TO GET KAKAO UNIQUE_ID INFORMATION
-    url = "https://kapi.kakao.com/v2/user/me"
-    headers = {"Authorization": "Bearer {}".format(user_data["access_token"])}
-    response = requests.post(url, headers=headers)
-    kakao_user = response.json()
-
-    target_id = kakao_user['id']
-    returning_user = PersonalUser.objects.filter(unique_id=target_id)
-
-    if (len(returning_user) != 0):
-        user = returning_user[0].user
-        auth.login(request, user)
-        return redirect('index')
-
-    elif (len(returning_user) == 0):
-
-        target_nickname = kakao_user['properties']['nickname']
-        target_email = kakao_user['kakao_account']['email']
-
-    # CREATE USER & PERSONAL USER INSTANCES
-        user = User.objects.create_user(
-            username=f"kakao{target_id}",
-            email=target_email,
-        )
-        new_account = PersonalUser.objects.create(
-            user=user,
-            email=target_email,
-            name=target_nickname,
-            email_authenticated=True,
-            unique_id=target_id,
-        )
-        user.set_unusable_password()
-        user.save()
-        auth.login(request, user)
-        return redirect('index')
-
-    return redirect('index')
-
-def kakao_logout(request):
-# USING ACCESS TOKEN
-    ACCESS_TOKEN=request.GET.get('access_token')
-    url = "https://kauth.kakao.com/v1/user/logout"
-    headers = {"Authorization": "Bearer {}".format(ACCESS_TOKEN)}
-
-    response=requests.post(url, headers=headers)
-   
-    print(response)
-    auth.logout(request)
-  
-    return redirect('index')
-
 
 class PersonalUserDetailView(generic.DeleteView) :
     model = PersonalUser
@@ -234,7 +157,6 @@ class PersonalUserDetailView(generic.DeleteView) :
 
     def post(self, request, *args, **kwargs) :
         return redirect('PUprofile', kwargs['pk'])
-
 
 class BusinessUserDetailView(generic.DeleteView) :
     model = BusinessUser
@@ -340,7 +262,6 @@ class CafeEditView(generic.View) :
 
         return redirect('cafedetail', kwargs['pk'])
 
-
 def cafedelete(request, cafe_pk) :
     cafe = StudyCafe.objects.filter(pk=cafe_pk)
     cafe.update(is_deleted=True)
@@ -361,6 +282,8 @@ class ReservationView(generic.View) :
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
         end_time = time(int(int(start_time) + int(use_time)))
         
+
+
         if len(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time)))and Date.objects.filter(content=date)) == 0 :
 
             date1 = Date.objects.create(
@@ -407,57 +330,3 @@ class ReviewView(generic.View) :
             content= content
         )
         return redirect('cafedetail', kwargs['pk'])
-
-
-# class Payment(request):
-#     # url Collection
-#     actual_url = "https://pay.toss.im/api/v2/payments"
-#     testing_url = ""        # fake web that responds --> TOSS
-#     service_url = ""        # our service url
-
-#     apiKey = apiKey         # testkey for api
-#     retUrl = ""             # for successful redirection
-#     retCancelUrl = ""       # for failed redirection
-
-#     #Product information
-#     orderNo = 1                         # requires nonconflicting ascending order numbering
-#     payment_amount = 1000               # total price payed
-#     tax_free_amount = 0                 # Duty free amount
-#     amountTaxable = 0                   # actual price without VAT
-#     amountVat = 0                       # VAt amount
-#     productDesc = f"{product_name}"     # name of content purchased
-#     amountServiceFee = 0                # service fee
-#     expired time = datetime.date()      # default is 10 mins but can be 60mins max      
-#     cashReceipt = True                  # Boolean value
-
-#     headers = { "Content-Type": "application/json"}
-#     params = {
-#         "orderNo":orderNo,                                       # 토스몰 고유의 주문번호 (필수)
-#         "amount":payment_amount,                                 # 결제 금액 (필수)
-#         "amountTaxFree":tax_free_amount,                         # 비과세 금액 (필수)
-#         "productDesc":productDesc,                               # 상품 정보 (필수)
-#         "apiKey":apiKey,                                         # 상점의 API Key (필수)
-#         "retUrl":f"{service_url}/ORDER-CHECK?orderno={orderNo}", # 결제 완료 후 연결할 웹 URL (필수)
-#         "retCancelUrl":f"{service_url}/close",                   # 결제 취소 시 연결할 웹 URL (필수)
-#         "autoExecute":true,                                      # 자동 승인 설정 (필수)
-#         "resultCallback":f"{service_url}/callback",              # 결제 결과 callback 웹 URL (필수-자동승인설정 true의 경우)
-#         "callbackVersion":"V2",                                  # callback 버전 (필수-자동승인설정 true의 경우)
-#         "amountTaxable":amountTaxable,                           # 결제 금액 중 과세금액
-#         "amountVat":amountVat,                                   # 결제 금액 중 부가세
-#         "amountServiceFee":0,                                    # 결제 금액 중 봉사료
-#         "expiredTime":"2019-06-17 12:47:35",                     # 결제 만료 예정 시각
-#         "cashReceipt":cashReceipt,                               # 현금영수증 발급 가능 여부
-#         }
-
-#     response = requests.post(actual_url, headers=headers, params=params)
-#     # expected result for response:
-#     # {"code":0,"checkoutPage":"https://pay.toss.im/payfront/auth?payToken=test_token1234567890", 
-#     # "payToken":"example-payToken"}
-    
-#     #after successful payment:
-#     # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
-#     # any status except for status=PAY_COMPLETE means unsuccesful payment
-
-#     #if status != PAY_COMPLETE:
-#     #    return
-

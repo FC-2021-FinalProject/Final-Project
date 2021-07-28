@@ -1,16 +1,108 @@
 {% extends 'base.html' %}
+{% block head %}
+{% load static %}
+<!-- javascript link -->
+<script defer src="{% static 'pu_profile.js' %}"></script>
+{% endblock head%}
 {% block content %}
 {% include 'header-nav.html' %}
-<h1>Personal User My Page</h1>
 
-<h2>내 정보</h2>
+<main class="main-container">
+    <section class="pu-mypage-wrapper">
+        <section class="pu-profile-wrapper">
+            <h2 class="pu-page-headers pu-profile-header selected">Edit Profile<h2>
+            <article class="pu-page-contents pu-profile-contents">
+                <div class="user-profile-info-wrapper">
+                    <h3>{{user.username}}</h3>
+                    <label for="profile-image">
+                        <img class="profile-photo" id="change-photo" for="profile-image" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Change profile photo">
+                    </label>
+                </div>
+                <form class="user-profile-edit-form" action="{% url 'personal_profile_edit' user.username %}" method="POST">
+                    {% csrf_token %}
+                    <div class="edit-control">
+                        <label for="profile-image">
+                            Change Profile Photo
+                        </label>
+                        <input class="visually-hidden" type="file" id="profile-image" name="profile-image">
+                    </div>
+                    <div class="edit-control">
+                        <label for="profile-name">Name</label>
+                        <input type="text" id="profile-name" name="profile-name" placeholder="Name" value={{request.user.personal_user.name}}>
+                    </div>
+                    <div class="edit-control">
+                        <label for="profile-username">Username</label>
+                        <input type="text" id="profile-username" name="profile-username" placeholder="Username" value={{user.username}}>
+                    </div>
+                    <div class="edit-control">
+                        <label for="profile-email">Email</label>
+                        <input type="email" id="profile-email" name="profile-email" placeholder="Email" value={{user.email}}>
+                    </div>
+                    <div class="edit-control">
+                        <button class="profile-edit-submit" type="submit">Edit Profile</button>
+                    </div>
+                </form>
+                <div class="status-msg">
+                    {% if profile.updated %}
+                        {{profile.msg}}
+                    {% endif %}
+                </div>
+            </article>
+        </article>
+        <section class="pu-password-wrapper">
+            <h2 class="pu-page-headers pu-password-header ">Change Password<h2>
+            <article class="pu-page-contents pu-password-contents visually-hidden">
+                <div class="user-profile-info-wrapper">
+                    <h3>{{user.username}}</h3>
+                    <img id="profile-photo" for="profile-image" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Your profile photo">
+                </div>
+                <form class="user-password-edit-form" action="{% url 'personal_password_edit' user.username %}" method="POST">
+                    {% csrf_token %}
+                    <div class="edit-control">
+                        <label for="profile-old-password">Old Password</label>
+                        <input type="password" id="profile-old-password" name="profile-old-password">
+                    </div>
+                    <div class="edit-control">
+                        <label for="profile-password">New Password</label>
+                        <input type="password" id="profile-password" name="profile-password">
+                    </div>
+                    <div class="edit-control">
+                        <label for="profile-password-check">Confirm Password</label>
+                        <input type="password" id="profile-password-check" name="profile-password-check">
+                    </div>
+                    <small class="error-msg">
+                        {% if error.state %}
+                        {{ error.msg }}
+                        {% endif %}
+                    </small>
+                    <div class="edit-control">
+                        <button class="profile-edit-submit" type="submit">Change Password</button>
+                    </div>
+                </form>
 
-    <ul>
-        <li>내이름: {{puser.name}}</li>
-        <li>아이디: {{puser.user.username}}</li>
-        <li>이메일: {{puser.email}}</li>
-    </ul>
-
-<h2>예약확인</h2>
+            </article>
+        </article>
+        <section class="pu-reservations-wrapper">
+            <h2 class="pu-page-headers pu-reservations-header">Reservations</h2>
+            <article class="pu-page-contents pu-reservations-contents visually-hidden">
+                <h3>{{user.username}}</h3>
+                <p>Reservations page coming soon!</p>
+            </article>
+        </section>
+        <section class="pu-bookmarked-wrapper">
+            <h2 class="pu-page-headers pu-bookmarked-header">Bookmarked Cafes</h2>
+            <article class="pu-page-contents pu-bookmarked-contents visually-hidden">
+                <h3>{{user.username}}</h3>
+                <p>Bookmarked page coming soon!</p>
+            </article>
+        </section>
+        <section class="pu-accounts-wrapper">
+            <h2 class="pu-page-headers pu-accounts-header">Accounts Center</h2>
+            <article class="pu-page-contents pu-accounts-contents">
+                <p>Control settings for your account can be accessed here.</p>
+            </article>
+        </section>
+    </section>
+</main>
 
 {% endblock content %}

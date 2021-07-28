@@ -23,8 +23,11 @@ ERROR_MSG = {
     'NO_EXIST_ID' : '존재하지 않는 아이디 입니다.',
     'MISSING_INPUT': '필수항목을 작성해주세요.',
     'PASSWORD_CHECK': '비밀번호를 확인해주세요',
+    'PASSWORD_NOMATCH': '비밀번호가 일치하지 않습니다'
 }
-
+SUCCESS_MSG = {
+    'PROFILE_UPDATED': 'Profile updated successfully.',
+}
 def index(request):
     return render(request, 'index.html')
 
@@ -174,7 +177,6 @@ def kakao_callback(request):
     headers = {"Authorization": "Bearer {}".format(user_data["access_token"])}
     response = requests.post(url, headers=headers)
     kakao_user = response.json()
-
     target_id = kakao_user['id']
     returning_user = PersonalUser.objects.filter(unique_id=target_id)
 
@@ -215,7 +217,6 @@ def kakao_logout(request):
 
     response=requests.post(url, headers=headers)
    
-    print(response)
     auth.logout(request)
   
     return redirect('index')
@@ -231,8 +232,56 @@ class PersonalUserDetailView(generic.DeleteView) :
         return render(request, 'PUprofile.html', context)
 
     def post(self, request, *args, **kwargs) :
-        return redirect('PUprofile', kwargs['pk'])
+        return redirect('PUprofile', kwargs['username'])
 
+
+def personal_profile_edit(request, username):
+    
+    validation_context  = {'profile': {'updated': False,'msg': '',}}
+
+    if request.method == 'POST':
+        user_name = request.POST['profile-name']
+        user_username=request.POST['profile-username']
+        user_email = request.POST['profile-email']
+        user = User.objects.filter(username=username)
+        
+        PersonalUser.objects.filter(user=request.user).update(
+            name=user_name,
+            email=user_email,
+        )
+        user.update(
+            username=user_username,
+            email=user_email,
+        )
+        
+        validation_context['profile']['updated'] = True
+        validation_context['profile']['msg'] = SUCCESS_MSG['PROFILE_UPDATED']
+        
+        return render(request, 'PUprofile.html', validation_context)
+
+    return redirect('PUprofile', request.user.username)
+
+
+def personal_password_edit(request, username):
+
+    validation_context  = {'error': {'state': False,'msg': '',}}
+
+    if request.method == 'POST':
+        user_password = request.POST['profile-password']
+        password_check = request.POST['profile-password-check']
+        user = User.objects.filter(username=username)
+        
+        if (user_password != password_check):
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['PASSWORD_NOMATCH']
+            return render(request, 'PUprofile.html', validation_context)
+
+        if (validation_context['error']['state'] is False):
+            user.update(
+                password=user_password,
+            )
+
+    return redirect('PUprofile', request.user.username)
 
 class BusinessUserDetailView(generic.DeleteView) :
     model = BusinessUser

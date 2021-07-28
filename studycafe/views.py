@@ -501,9 +501,9 @@ def Payment(request):
     # {"code":0,"checkoutPage":"https://pay.toss.im/payfront/auth?payToken=test_token1234567890", 
     # "payToken":"example-payToken"}
     
-#     #after successful payment:
-#     # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
-#     # any status except for status=PAY_COMPLETE means unsuccesful payment
+    #after successful payment:
+    # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
+    # any status except for status=PAY_COMPLETE means unsuccesful payment
 
     #if status != PAY_COMPLETE:
     #    return

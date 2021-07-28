@@ -1,32 +1,39 @@
 {% if user.is_authenticated %}
 <header class="header-container">
     <section class="header-wrapper">
-        <h1><a href="{% url 'index' %}">박도비팀 프로젝트</a></h1>
+        <h1><a href="{% url 'index' %}">dobby is park</a></h1>
         <form class="search-form">
             <fieldset>
                 <legend class="visually-hidden">Search form</legend>
                 <div class="search-form">
                     <label for="searchInput" class="visually-hidden">search input</label>
-                    <input name="searchInput" id="searchInput" type="text" placeholder="스터디 카페 검색하기"/>
+                    <input name="searchInput" id="searchInput" type="text" placeholder="search here for freedom"/>
                 </div>
             </fieldset>
         </form>
         <section class="mobile-menu">
+            <div class="logged-in-user-status">
+                {% if user.business_user %}
+                Logged in as {{user.business_user.name}}
+                {% elif user.personal_user %}
+                Logged in as {{user.personal_user.name}}
+                {% endif %}
+            </div>
             <button>
                 <i id="mobile-menu" class="fas fa-bars"></i>
             </button>
             <div class="header-nav-menu-container">
                 <ul class="header-nav-menu-list">
                     {% if user.business_user %}
-                        <li><a href="{% url 'BUprofile' user.pk %}" role="button">마이페이지</a></li>
-                        <li><a href="{% url 'logout' %}">로그아웃</a></li>
+                        <li><a href="{% url 'BUprofile' user.pk %}" role="button">My Page</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
                     {% elif user.personal_user %}
-                        <li><a href="{% url 'PUprofile' user.pk %}" role="button">마이페이지</a></li>
-                        <li><a href="#" role="button">예약확인</a></li>
+                        <li><a href="{% url 'PUprofile' user.username %}" role="button">My Page</a></li>
+                        <li><a href="#" role="button">Reservations</a></li>
                         {% if request.user.personal_user.unique_id %}
-                        <li><a href="{% url 'kakao_logout' %}">로그아웃</a></li>
+                        <li><a href="{% url 'kakao_logout' %}">Logout</a></li>
                         {% else %}
-                        <li><a href="{% url 'logout' %}">로그아웃</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -37,13 +44,13 @@
 {% elif user.is_anonymous %}
 <header class="header-container">
     <section class="header-wrapper">
-        <h1><a href="{% url 'index' %}">박도비팀 프로젝트</a></h1>
+        <h1><a href="{% url 'index' %}">Doby is Park</a></h1>
         <form class="search-form">
             <fieldset>
                 <legend class="visually-hidden">Search form</legend>
                 <div class="search-form">
                     <label for="searchInput" class="visually-hidden">search input</label>
-                    <input name="searchInput" id="searchInput" type="text" placeholder="스터디 카페 검색하기"/>
+                    <input name="searchInput" id="searchInput" type="text" placeholder="search here for freedom"/>
                 </div>
             </fieldset>
         </form>

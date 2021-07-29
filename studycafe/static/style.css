@@ -361,7 +361,7 @@ button{
 
 
 /* ----------------- PUprofile.html-------------------- */
-.pu-mypage-wrapper{
+.pu-mypage-container{
     max-width: 930px;
     margin: 20px auto;
     border: 1px solid rgb(176, 176, 176);
@@ -533,6 +533,12 @@ button{
     text-align: center;
     cursor: pointer;
 }
+.profile-edit-submit.disabled{
+    pointer-events: none;
+    background: #d80a63;
+    opacity: .3;
+}
+
 /* BOTTOM LEFT: accounts information section */
 .pu-accounts-wrapper{
     position: absolute;

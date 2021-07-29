@@ -19,8 +19,9 @@
                 Logged in as {{user.personal_user.name}}
                 {% endif %}
             </div>
-            <button>
-                <i id="mobile-menu" class="fas fa-bars"></i>
+            <button id="mobile-menu">
+                <i class="fas fa-bars"></i>
+                <img id="mobile-menu-profile-img" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="User profile photo">
             </button>
             <div class="header-nav-menu-container">
                 <ul class="header-nav-menu-list">
@@ -56,14 +57,15 @@
         </form>
 
         <section class="mobile-menu">
-            <button>
-                <i id="mobile-menu" class="fas fa-bars"></i>
+            <button id="mobile-menu">
+                <i class="fas fa-bars"></i>
+                <img id="mobile-menu-profile-img" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="User profile photo">
             </button>
             <div class="header-nav-menu-container">
                 <ul class="header-nav-menu-list">
-                    <li><a href="{% url 'personal_signup' %}" role="button" class="popup-button">개인회원가입</a></li>
-                    <li><a href="{% url 'business_signup' %}" role="button" class="popup-button">기업회원가입</a></li>
-                    <li><a href="{% url 'login' %}" role="button" class="popup-button">로그인</a></li>
+                    <li><a href="{% url 'personal_signup' %}" role="button" class="popup-button">User Signup</a></li>
+                    <li><a href="{% url 'business_signup' %}" role="button" class="popup-button">Business Signup</a></li>
+                    <li><a href="{% url 'login' %}" role="button" class="popup-button">Login</a></li>
                 </ul>
             </div>
         </section>

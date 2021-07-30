@@ -45,7 +45,6 @@ class StudyCafe(models.Model) :
     business_hour_start = models.CharField(max_length=32)
     business_hour_end = models.CharField(max_length=32)
     img = models.TextField()
-    introduce_cafe = models.TextField()
 
     def __str__(self):
         return self.name

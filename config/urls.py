@@ -19,12 +19,12 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     
-    #Id Pw Searching
+    # Id Pw Searching
     path('IdPwSearch/', views.IdPwSearch, name='IdPwSearch'),
     path('IdSearch/', views.IdSearch, name='IdSearch'),
     path('PwSearch/', views.PwSearch, name='PwSearch'),
 
-    # social login
+    #social login
     path('kakao/login/', views.kakao_login, name='kakao_login'),
     path('kakao/login/callback/', views.kakao_callback, name='kakao_callback'),
     path('kakao/logout/', views.kakao_logout, name='kakao_logout'),

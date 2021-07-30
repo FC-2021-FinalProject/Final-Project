@@ -1,0 +1,47 @@
+.html-wrapper{
+    max-width: 930px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.nav_1{
+    font-size: 30px;
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid black;
+}
+.cont_1_1{
+    padding-top: 20px;
+    font-size: 25px;
+}
+.cont_1_2{
+    font-size: 15px;
+    width: 500px;
+}
+.cont_2{
+    padding-top: 20px;
+    font-size: 15px;
+}
+.cont_3{
+    width: 700px;
+    padding-top: 20px;
+    font-size: 15px;
+}
+.cont_3_1{
+    display: flex;
+    justify-content: space-around;
+}
+.cont_4{
+    padding-top: 20px;
+}
+.cont_5{
+    width: 400px;
+    height: 200px;
+    position: absolute;
+    top: 250px;
+    right: 100px;
+    border: 1px solid black;
+}
+.form-wrapper{
+display: flex;
+flex-direction: column;
+}

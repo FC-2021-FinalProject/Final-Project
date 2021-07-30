@@ -23,25 +23,23 @@ ERROR_MSG = {
     'NO_EXIST_ID' : '존재하지 않는 아이디 입니다.',
     'MISSING_INPUT': '필수항목을 작성해주세요.',
     'PASSWORD_CHECK': '비밀번호를 확인해주세요',
-    'INCORRECT_PW': '비밀번호가 틀렸습니다',
-    'PASSWORD_NOMATCH': '비밀번호가 일치하지 않습니다',
+    'PASSWORD_NOMATCH': '비밀번호가 일치하지 않습니다'
 }
 SUCCESS_MSG = {
     'PROFILE_UPDATED': 'Profile updated successfully.',
-    'PW_UPDATED': 'Password updated successfully.',
 }
 def index(request):
-    cafes = StudyCafe.objects.all()
+    # cafes = StudyCafe.objects.all()
 
-    random_index = random.sample(range(0,len(cafes)), 4)
+    # random_index = random.sample(range(0,len(cafes)), 4)
 
-    random_cafes = []
-    for i in random_index:
-        print(i)
-        random_cafes.append(cafes[random_index[i]])
+    # random_cafes = []
+    # for i in random_index:
+    #     print(i)
+    #     random_cafes.append(cafes[random_index[i]])
 
-    context = {'cafelists': random_cafes}
-    return render(request, 'index.html', context)
+    # context = {'cafelists': random_cafes}
+    return render(request, 'index.html')
 
 # function for email authentication
 def verified_callback(user):

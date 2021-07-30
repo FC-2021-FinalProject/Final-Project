@@ -27,6 +27,7 @@
                 <ul class="header-nav-menu-list">
                     {% if user.business_user %}
                         <li><a href="{% url 'BUprofile' user.pk %}" role="button">My Page</a></li>
+                        <li><a href="{% url 'cafeupload' user.pk %}">Host your Cafe</a></li>
                         <li><a href="{% url 'logout' %}">Logout</a></li>
                     {% elif user.personal_user %}
                         <li><a href="{% url 'PUprofile' user.username %}" role="button">My Page</a></li>

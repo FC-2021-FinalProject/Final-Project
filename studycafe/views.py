@@ -9,12 +9,11 @@ from django.http import request
 from django.views import generic, View
 from django.shortcuts import get_object_or_404, render, redirect
 
-# Third-Party App Imports
 import boto3
 from boto3.session import Session
+from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
+from datetime import datetime,time
 
-# Imports from Apps
-from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
 
@@ -221,7 +220,6 @@ def kakao_logout(request):
   
     return redirect('index')
 
-
 class PersonalUserDetailView(generic.DeleteView) :
     model = PersonalUser
     template_name = 'PUprofile.html'
@@ -332,14 +330,13 @@ class CafeUploadView(View) :
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
+            introduce_cafe = request.POST['introduce']
         )
 
         return redirect('cafelist')
 
 
 class CafeDetailView(generic.DetailView) :
-    model = StudyCafe
-    template_name = 'cafedetail.html'
 
     def get(self, request, *args, **kwargs) :
         cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
@@ -383,10 +380,10 @@ class CafeEditView(generic.View) :
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
+            introduce_cafe = request.POST['introduce']
         )
 
         return redirect('cafedetail', kwargs['pk'])
-
 
 def cafedelete(request, cafe_pk) :
     cafe = StudyCafe.objects.filter(pk=cafe_pk)
@@ -395,52 +392,82 @@ def cafedelete(request, cafe_pk) :
     return redirect('BUprofile', cafe_pk)
 
 
+
 class ReservationView(generic.View) :
     model = Reservations
     template_name = 'cafedetail.html'
     context_object_name = 'reserv'
 
+    
+
     def post(self, request, *args, **kwargs) :
+        # user = User.objects.get(username=admin)
         date = request.POST['date']
-        start_time = request.POST['start_time']
-        use_time = request.POST['time']
+        start_time = int(request.POST['start_time'])
+        use_time = int(request.POST['time'])
+        end_time = start_time + use_time
         seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
-        end_time = time(int(int(start_time) + int(use_time)))
-        
-        if len(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time)))and Date.objects.filter(content=date)) == 0 :
 
+        if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
+            print('카페 날짜 좌석 중복')
+            if Reservations.objects.filter(hours__start_time__lt=start_time, hours__start_time__lte=end_time, hours__end_time__gte=start_time, hours__end_time__gt=end_time) :
+                print('이용시간 중복 ㄴ')
+            
+                date1 = Date.objects.create(
+                    content = date,
+                    studycafe = studycafe
+                )
+
+                hour = HourTime.objects.create(
+                    studycafe = studycafe,
+                    start_time = start_time,
+                    end_time = end_time,
+                )
+
+                seat1 = Seats.objects.create(
+                    studycafe = studycafe,
+                    content = seat,
+                    available = True
+                )
+
+                Reservations.objects.create(
+                    # personal_user = user,
+                    studycafe = studycafe,
+                    date = date1,
+                    hours = hour,
+                    seat = seat1
+                )
+            else :
+                print('이용시간 중복')
+
+        else :
             date1 = Date.objects.create(
                 content = date,
                 studycafe = studycafe
             )
 
             hour = HourTime.objects.create(
-                date = date1,
-                start_time = time(int(start_time)),
-                use_time = time(int(use_time)),
-                end_time = time(int(int(start_time) + int(use_time))),
-                state = True
+                studycafe = studycafe,
+                start_time = start_time,
+                end_time = end_time,
             )
 
             seat1 = Seats.objects.create(
-                hour_time = hour,
+                studycafe = studycafe,
                 content = seat,
-                state = True
+                available = True
             )
 
             Reservations.objects.create(
-                personal_user = request.user,
+                # personal_user = user,
                 studycafe = studycafe,
                 date = date1,
                 hours = hour,
-                seat = seat1,
+                seat = seat1
             )
-        else :
-            print("사용시간 중복")
-
+    
         return redirect('cafedetail', kwargs['pk'])
-
 
 class ReviewView(generic.View) :
 
@@ -455,59 +482,58 @@ class ReviewView(generic.View) :
         )
         return redirect('cafedetail', kwargs['pk'])
 
+# def Payment(request):
+# # url Collection
+# actual_url = "https://pay.toss.im/api/v2/payments"
+# testing_url = ""        # fake web that responds --> TOSS
+# service_url = ""        # our service url
 
-def Payment(request):
-    # url Collection
-    actual_url = "https://pay.toss.im/api/v2/payments"
-    testing_url = ""        # fake web that responds --> TOSS
-    service_url = ""        # our service url
+# apiKey = apiKey         # testkey for api
+# retUrl = ""             # for successful redirection
+# retCancelUrl = ""       # for failed redirection
 
-    apiKey = apiKey         # testkey for api
-    retUrl = ""             # for successful redirection
-    retCancelUrl = ""       # for failed redirection
+# #Product information
+# orderNo = 1                         # requires nonconflicting ascending order numbering
+# payment_amount = 1000               # total price payed
+# tax_free_amount = 0                 # Duty free amount
+# amountTaxable = 0                   # actual price without VAT
+# amountVat = 0                       # VAt amount
+# productDesc = ""     # name of content purchased
+# amountServiceFee = 0                # service fee
+# expired_time = datetime.date()      # default is 10 mins but can be 60mins max      
+# cashReceipt = True                  # Boolean value
 
-    #Product information
-    orderNo = 1                         # requires nonconflicting ascending order numbering
-    payment_amount = 1000               # total price payed
-    tax_free_amount = 0                 # Duty free amount
-    amountTaxable = 0                   # actual price without VAT
-    amountVat = 0                       # VAt amount
-    productDesc = ""     # name of content purchased
-    amountServiceFee = 0                # service fee
-    expired_time = datetime.date()      # default is 10 mins but can be 60mins max      
-    cashReceipt = True                  # Boolean value
+# headers = { "Content-Type": "application/json"}
+# params = {
+#     "orderNo":orderNo,                                       # 토스몰 고유의 주문번호 (필수)
+#     "amount":payment_amount,                                 # 결제 금액 (필수)
+#     "amountTaxFree":tax_free_amount,                         # 비과세 금액 (필수)
+#     "productDesc":productDesc,                               # 상품 정보 (필수)
+#     "apiKey":apiKey,                                         # 상점의 API Key (필수)
+#     "retUrl":f"{service_url}/ORDER-CHECK?orderno={orderNo}", # 결제 완료 후 연결할 웹 URL (필수)
+#     "retCancelUrl":f"{service_url}/close",                   # 결제 취소 시 연결할 웹 URL (필수)
+#     "autoExecute":true,                                      # 자동 승인 설정 (필수)
+#     "resultCallback":f"{service_url}/callback",              # 결제 결과 callback 웹 URL (필수-자동승인설정 true의 경우)
+#     "callbackVersion":"V2",                                  # callback 버전 (필수-자동승인설정 true의 경우)
+#     "amountTaxable":amountTaxable,                           # 결제 금액 중 과세금액
+#     "amountVat":amountVat,                                   # 결제 금액 중 부가세
+#     "amountServiceFee": amountServiceFee,                                    # 결제 금액 중 봉사료
+#     "expiredTime":expired_time,                     # 결제 만료 예정 시각
+#     "cashReceipt":cashReceipt,                               # 현금영수증 발급 가능 여부
+#     }
 
-    headers = { "Content-Type": "application/json"}
-    params = {
-        "orderNo":orderNo,                                       # 토스몰 고유의 주문번호 (필수)
-        "amount":payment_amount,                                 # 결제 금액 (필수)
-        "amountTaxFree":tax_free_amount,                         # 비과세 금액 (필수)
-        "productDesc":productDesc,                               # 상품 정보 (필수)
-        "apiKey":apiKey,                                         # 상점의 API Key (필수)
-        "retUrl":f"{service_url}/ORDER-CHECK?orderno={orderNo}", # 결제 완료 후 연결할 웹 URL (필수)
-        "retCancelUrl":f"{service_url}/close",                   # 결제 취소 시 연결할 웹 URL (필수)
-        "autoExecute":true,                                      # 자동 승인 설정 (필수)
-        "resultCallback":f"{service_url}/callback",              # 결제 결과 callback 웹 URL (필수-자동승인설정 true의 경우)
-        "callbackVersion":"V2",                                  # callback 버전 (필수-자동승인설정 true의 경우)
-        "amountTaxable":amountTaxable,                           # 결제 금액 중 과세금액
-        "amountVat":amountVat,                                   # 결제 금액 중 부가세
-        "amountServiceFee": amountServiceFee,                                    # 결제 금액 중 봉사료
-        "expiredTime":expired_time,                     # 결제 만료 예정 시각
-        "cashReceipt":cashReceipt,                               # 현금영수증 발급 가능 여부
-        }
+# response = requests.post(actual_url, headers=headers, params=params)
+# # expected result for response:
+# # {"code":0,"checkoutPage":"https://pay.toss.im/payfront/auth?payToken=test_token1234567890", 
+# # "payToken":"example-payToken"}
 
-    response = requests.post(actual_url, headers=headers, params=params)
-    # expected result for response:
-    # {"code":0,"checkoutPage":"https://pay.toss.im/payfront/auth?payToken=test_token1234567890", 
-    # "payToken":"example-payToken"}
-    
-    #after successful payment:
-    # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
-    # any status except for status=PAY_COMPLETE means unsuccesful payment
+# #after successful payment:
+# # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
+# # any status except for status=PAY_COMPLETE means unsuccesful payment
 
-    #if status != PAY_COMPLETE:
-    #    return
-    
+# #if status != PAY_COMPLETE:
+# #    return
+
 
 def IdPwSearch(request):
     return render(request, "IdPwSearch.html")
@@ -515,7 +541,7 @@ def IdPwSearch(request):
 
 def IdSearch(request):
     result_msg = {'error': {'state': False, 'msg': ''}}
-    
+
     if request.method == 'POST':
 
         verification_email == request.POST['verification-email1']
@@ -539,7 +565,7 @@ def IdSearch(request):
             result_msg['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
 
             return render(request, "IdPwSearch.html", result_msg)
-    
+
     return render(request, "IdPwSearch.html", result_msg)
 
 def pw_random_generator(length):
@@ -547,12 +573,12 @@ def pw_random_generator(length):
     upper = string.ascii_uppercase
     digit = string.digits
     symbol = string.punctuation
-    
+
     pw_parameters = lower + upper + digit + symbol
-    
+
     temp = random.sample(pw_parameters, length)
     generated_pw = "".join(temp)
-    
+
     return generated_pw
 
 def PwSearch(request):
@@ -583,7 +609,7 @@ def PwSearch(request):
             # send pw to email()
             
             result_msg['error']['msg'] = "Your new password has been sent to your email."
-    
+
             return render(request, "IdPwSearch.html", result_msg)
         
         else:

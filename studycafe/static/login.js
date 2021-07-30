@@ -1,66 +1,62 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("<<-----login.js----->> connected!")
 
-  //final validation check array. Submit button to be enabled if all validation check passes and all elements of isValidLogin are true.
-  const isValidLogin = [false, false, false];
+  const $username = document.getElementById('login-name');
+  const $password = document.getElementById('login-password');
+  const $errorUsername = document.querySelector('.username-input.error-msg');
+  const $errorPassword = document.querySelector('.password-input.error-msg');
+  const $submitButton = document.querySelector('.login-button');
+  console.log($submitButton)
+  
+  const isValidLogin = [false, false];
 
-  //Username validation
-  const $username = document.getElementById('login-name')
-  $username.onblur = () => {
-    console.log('username test');
-    // if check fails show error message and return
+  //USERNAME VALIDATION
+  $username.addEventListener('blur', () => {
     if (lengthCheckValidation($username.value, 5)) {
       console.log("******username is too short!!1")
       // 에러메세지 보여주기
+      $errorUsername.innerHTML = "Username must be greater than 5 characters."
       isValidLogin[0] = false;
       return;
     }
-    // if check passes override isValid to True 
+    $errorUsername.innerHTML = "";
     isValidLogin[0] = true;
 
-    if (typeCheckValidation($username.value, String)){
-      console.log("******username type error!!1")
-      isValidLogin[1] = false;
-      return;
-    } 
-    isValidLogin[1] = true;
-  };
-
-  //Password validation
-  const $password = document.getElementById('login-password')
-  $password.onblur = () => {
-    console.log($password)
-    console.log('password test');
-
-    // if check fails show error message and return
+    if ((isValidLogin[0] == true) && (isValidLogin[1] == true)){
+      if ($submitButton.classList.contains('disabled')){
+        toggleSubmit()
+        console.log($submitButton)
+      }
+    }
+  });
+  
+  //PASSWORD VALIDATION
+  $password.addEventListener('blur', () => {
     if (lengthCheckValidation($password.value, 8)) {
       console.log("******password is too short!!1")
-      isValidLogin[2] = false;
+      $errorPassword.innerHTML = "Password must be greater than 8 characters."
+      isValidLogin[1] = false;
       return;
     }
-    isValidLogin[2] = true;
-  };
+    $errorPassword.innerHTML = "";
+    isValidLogin[1] = true;
 
-  // Enable submit button after all validation check has passed (css and buttons disabled)
+    if ((isValidLogin[0] == true) && (isValidLogin[1] == true)){
+      if ($submitButton.classList.contains('disabled')){
+        toggleSubmit()
+        console.log($submitButton)
+      }
+    }
+  });
 
-  
+  //
+  const toggleSubmit = () => {
+    $submitButton.classList.remove('disabled');
+    $submitButton.disabled = false;
+  };  
+
 });
 
-const retrieveUsername = async () => {
-  try {
-    const res = await fetch('http://example.com/getNickName');
-    const data = res.json();
-  
-    if (data.nickname) {
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.log(error);
-    alert('')
-  }
-
-}
 const lengthCheckValidation = (word, length) => {
 
   if (word.length > length) {
@@ -68,9 +64,19 @@ const lengthCheckValidation = (word, length) => {
   }
   return true;
 }
-const typeCheckValidation = (word, type) => {
-  if (typeof word === type) {
-    return true;
-  }
-  return false;
-}
+// Check if username exists
+// const retrieveUsername = async () => {
+//   try {
+//     const res = await fetch('http://127.0.0.1:8000/getUserName');
+//     const data = res.json();
+  
+//     if (data.usernname) {
+//       return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.log(error);
+//     alert('')
+//   }
+
+// }

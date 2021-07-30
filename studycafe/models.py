@@ -45,50 +45,34 @@ class StudyCafe(models.Model) :
     business_hour_start = models.CharField(max_length=32)
     business_hour_end = models.CharField(max_length=32)
     img = models.TextField()
-    # is_deleted = models.BooleanField(default=False)
+    introduce_cafe = models.TextField()
 
     def __str__(self):
         return self.name
 
 class Date(models.Model): 
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='date', null=True, blank=True)
-    content = models.TextField()
+    content = models.DateField()
 
-    def __str__(self) :
-        return self.content
 
 class HourTime(models.Model):
-    date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name='hour_time', null=True, blank=True )
-
-    TIME_CHOICE = []
-    for j in range(24) :
-        if j < 10 :
-            TIME_CHOICE.append(tuple([f'0{j}:00', f'0{j}:00']))
-        else :
-            TIME_CHOICE.append(tuple([f'{j}:00', f'{j}:00']))
-
-    start_time = models.CharField(max_length=32)
-    use_time = models.CharField(max_length=32)
-    end_time = models.CharField(max_length=32)
-    state = models.BooleanField(default=False)
+    studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='hours', null=True, blank=True)
+    start_time = models.IntegerField()
+    end_time = models.IntegerField()
 
     def __str__(self) :
-        return (f"시작시간:{self.start_time}, 이용시간:{self.use_time}, 종료시간:{self.end_time}")
+        return (f"시작시간:{self.start_time}, 종료시간:{self.end_time}")
 
 class Seats(models.Model):
-    hour_time = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='seat', null=True,blank=True)
-    state = models.BooleanField(default=False)
-    SEAT_CHOICE = []
-    for i in range(1, 101) :
-        SEAT_CHOICE.append(tuple([f'{i}', f'{i}']))
-
-    content = models.CharField(max_length=32, choices=tuple(SEAT_CHOICE))
+    studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='seat', null=True, blank=True)
+    available = models.BooleanField(default=False)
+    content = models.CharField(max_length=32)
 
     def __str__(self) :
         return self.content
 
 class Reservations(models.Model):
-    personal_user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='reservation')
+    # personal_user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='reservation')
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     hours = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'header-nav.html' %}
-<main>
+<main class="main-container">
 <h2>Cafe Detail</h2>
 <ul>
     <li>지점 소개  |  사진  |  위치  |  후기</li>
@@ -22,7 +22,7 @@
         <button type="submit" onclick="return confirm('예약하시겠습니까?');">예약하기</button>
     </form>
     
-    <form action="{% url 'review' user.pk %}" method="POST">
+    <form action="{% url 'review' cafe.pk %}" method="POST">
         {% csrf_token %}
         <input type="text" name="review" placeholder="리뷰를 작성하세요">
         <button>리뷰 쓰기</button>

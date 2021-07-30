@@ -4,47 +4,49 @@
 {% providers_media_js %}
 {% block content %}
 {% include 'header-nav.html' %}
-<section class="auth-page-wrapper">
-    <section class="auth-form-container">
-        <h2 class="auth-form-header">Personal User Signup</h2>
-        <form class="auth-form" action="{% url 'personal_signup' %}" method="POST">
-            {% csrf_token %}
-            <div class="auth-input-controls">
-                <label class="auth-labels" for="signup-name">Name</label>
-                <input class="pu-signup-inputs auth-input-items" type="text" id="signup-name" name="signup-name">
-            </div>
-            <div class="auth-input-controls">
-                <label class="auth-labels"  for="signup-username">Username</label>
-                <input class="pu-signup-inputs auth-input-items" type="text" id="signup-username" name="signup-username">
-            </div>
-            <div class="auth-input-controls">
-                <label class="auth-labels"  for="signup-email">Email</label>
-                <input class="pu-signup-inputs auth-input-items"  type="email" id="signup-email" name="signup-email">
-            </div>
-            <div class="auth-input-controls">
-                <label class="auth-labels"  for="signup-password">Password</label>
-                <input class="pu-signup-inputs auth-input-items"  type="password" id="signup-password" name="signup-password">
-            </div>
-            <div class="auth-input-controls">
-                <label class="auth-labels"  for="signup-password-check">Confirm Password</label>
-                <input class="pu-signup-inputs auth-input-items"  type="password" id="signup-password-check" name="signup-password-check">
-            </div>
-            <button class="auth-submit-buttons" type="submit">Signup</button>
-        </form>
-        <article class="idpw-search-container">
-            <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot username?</a>
-            <a href="{% url 'IdPwSearch' %}" class="pw-search">Forgot Password?</a>
-        </article>
-        <article class="social-login-container">
-            <a href="{% url 'kakao_login' %}" class="social-login-wrapper">
-                <i class="fas fa-comment mr-2"></i>
-                Login with Kakao Account
-            </a>
-            <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
-                <i class="fab fa-google"></i>
-                Login with Google Account
-            </a>
-        </article>
+<main class="main-container">
+    <section class="auth-page-wrapper">
+        <section class="auth-form-container">
+            <h2 class="auth-form-header">Personal User Signup</h2>
+            <form class="auth-form" action="{% url 'personal_signup' %}" method="POST">
+                {% csrf_token %}
+                <div class="auth-input-controls">
+                    <label class="auth-labels auth-input-focused" for="signup-name">Name</label>
+                    <input class="pu-signup-inputs auth-input-items" type="text" id="signup-name" name="signup-name">
+                </div>
+                <div class="auth-input-controls">
+                    <label class="auth-labels auth-input-focused"  for="signup-username">Username</label>
+                    <input class="pu-signup-inputs auth-input-items" type="text" id="signup-username" name="signup-username">
+                </div>
+                <div class="auth-input-controls">
+                    <label class="auth-labels auth-input-focused"  for="signup-email">Email</label>
+                    <input class="pu-signup-inputs auth-input-items"  type="email" id="signup-email" name="signup-email">
+                </div>
+                <div class="auth-input-controls">
+                    <label class="auth-labels auth-input-focused"  for="signup-password">Password</label>
+                    <input class="pu-signup-inputs auth-input-items"  type="password" id="signup-password" name="signup-password">
+                </div>
+                <div class="auth-input-controls">
+                    <label class="auth-labels auth-input-focused"  for="signup-password-check">Confirm Password</label>
+                    <input class="pu-signup-inputs auth-input-items"  type="password" id="signup-password-check" name="signup-password-check">
+                </div>
+                <button class="auth-submit-buttons" type="submit">Signup</button>
+            </form>
+            <article class="idpw-search-container">
+                <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot username?</a>
+                <a href="{% url 'IdPwSearch' %}" class="pw-search">Forgot Password?</a>
+            </article>
+            <article class="social-login-container">
+                <a href="{% url 'kakao_login' %}" class="social-login-wrapper">
+                    <i class="fas fa-comment mr-2"></i>
+                    Login with Kakao Account
+                </a>
+                <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
+                    <i class="fab fa-google"></i>
+                    Login with Google Account
+                </a>
+            </article>
+        </section>
     </section>
-</section>
+</main>
 {% endblock content %}

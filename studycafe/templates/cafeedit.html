@@ -2,7 +2,7 @@
 {% block content %}
 {% include 'header-nav.html' %}
 
-<main>
+<main class="main-container">
 <h2>Cafe Edit</h2>
     <form action="{% url 'cafeedit' cafe.pk %}" method="POST">
         {% csrf_token %}

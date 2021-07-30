@@ -24,11 +24,11 @@ urlpatterns = [
     path('IdSearch/', views.IdSearch, name='IdSearch'),
     path('PwSearch/', views.PwSearch, name='PwSearch'),
 
-    # social login
-    # path('kakao/login/', views.kakao_login, name='kakao_login'),
-    # path('kakao/login/callback/', views.kakao_callback, name='kakao_callback'),
-    # path('kakao/logout/', views.kakao_logout, name='kakao_logout'),
-    # path('', include('allauth.urls')),
+    social login
+    path('kakao/login/', views.kakao_login, name='kakao_login'),
+    path('kakao/login/callback/', views.kakao_callback, name='kakao_callback'),
+    path('kakao/logout/', views.kakao_logout, name='kakao_logout'),
+    path('', include('allauth.urls')),
 
     # user profile pages
     path('PUprofile/<slug:username>', PersonalUserDetailView.as_view(), name='PUprofile'),

@@ -8,11 +8,11 @@
 {% include 'header-nav.html' %}
 
 <main class="main-container">
-    <section class="pu-mypage-wrapper">
+    <section class="pu-mypage-container">
         <section class="pu-profile-wrapper">
-            <h2 class="pu-page-headers pu-profile-header selected">Edit Profile<h2>
-            <article class="pu-page-contents pu-profile-contents">
-                <div class="user-profile-info-wrapper">
+            <h2 class="pu-page-headers pu-tab-option pu-profile-header selected">Edit Profile<h2>
+            <article class="pu-page-contents pu-profile-contents ">
+                <div class="user-profile-info-wrapper ">
                     <h3>{{user.username}}</h3>
                     <label for="profile-image">
                         <img class="profile-photo" id="change-photo" for="profile-image" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Change profile photo">
@@ -39,7 +39,7 @@
                         <input type="email" id="profile-email" name="profile-email" placeholder="Email" value={{user.email}}>
                     </div>
                     <div class="edit-control">
-                        <button class="profile-edit-submit" type="submit">Edit Profile</button>
+                        <button class="profile-edit-submit disabled" type="submit" disabled>Edit Profile</button>
                     </div>
                 </form>
                 <div class="status-msg">
@@ -48,13 +48,13 @@
                     {% endif %}
                 </div>
             </article>
-        </article>
+        </section>
         <section class="pu-password-wrapper">
-            <h2 class="pu-page-headers pu-password-header ">Change Password<h2>
+            <h2 class="pu-page-headers pu-tab-option pu-password-header">Change Password<h2>
             <article class="pu-page-contents pu-password-contents visually-hidden">
-                <div class="user-profile-info-wrapper">
+                <div class="user-profile-info-wrapper password-tab">
                     <h3>{{user.username}}</h3>
-                    <img id="profile-photo" for="profile-image" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Your profile photo">
+                    <img class="profile-photo" id="profile-pw-photo"  src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Your profile photo">
                 </div>
                 <form class="user-password-edit-form" action="{% url 'personal_password_edit' user.username %}" method="POST">
                     {% csrf_token %}
@@ -79,21 +79,18 @@
                         <button class="profile-edit-submit" type="submit">Change Password</button>
                     </div>
                 </form>
-
             </article>
-        </article>
+        </section>
         <section class="pu-reservations-wrapper">
-            <h2 class="pu-page-headers pu-reservations-header">Reservations</h2>
+            <h2 class="pu-page-headers pu-tab-option pu-reservations-header">Reservations</h2>
             <article class="pu-page-contents pu-reservations-contents visually-hidden">
-                <h3>{{user.username}}</h3>
-                <p>Reservations page coming soon!</p>
+                <h3>Reservations page coming soon!</h3>
             </article>
         </section>
         <section class="pu-bookmarked-wrapper">
-            <h2 class="pu-page-headers pu-bookmarked-header">Bookmarked Cafes</h2>
+            <h2 class="pu-page-headers pu-tab-option pu-bookmarked-header">Bookmarked Cafes</h2>
             <article class="pu-page-contents pu-bookmarked-contents visually-hidden">
-                <h3>{{user.username}}</h3>
-                <p>Bookmarked page coming soon!</p>
+                <h3>Bookmarked Cafes page coming soon!</h3>
             </article>
         </section>
         <section class="pu-accounts-wrapper">

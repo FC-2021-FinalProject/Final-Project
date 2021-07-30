@@ -4,33 +4,33 @@
 {% providers_media_js %}
 {% block content %}
 {% include 'header-nav.html' %}
-<section class="auth-page-wrapper">
+<main class="main-container auth-page-wrapper">
     <section class="auth-form-container">
         <h2 class="auth-form-header">Business User Signup</h2>
         <form class="auth-form" action="{% url 'business_signup' %}" method="POST">
             {% csrf_token %}
             <div class="auth-input-controls">
-                <label class="auth-labels" for="signup-name">First and Last Name</label>
+                <label class="auth-labels auth-input-focused" for="signup-name">First and Last Name</label>
                 <input class="bu-signup-inputs auth-input-items" type="text" id="signup-name" name="signup-name">
             </div>
             <div class="auth-input-controls">
-                <label class="auth-labels" for="signup-registration-number">Business registration number</label>
+                <label class="auth-labels auth-input-focused" for="signup-registration-number">Business registration number</label>
                 <input class="bu-signup-inputs auth-input-items" type="number" id="signup-registration-number" name="signup-registration-number">
             </div>
             <div class="auth-input-controls">
-                <label class="auth-labels" for="signup-username">Username</label>
+                <label class="auth-labels auth-input-focused" for="signup-username">Username</label>
                 <input class="bu-signup-inputs auth-input-items" type="text" id="signup-username" name="signup-username">
             </div>
             <div class="auth-input-controls">
-                <label class="auth-labels" for="signup-email">Email</label>
+                <label class="auth-labels auth-input-focused" for="signup-email">Email</label>
                 <input class="bu-signup-inputs auth-input-items" type="email" id="signup-email" name="signup-email">
             </div>
             <div class="auth-input-controls">
-                <label class="auth-labels" for="signup-password">Password</label>
+                <label class="auth-labels auth-input-focused" for="signup-password">Password</label>
                 <input class="bu-signup-inputs auth-input-items" type="password" id="signup-password" name="signup-password">
             </div>
             <div class="auth-input-controls">
-                <label class="auth-labels" for="signup-password-check">Confirm password</label>
+                <label class="auth-labels auth-input-focused" for="signup-password-check">Confirm password</label>
                 <input class="bu-signup-inputs auth-input-items" type="password" id="signup-password-check" name="signup-password-check">
             </div>
             <button class="auth-submit-buttons" type="submit">Signup</button>
@@ -40,5 +40,5 @@
             <a href="{% url 'IdPwSearch' %}" class="pw-search">Forgot Password?</a>
         </article>
     </section>
-</section>
+</main>
 {% endblock content %}

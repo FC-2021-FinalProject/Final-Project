@@ -12,25 +12,28 @@
 <section class="auth-page-wrapper">
     <section class="login-page-wrapper">
         <section class="auth-form-container">
-            <!-- <i class="fas fa-window-close popup-modal__close"></i> -->
             <h2 class="auth-form-header">Login</h2>
             <form class="auth-form" action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
                 <div class="auth-input-controls">
-                    <label class="auth-labels username-focused" for="login-name">Username</label>
+                    <label class="auth-labels auth-input-focused" for="login-name">Username</label>
                     <input class="auth-input-items" type="text" id="login-name" name="login-name">
                     {% if error.state %}
-                    <small class="error-msg">{{ error.msg }}error!</small>
+                    <small>{{ error.msg }}</small>
+                    {% else %}
+                    <small class="auth-error-msg error-msg username-input"></small>
                     {% endif %}
                 </div>
-                <div class="auth-input-controls">
-                    <label class="auth-labels password-focused" for="login-password">Password</label>
+                <div class="auth-input-controls password-input">
+                    <label class="auth-labels auth-input-focused" for="login-password">Password</label>
                     <input class="auth-input-items" type="password" id="login-password" name="login-password">
                     {% if error.state %}
                     <small>{{ error.msg }}</small>
+                    {% else %}
+                    <small class="auth-error-msg error-msg password-input "></small>
                     {% endif %}
                 </div>
-                <button class="auth-submit-buttons" type="submit">Login</button>
+                <button class="login-button auth-submit-buttons disabled" type="submit" disabled>Login</button>
             </form>
             <article class="idpw-search-container">
                 <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot username?</a>

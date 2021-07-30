@@ -4,7 +4,7 @@ from django.urls.conf import include
 import debug_toolbar
 
 from studycafe import views
-from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, ReservationView, personal_signup, business_signup, ReviewView # login, kakao_logout, IdPwSearch, IdSearch, PwSearch
+from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, ReservationView, personal_signup, business_signup, personal_profile_edit, personal_password_edit, ReviewView, login, kakao_logout, IdPwSearch, IdSearch, PwSearch
 
 
 urlpatterns = [
@@ -19,10 +19,10 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     
-    #Id Pw Searching
-    # path('IdPwSearch/', views.IdPwSearch, name='IdPwSearch'),
-    # path('IdSearch/', views.IdSearch, name='IdSearch'),
-    # path('PwSearch/', views.PwSearch, name='PwSearch'),
+    # Id Pw Searching
+    path('IdPwSearch/', views.IdPwSearch, name='IdPwSearch'),
+    path('IdSearch/', views.IdSearch, name='IdSearch'),
+    path('PwSearch/', views.PwSearch, name='PwSearch'),
 
     # social login
     # path('kakao/login/', views.kakao_login, name='kakao_login'),
@@ -31,7 +31,9 @@ urlpatterns = [
     # path('', include('allauth.urls')),
 
     # user profile pages
-    path('PUprofile/<int:pk>', PersonalUserDetailView.as_view(), name='PUprofile'),
+    path('PUprofile/<slug:username>', PersonalUserDetailView.as_view(), name='PUprofile'),
+    path('PUprofileedit/<slug:username>', views.personal_profile_edit, name='personal_profile_edit'),
+        path('PUpasswordedit/<slug:username>', views.personal_password_edit, name='personal_password_edit'),
     path('BUprofile/<int:pk>', BusinessUserDetailView.as_view(), name='BUprofile'),
     
     # study cafe listings

@@ -1,13 +1,103 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends 'base.html' %}
+{% block head%}
 {% load static %}
 <link rel="stylesheet" href="{% static "calendar.css" %}">
-<div class="to-delete">카페상세 템플릿</div>
+<link rel="stylesheet" href="{% static "cafedetail.css" %}">
+<script defer type="text/javascript" src="/static/calendar.js"></script>
+{% endblock head %}
+{% block content %}
 {% include 'header-nav.html' %}
-<main>
-<h2>Cafe Detail</h2>
+<main class="main-container">
+<section class="html-wrapper container">
+    <div class="nav">
+        <ul class="nav_1">
+            <li>지점 소개</li>
+            <li>내부 모습</li>
+            <li>위치</li>
+            <li>후기</li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="cont_1">
+            <h3 class="cont_1_1">
+                <span>지점소개</span>
+            </h3>
+            <div class="cont_1_2">
+                {{cafe.introduce_cafe}}
+            </div>
+        </div>
+        <dl class="cont_2">
+            <dt>이용 시간</dt>
+            <dd>
+                평&nbsp;&nbsp;&nbsp;일 - 08:30 ~ 21:30
+                <br>	
+                토요일 - 09:00 ~ 21:00	
+                <br>
+                일요일 - 09:00 ~ 21:00
+            </dd>
+            <dt>휴무일</dt>
+            <dd>
+                없음
+            </dd>
+            <dt>카페 주소 및 위치</dt>
+            <dd>{{cafe.address}}</dd>
+        </dl>
+        <div class="cont_3">
+            <h4>편의시설 및 서비스</h4>
+            <ul class="cont_3_1">
+                    <li><img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/8/2/11/101324_1501640945689.png" alt="" style="width: 42px;height: 42px;"><span>주차시설 </span><i class="icon_pack icon-won"></i></li>
+                
+                    <li><img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/9/18/11/894778_1505700481751.png" alt="" style="width: 42px;height: 42px;"><span>음료제공 </span></li>
+                
+                    <li><img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/12/13/15/826670_1513147589625.png" alt="" style="width: 42px;height: 42px;"><span>무선Wi-Fi </span></li>
+                
+                    <li><img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/12/13/15/941333_1513148198048.png" alt="" style="width: 42px;height: 42px;"><span>복합기 </span><i class="icon_pack icon-won"></i></li>
+                
+                    <li><img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/9/15/16/761549_1505459131213.png" alt="" style="width: 42px;height: 42px;"><span>다중보안시스템 </span></li>
+            </ul>
+        </div>
+        <div class="cont_4">
+            <h3>내부 모습</h3>
+            <img src="{{cafe.img}}" alt="cafe.name" width="250px;">
+        </div>
+        <div class="cont_5">
+            <h3>예약하기</h3>
+            <div class="cont_5_1">
+                <form class="form-wrapper" action="{% url 'reservation' cafe.pk %}" method="POST">
+                    {% csrf_token %}
+                    <div class="date-picker">
+                        <input class="date-picker-selector" type="text" name="date" placeholder="Select date">
+                        <div class="calendar" style="display: none;"></div>
+                    </div>
+                    <input type="text" name="start_time" placeholder="시작 시간">
+                    <input type="text" name="time" placeholder="이용 시간">
+                    <input type="text" name="seat" placeholder="좌석을 선택하세요">
+                    <button class="resev_bt" type="submit" onclick="return confirm('예약하시겠습니까?');">예약하기</button>
+                </form>
+            </div>
+        </div>
+        <div class="cont_6">
+            <h3>이용 후기</h3>
+            <br>
+            <div class="cont_6_1">{% for review in reviews %}
+                <p>{{review.content}} -- 작성자 : {{review.writer}}</p>
+            {% endfor %}
+            </div>
+            <br>
+            <div class="cont_6_2">
+                <form action="{% url 'review' cafe.pk%}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="review" placeholder="리뷰를 작성하세요">
+                    <button>리뷰 쓰기</button>
+                </form>
+            </div>
+        </div>
+    </div>    
+</section>
+</main>
+{% endblock content %}
+
 <ul>
-    <li>지점 소개  |  사진  |  위치  |  후기</li>
     <li><a href="{% url 'cafeedit' cafe.pk %}">카페 정보 수정하기</a></li>
     <li>{{cafe.name}}</li>
     <img src="{{cafe.img}}" alt="cafe.name" width="250px;">
@@ -15,20 +105,8 @@
     <p>시간당 가격 : {{cafe.price_per_hour}}</p>
     <p>오픈 시간 : {{cafe.business_hour_start}}</p>
     <p>마감 시간 : {{cafe.business_hour_end}}</p>
-<div>
+</ul>
 
-    <form action="{% url 'reservation' cafe.pk %}" method="POST">
-        {% csrf_token %}
-        <div class="date-picker">
-            <input class="date-picker-selector" type="text" name="date" placeholder="Select date">
-            <div class="calendar" style="display: none;"></div>
-        </div>
-        <input type="text" name="start_time" placeholder="시작 시간">
-        <input type="text" name="time" placeholder="이용 시간">
-        <input type="text" name="seat" placeholder="좌석을 선택하세요">
-        <button type="submit" onclick="return confirm('예약하시겠습니까?');">예약하기</button>
-    </form>
-</div>
 <form action="{% url 'review' cafe.pk%}" method="POST">
     {% csrf_token %}
     <input type="text" name="review" placeholder="리뷰를 작성하세요">
@@ -37,6 +115,3 @@
 {% for review in reviews %}
     <p>{{review.content}} -- 작성자 : {{review.writer}}</p>
 {% endfor %}
-<script type="text/javascript" src="/static/calendar.js"></script>
-</main>
-{% endblock content %}

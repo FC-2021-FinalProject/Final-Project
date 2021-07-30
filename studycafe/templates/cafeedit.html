@@ -1,6 +1,5 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<div class="to-delete">카페수정 템플릿</div>
 {% include 'header-nav.html' %}
 
 <main>
@@ -9,6 +8,7 @@
         {% csrf_token %}
         <input type="text" name="name" placeholder="카페 이름" value="{{cafe.name}}">
         <input type="text" name="address" placeholder="카페 주소" value="{{cafe.address}}">
+        <input type="text" name="introduce" placeholder="카페 소개글" value="{{cafe.introduce_cafe}}">
         <input type="text" name="price_per_hour" placeholder="시간 당 가격" value="{{cafe.price_per_hour}}">
         <input type="text" name="business_hour_start" placeholder="영업 오픈 시간" value="{{cafe.business_hour_start}}">
         <input type="text" name="business_hour_end" placeholder="영업 마감 시간" value="{{cafe.business_hour_end}}">

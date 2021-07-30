@@ -1,4 +1,9 @@
-from django.contrib import admin, auth
+# Standard Library Imports
+from datetime import datetime, time
+import requests, random, string
+
+# Core Django Imports
+from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import request
 from django.views import generic, View
@@ -11,16 +16,17 @@ from datetime import datetime,time
 
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
-import requests
-
 
 ERROR_MSG = {
     'ID_EXIST': '이미 존재하는 아이디 입니다.',
     'NO_EXIST_ID' : '존재하지 않는 아이디 입니다.',
     'MISSING_INPUT': '필수항목을 작성해주세요.',
     'PASSWORD_CHECK': '비밀번호를 확인해주세요',
+    'PASSWORD_NOMATCH': '비밀번호가 일치하지 않습니다'
 }
-
+SUCCESS_MSG = {
+    'PROFILE_UPDATED': 'Profile updated successfully.',
+}
 def index(request):
     return render(request, 'index.html')
 
@@ -142,8 +148,76 @@ def login(request) :
     return render(request, 'login.html', validation_context)
 
 def logout(request) :
-    if request.method == 'POST' :
-        auth.logout(request)
+    # if request.method == 'POST' :
+    auth.logout(request)
+    return redirect('index')
+
+def kakao_login(request):
+    REST_API_KEY=KAKAO_REST_API_KEY
+    REDIRECT_URI=KAKAO_REDIRECT_URI
+     
+    return redirect(f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code")
+
+def kakao_callback(request):
+#KEYS
+    REST_API_KEY=KAKAO_REST_API_KEY
+    SECRET_KEY=KAKAO_SECRET_KEY
+    REDIRECT_URI=KAKAO_REDIRECT_URI
+
+#GET CODE FOR ACCESS TOKEN REQUEST
+    AUTHORIZATION_CODE=request.GET.get("code")
+
+    response = requests.post(f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&code={AUTHORIZATION_CODE}&client_secret={SECRET_KEY}",headers={"Accept": "application/json"},)
+    user_data = response.json()
+    ACCESS_TOKEN = user_data['access_token']
+    
+#REQUEST TO GET KAKAO UNIQUE_ID INFORMATION
+    url = "https://kapi.kakao.com/v2/user/me"
+    headers = {"Authorization": "Bearer {}".format(user_data["access_token"])}
+    response = requests.post(url, headers=headers)
+    kakao_user = response.json()
+    target_id = kakao_user['id']
+    returning_user = PersonalUser.objects.filter(unique_id=target_id)
+
+    if (len(returning_user) != 0):
+        user = returning_user[0].user
+        auth.login(request, user)
+        return redirect('index')
+
+    elif (len(returning_user) == 0):
+
+        target_nickname = kakao_user['properties']['nickname']
+        target_email = kakao_user['kakao_account']['email']
+
+    # CREATE USER & PERSONAL USER INSTANCES
+        user = User.objects.create_user(
+            username=f"kakao{target_id}",
+            email=target_email,
+        )
+        new_account = PersonalUser.objects.create(
+            user=user,
+            email=target_email,
+            name=target_nickname,
+            email_authenticated=True,
+            unique_id=target_id,
+        )
+        user.set_unusable_password()
+        user.save()
+        auth.login(request, user)
+        return redirect('index')
+
+    return redirect('index')
+
+def kakao_logout(request):
+# USING ACCESS TOKEN
+    ACCESS_TOKEN=request.GET.get('access_token')
+    url = "https://kauth.kakao.com/v1/user/logout"
+    headers = {"Authorization": "Bearer {}".format(ACCESS_TOKEN)}
+
+    response=requests.post(url, headers=headers)
+   
+    auth.logout(request)
+  
     return redirect('index')
 
 class PersonalUserDetailView(generic.DeleteView) :
@@ -156,7 +230,56 @@ class PersonalUserDetailView(generic.DeleteView) :
         return render(request, 'PUprofile.html', context)
 
     def post(self, request, *args, **kwargs) :
-        return redirect('PUprofile', kwargs['pk'])
+        return redirect('PUprofile', kwargs['username'])
+
+
+def personal_profile_edit(request, username):
+    
+    validation_context  = {'profile': {'updated': False,'msg': '',}}
+
+    if request.method == 'POST':
+        user_name = request.POST['profile-name']
+        user_username=request.POST['profile-username']
+        user_email = request.POST['profile-email']
+        user = User.objects.filter(username=username)
+        
+        PersonalUser.objects.filter(user=request.user).update(
+            name=user_name,
+            email=user_email,
+        )
+        user.update(
+            username=user_username,
+            email=user_email,
+        )
+        
+        validation_context['profile']['updated'] = True
+        validation_context['profile']['msg'] = SUCCESS_MSG['PROFILE_UPDATED']
+        
+        return render(request, 'PUprofile.html', validation_context)
+
+    return redirect('PUprofile', request.user.username)
+
+
+def personal_password_edit(request, username):
+
+    validation_context  = {'error': {'state': False,'msg': '',}}
+
+    if request.method == 'POST':
+        user_password = request.POST['profile-password']
+        password_check = request.POST['profile-password-check']
+        user = User.objects.filter(username=username)
+        
+        if (user_password != password_check):
+            validation_context['error']['state'] = True
+            validation_context['error']['msg'] = ERROR_MSG['PASSWORD_NOMATCH']
+            return render(request, 'PUprofile.html', validation_context)
+
+        if (validation_context['error']['state'] is False):
+            user.update(
+                password=user_password,
+            )
+
+    return redirect('PUprofile', request.user.username)
 
 class BusinessUserDetailView(generic.DeleteView) :
     model = BusinessUser
@@ -207,6 +330,7 @@ class CafeUploadView(View) :
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
+            introduce_cafe = request.POST['introduce']
         )
 
         return redirect('cafelist')
@@ -256,6 +380,7 @@ class CafeEditView(generic.View) :
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
+            introduce_cafe = request.POST['introduce']
         )
 
         return redirect('cafedetail', kwargs['pk'])
@@ -287,7 +412,6 @@ class ReservationView(generic.View) :
         print('시작시간보다 크거나 같은',Reservations.objects.filter(hours__start_time__gte=start_time))
         print('끝 시간보다 작거나 같은',Reservations.objects.filter(hours__start_time__lte=end_time))
         print('끝 시간보다 크거나 같은',Reservations.objects.filter(hours__start_time__gte=end_time))
-        # i = [i for i in range(int(start_time), int(start_time) + int(use_time)+1)]
         if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
             print('카페 날짜 좌석 중복')
             if Reservations.objects.filter(hours__start_time__lt=start_time, hours__start_time__lte=end_time, hours__end_time__gte=start_time, hours__end_time__gt=end_time) :
@@ -321,7 +445,7 @@ class ReservationView(generic.View) :
                 print('이용시간 중복')
 
         else :
-            print('카페 날짜 좌석 중복')
+            print('카페 날짜 좌석 중복 ㄴ')
             date1 = Date.objects.create(
                 content = date,
                 studycafe = studycafe
@@ -361,3 +485,141 @@ class ReviewView(generic.View) :
             content= content
         )
         return redirect('cafedetail', kwargs['pk'])
+
+# def Payment(request):
+# # url Collection
+# actual_url = "https://pay.toss.im/api/v2/payments"
+# testing_url = ""        # fake web that responds --> TOSS
+# service_url = ""        # our service url
+
+# apiKey = apiKey         # testkey for api
+# retUrl = ""             # for successful redirection
+# retCancelUrl = ""       # for failed redirection
+
+# #Product information
+# orderNo = 1                         # requires nonconflicting ascending order numbering
+# payment_amount = 1000               # total price payed
+# tax_free_amount = 0                 # Duty free amount
+# amountTaxable = 0                   # actual price without VAT
+# amountVat = 0                       # VAt amount
+# productDesc = ""     # name of content purchased
+# amountServiceFee = 0                # service fee
+# expired_time = datetime.date()      # default is 10 mins but can be 60mins max      
+# cashReceipt = True                  # Boolean value
+
+# headers = { "Content-Type": "application/json"}
+# params = {
+#     "orderNo":orderNo,                                       # 토스몰 고유의 주문번호 (필수)
+#     "amount":payment_amount,                                 # 결제 금액 (필수)
+#     "amountTaxFree":tax_free_amount,                         # 비과세 금액 (필수)
+#     "productDesc":productDesc,                               # 상품 정보 (필수)
+#     "apiKey":apiKey,                                         # 상점의 API Key (필수)
+#     "retUrl":f"{service_url}/ORDER-CHECK?orderno={orderNo}", # 결제 완료 후 연결할 웹 URL (필수)
+#     "retCancelUrl":f"{service_url}/close",                   # 결제 취소 시 연결할 웹 URL (필수)
+#     "autoExecute":true,                                      # 자동 승인 설정 (필수)
+#     "resultCallback":f"{service_url}/callback",              # 결제 결과 callback 웹 URL (필수-자동승인설정 true의 경우)
+#     "callbackVersion":"V2",                                  # callback 버전 (필수-자동승인설정 true의 경우)
+#     "amountTaxable":amountTaxable,                           # 결제 금액 중 과세금액
+#     "amountVat":amountVat,                                   # 결제 금액 중 부가세
+#     "amountServiceFee": amountServiceFee,                                    # 결제 금액 중 봉사료
+#     "expiredTime":expired_time,                     # 결제 만료 예정 시각
+#     "cashReceipt":cashReceipt,                               # 현금영수증 발급 가능 여부
+#     }
+
+# response = requests.post(actual_url, headers=headers, params=params)
+# # expected result for response:
+# # {"code":0,"checkoutPage":"https://pay.toss.im/payfront/auth?payToken=test_token1234567890", 
+# # "payToken":"example-payToken"}
+
+# #after successful payment:
+# # f"{service_url}/ORDER-CHECK?status=PAY_COMPLETE&orderNo={orderNo}&payMethod=TOSS_MONEY   
+# # any status except for status=PAY_COMPLETE means unsuccesful payment
+
+# #if status != PAY_COMPLETE:
+# #    return
+
+
+def IdPwSearch(request):
+    return render(request, "IdPwSearch.html")
+
+
+def IdSearch(request):
+    result_msg = {'error': {'state': False, 'msg': ''}}
+
+    if request.method == 'POST':
+
+        verification_email == request.POST['verification-email1']
+
+        if len(PersonalUser.objects.filter(email=verification_email)) != 0: 
+            user_id = PersonalUser.objects.filter(email=verification_email).user.username
+            partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
+            result_msg['error']['msg'] = partial_user_id
+
+            return render(request, "IdPwSearch.html", result_msg)            
+
+        elif len(BusinessUser.objects.filter(email=verification_email)) != 0 :
+            user_id = BusinessUser.objects.filter(email=verification_email).user.username
+            partial_user_id = user_id[:4] + (len(user_id[3:])* '*')
+            result_msg['error']['msg'] = partial_user_id
+        
+            return render(request, "IdPwSearch.html", result_msg)            
+
+        else:
+            result_msg['error']['state'] = True
+            result_msg['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
+
+            return render(request, "IdPwSearch.html", result_msg)
+
+    return render(request, "IdPwSearch.html", result_msg)
+
+def pw_random_generator(length):
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase
+    digit = string.digits
+    symbol = string.punctuation
+
+    pw_parameters = lower + upper + digit + symbol
+
+    temp = random.sample(pw_parameters, length)
+    generated_pw = "".join(temp)
+
+    return generated_pw
+
+def PwSearch(request):
+    result_msg = {'error': {'state': False, 'msg': ''}}
+
+    if request.method == 'POST':
+        verification_email == request.POST['verification-email2']
+        user_id == request.POST['verification-id']
+
+        if PersonalUser.objects.filter(email=verification_email).user == User.objects.filter(username=user_id):
+            random_pw = pw_random_generator(16)
+            filtered_user = User.objects.filter(username=user_id)
+            filtered_user.objects.update(
+                password = random_pw
+            )
+            # send pw to email()
+            
+            result_msg['error']['msg'] = "Your new password has been sent to your email."
+
+            return render(request, "IdPwSearch.html", result_msg)
+        
+        if BusinessUser.objects.filter(email=verification_email).user == User.objects.filter(username=user_id):
+            random_pw = pw_random_generator(16)
+            filtered_user = User.objects.filter(username=user_id)
+            filtered_user.objects.update(
+                password = random_pw
+            )
+            # send pw to email()
+            
+            result_msg['error']['msg'] = "Your new password has been sent to your email."
+
+            return render(request, "IdPwSearch.html", result_msg)
+        
+        else:
+            result_msg['error']['state'] = True
+            result_msg['error']['msg'] = "No matching user with that ID and email."
+
+            return render ("IdPwSearch.html", result_msg)   
+
+    return(request, "IdPwSearch.html", result_msg)

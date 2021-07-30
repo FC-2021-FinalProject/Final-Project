@@ -20,23 +20,23 @@
     <form action="{% url 'reservation' cafe.pk %}" method="POST">
         {% csrf_token %}
         <div class="date-picker">
-            <input class="date-picker-selector" type="text" name="date" placeholder="Select date" readonly="">
+            <input class="date-picker-selector" type="text" name="date" placeholder="Select date">
             <div class="calendar" style="display: none;"></div>
-          </div>
+        </div>
         <input type="text" name="start_time" placeholder="시작 시간">
         <input type="text" name="time" placeholder="이용 시간">
         <input type="text" name="seat" placeholder="좌석을 선택하세요">
         <button type="submit" onclick="return confirm('예약하시겠습니까?');">예약하기</button>
     </form>
 </div>
-    <form action="{% url 'review' user.pk %}" method="POST">
-        {% csrf_token %}
-        <input type="text" name="review" placeholder="리뷰를 작성하세요">
-        <button>리뷰 쓰기</button>
-    </form>
+<form action="{% url 'review' cafe.pk%}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="review" placeholder="리뷰를 작성하세요">
+    <button>리뷰 쓰기</button>
+</form>
 {% for review in reviews %}
     <p>{{review.content}} -- 작성자 : {{review.writer}}</p>
 {% endfor %}
-</main>
 <script type="text/javascript" src="/static/calendar.js"></script>
+</main>
 {% endblock content %}

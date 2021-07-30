@@ -4,7 +4,7 @@ from django.urls.conf import include
 import debug_toolbar
 
 from studycafe import views
-from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, ReservationView, personal_signup, business_signup, ReviewView, login, kakao_logout, IdPwSearch, IdSearch, PwSearch
+from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, ReservationView, personal_signup, business_signup, ReviewView # login, kakao_logout, IdPwSearch, IdSearch, PwSearch
 
 
 urlpatterns = [
@@ -20,15 +20,15 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     
     #Id Pw Searching
-    path('IdPwSearch/', views.IdPwSearch, name='IdPwSearch'),
-    path('IdSearch/', views.IdSearch, name='IdSearch'),
-    path('PwSearch/', views.PwSearch, name='PwSearch'),
+    # path('IdPwSearch/', views.IdPwSearch, name='IdPwSearch'),
+    # path('IdSearch/', views.IdSearch, name='IdSearch'),
+    # path('PwSearch/', views.PwSearch, name='PwSearch'),
 
     # social login
-    path('kakao/login/', views.kakao_login, name='kakao_login'),
-    path('kakao/login/callback/', views.kakao_callback, name='kakao_callback'),
-    path('kakao/logout/', views.kakao_logout, name='kakao_logout'),
-    path('', include('allauth.urls')),
+    # path('kakao/login/', views.kakao_login, name='kakao_login'),
+    # path('kakao/login/callback/', views.kakao_callback, name='kakao_callback'),
+    # path('kakao/logout/', views.kakao_logout, name='kakao_logout'),
+    # path('', include('allauth.urls')),
 
     # user profile pages
     path('PUprofile/<int:pk>', PersonalUserDetailView.as_view(), name='PUprofile'),

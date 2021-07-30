@@ -9,39 +9,43 @@
 
 {% block content %}
 {% include 'header-nav.html' %}
-<ul class="search-list">
-    <li class="search-id-selector search-id active" id="search-id">Username</li>
-    <li class="search-pw-selector search-pw" id="search-pw">Password</li>
-</ul>
-
-<div class="idpw-search-body">
-    <section class="id-search-container search-id active">
-        <h2 class="id-search-header">Find Missing Username</h2>
-        <div class="id-search-container">
-            <form action="{% url 'IdSearch' %}" method="POST">
-                {% csrf_token %}
-                <div class="pw-search-email-block">
-                    <label for="validation-email1">Registered Email</label>
-                    <input type="text" id="validation-email1" name="validation-email1" placeholder="Enter your email here.">
-                </div>
-                <button type="submit">submit</button>
-            </form>
-        </div>
-    </section>
-    <section class="pw-search-container search-pw">
-        <h2 class="pw-search-header">Find Missing Password</h2>
-        <form action="{% url 'PwSearch' %}" method="POST">
-            {% csrf_token %}
-            <div class="pw-search-username-block>
-                <label for="validation-id">username</label>
-                <input type="text" id="validation-id" name="validation-id" placeholder="Enter your username here.">
+<main class="idpw-search-main-container">
+    <section class="idpw-html-wrapper">
+        <ul class="search-list">
+            <li class="search-id-selector search-id active" id="search-id">Username</li>
+            <li class="search-pw-selector search-pw" id="search-pw">Password</li>
+        </ul>
+            <div class="idpw-search-body">
+                <section class="id-search-container search-id active">
+                    <h2 class="id-search-header">Find Missing Username</h2>
+                    <div class="id-search-container">
+                        <form action="{% url 'IdSearch' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="id-search-email-block">
+                                <label for="validation-email1">Registered Email</label>
+                                <input type="text" id="validation-email1" name="validation-email1" placeholder="Enter your email here.">
+                            </div>
+                            <button class="search-submit-button" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </section>
+                <section class="pw-search-container search-pw">
+                    <h2 class="pw-search-header">Find Missing Password</h2>
+                    <form action="{% url 'PwSearch' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="pw-search-username-block">
+                            <label for="validation-id">Username</label>
+                            <input type="text" id="validation-id" name="validation-id" placeholder="Enter your username here.">
+                        </div>
+                        <div class="pw-search-email-block">
+                            <label for="validation-email2">Registered Email</label>
+                            <input type="text" id="validation-email2" name="validation-email2" placeholder="Enter your email here.">
+                        </div>
+                        <button class="search-submit-button" type="submit">Submit</button>
+                    </form>
+                </section>
             </div>
-            <div class="pw-search-email-block">
-                <label for="validation-email2">Registered Email</label>
-                <input type="text" id="validation-email2" name="validation-email2" placeholder="Enter your email here.">
-            </div>
-            <button type="submit">submit</button>
-        </form>
+        </article>
     </section>
-</div>
+</main>
 {% endblock content %}

@@ -286,6 +286,12 @@ button{
     border-radius: 0 0 8px 8px;
 }
 /* ----------------- forgot id/pw link  -------------------- */
+.html-wrapper{
+    max-width: 930px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
 .idpw-search-container{
     width: 100%;
     margin-top: 15px;
@@ -328,12 +334,97 @@ button{
 }
 
 /* ----------------- IdPwSearch.html-------------------- */
-/* style for testing */
-/* .active{ */
-    /* font-size: 24px; */
-    /* transition-property: font-size; */
-    /* transition-duration: 4s; */
-/* } */
+.idpw-search-main-container{
+    display: block;
+    margin-left: 37%;
+    margin-right: auto;
+    width: 50%;
+}
+.search-list {
+    display: flex;
+    flex-direction: row; 
+    flex-wrap: nowrap;
+    margin: 20px 10px;
+}
+
+.search-list > li {
+    display: block;
+    padding: 5px 10px;
+    text-align: center;
+    border-radius: 5px 5px 0px 0px;
+    border:1px solid gray;
+    opacity: 0.8;
+}
+
+.search-list > li.active {
+    border:2px solid rgb(0, 0, 0);
+    opacity: 1;
+}
+
+.idpw-search-body{
+    flex-wrap: wrap;
+    margin-left: 0px;
+    display: inline-block;
+    padding: 20px;
+}
+.idpw-search-body > section{
+    display: none;
+}
+.idpw-search-body > section.active{
+    display: inline-block;
+}
+.id-search-header, .pw-search-header{
+    width: 100%;
+    font-size: large;
+    text-align: center;
+    padding-bottom: 20px;
+}
+.id-search-email-block, .pw-search-email-block, .pw-search-username-block{
+    font-size: large;
+}
+.id-search-email-block > label, .pw-search-email-block > label, .pw-search-username-block > label{
+    width: 200px;
+    text-align: left;
+    display: inline-block;
+}
+.id-search-email-block > input, .pw-search-email-block > input, .pw-search-username-block > input{
+    font-size: medium;
+    margin-bottom: 10px;
+}
+
+
+.auth-labels{
+    position: absolute;
+    top: 15px;
+    margin-left: 20px;
+    font-size: large;
+    color: rgb(176, 176, 176)
+}
+.auth-input-items{
+    outline: none;
+    box-sizing: border-box;
+    border: 1px solid rgb(176, 176, 176);
+    padding-top: 20px;
+    padding-left: 20px;
+    width: 100%;
+    height: 50px;
+}
+.search-submit-button{
+    background: #d80a63;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: #fff;
+    font-size: medium;
+    border-radius: 5px;
+    padding: 10px 5px;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+
 
 
 /* ----------------- PUprofile.html-------------------- */

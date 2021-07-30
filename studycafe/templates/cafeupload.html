@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'header-nav.html' %}
-<main>
+<main class="main-container">
 <h2>Cafe Upload Page</h2>
 <form action="{% url 'cafeupload' user.pk %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}

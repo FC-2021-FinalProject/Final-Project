@@ -408,10 +408,7 @@ class ReservationView(generic.View) :
         end_time = start_time + use_time
         seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
-        print('시작시간보다 작거나 같은',Reservations.objects.filter(hours__start_time__lte=start_time))
-        print('시작시간보다 크거나 같은',Reservations.objects.filter(hours__start_time__gte=start_time))
-        print('끝 시간보다 작거나 같은',Reservations.objects.filter(hours__start_time__lte=end_time))
-        print('끝 시간보다 크거나 같은',Reservations.objects.filter(hours__start_time__gte=end_time))
+
         if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
             print('카페 날짜 좌석 중복')
             if Reservations.objects.filter(hours__start_time__lt=start_time, hours__start_time__lte=end_time, hours__end_time__gte=start_time, hours__end_time__gt=end_time) :
@@ -445,7 +442,6 @@ class ReservationView(generic.View) :
                 print('이용시간 중복')
 
         else :
-            print('카페 날짜 좌석 중복 ㄴ')
             date1 = Date.objects.create(
                 content = date,
                 studycafe = studycafe

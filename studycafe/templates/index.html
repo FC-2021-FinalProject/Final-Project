@@ -2,7 +2,6 @@
 {% block content %}
 {% include 'header-nav.html' %}
 <main class="main-container">
-
     <section class="visual-wrapper"></section>
     <section class="user-info-wrapper">
     {% if user.is_authenticated %}
@@ -10,32 +9,24 @@
     {% endif %}
     </section>
     <section class="cafe-wrapper">
-        <h2>지역별 스터디 카페</h2>
+        <h2>Study Cafes Available for Booking</h2>
         <ul class="cafe-content-list">
 
-            
+            {% for cafelist in cafelists %}
+
             <li>
-                <button>
-                    성수
-                </button>
-            </li>
-            <li>
-                <button>
-                    건대
-                </button>
-            </li>
-            <li>
-                <button>
-                    뚝섬
-                </button>
-            </li>
-            <li>
-                <button>
-                    강남
-                </button>
+                <a href="{% url 'cafedetail' cafelist.pk %}">
+                    <img src="{{cafelist.img}}" width="250px;" alt="{{cafelist.name}}">
+                <ul>
+                    <li>카페 이름 : {{cafelist.name}}</li>
+                    <li>시간 당 가격 : {{cafelist.price_per_hour}}</li>
+
+                    </a>
+
             </li>
         </ul>
+
+        {% endfor %}
     </section>
 </main>
-
 {% endblock content %}

@@ -31,8 +31,17 @@ SUCCESS_MSG = {
     'PW_UPDATED': 'Password updated successfully.',
 }
 def index(request):
+    cafes = StudyCafe.objects.all()
 
-    return render(request, 'index.html')
+    random_index = random.sample(range(0,len(cafes)), 4)
+
+    random_cafes = []
+    for i in random_index:
+        print(i)
+        random_cafes.append(cafes[random_index[i]])
+
+    context = {'cafelists': random_cafes}
+    return render(request, 'index.html', context)
 
 # function for email authentication
 def verified_callback(user):

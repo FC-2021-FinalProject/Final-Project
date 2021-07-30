@@ -23,12 +23,15 @@ ERROR_MSG = {
     'NO_EXIST_ID' : '존재하지 않는 아이디 입니다.',
     'MISSING_INPUT': '필수항목을 작성해주세요.',
     'PASSWORD_CHECK': '비밀번호를 확인해주세요',
-    'PASSWORD_NOMATCH': '비밀번호가 일치하지 않습니다'
+    'INCORRECT_PW': '비밀번호가 틀렸습니다',
+    'PASSWORD_NOMATCH': '비밀번호가 일치하지 않습니다',
 }
 SUCCESS_MSG = {
     'PROFILE_UPDATED': 'Profile updated successfully.',
+    'PW_UPDATED': 'Password updated successfully.',
 }
 def index(request):
+
     return render(request, 'index.html')
 
 # function for email authentication

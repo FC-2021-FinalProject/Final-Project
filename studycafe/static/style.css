@@ -254,6 +254,7 @@ button{
 .auth-input-controls{
     width: 100%;
     position: relative;
+    box-sizing: border-box;
 }
 .auth-labels{
     position: absolute;
@@ -261,6 +262,10 @@ button{
     margin-left: 20px;
     font-size: large;
     color: rgb(176, 176, 176)
+}
+.auth-input-focused{
+    font-size: small;
+    top: 7px;
 }
 .auth-input-items{
     outline: none;
@@ -270,6 +275,15 @@ button{
     padding-left: 20px;
     width: 100%;
     height: 50px;
+}
+.auth-error-msg.error-msg{
+    position: absolute;
+    width: 40%;
+    height: 100%;
+    top: 10px;
+    right: 5px;
+    text-align: right;
+    color: #d80a63;
 }
 .auth-submit-buttons{
     background: #d80a63;
@@ -285,15 +299,21 @@ button{
     margin-top: 15px;
     cursor: pointer;
 }
+.auth-submit-buttons.disabled{
+    pointer-events: none;
+    background: #d80a63;
+    opacity: .7;
+}
 /* label in lieu of placeholder for auth forms */
 
 /* ----------------- login.html -------------------- */
 #login-name{
-    border-radius: 8px 8px 0 0 ;
+    border-radius: 8px 8px 0 0;
+    border-bottom: transparent;
+
 }
 #login-password{
     border-radius: 0 0 8px 8px;
-    border-top: none;
 }
 
 /* ----------------- personal_signup.html -------------------- */
@@ -485,17 +505,27 @@ button{
     flex-direction: column;
     align-items: center;
     padding: 25px 20px;
+    position: absolute;
 }
-.user-profile-info-wrapper > .profile-photo{
+.user-profile-info-wrapper{
+    position: relative;
+    width: 50%;
+}
+.profile-photo{
     width: 50px;
     height: 50px;
     object-fit: cover;
     border-radius: 50%;
-    margin-top: 10px;
-    margin-right: 10px;
     cursor: pointer;
 }
+#profile-pw-photo{
+    position: absolute;
+    left: -31px;
+    transform: translate(-100%, -50%);
+    cursor: none;
+}
 .user-password-edit-form{
+    margin-top: 30px;
     position: relative;
     width: 50%;
 }
@@ -536,7 +566,7 @@ button{
 .profile-edit-submit.disabled{
     pointer-events: none;
     background: #d80a63;
-    opacity: .3;
+    opacity: .7;
 }
 
 /* BOTTOM LEFT: accounts information section */

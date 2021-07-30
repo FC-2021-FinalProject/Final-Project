@@ -1,6 +1,6 @@
 {% if user.is_authenticated %}
 <header class="header-container">
-    <section class="header-wrapper">
+    <section class="page-wrapper header-wrapper">
         <h1><a href="{% url 'index' %}">dobby is park</a></h1>
         <form class="search-form">
             <fieldset>
@@ -45,7 +45,7 @@
 </header>
 {% elif user.is_anonymous %}
 <header class="header-container">
-    <section class="header-wrapper">
+    <section class="page-wrapper header-wrapper">
         <h1><a href="{% url 'index' %}">Doby is Park</a></h1>
         <form class="search-form">
             <fieldset>
@@ -73,3 +73,4 @@
     </section>
 </header>
 {% endif %}
+<div class="body-background"></div>

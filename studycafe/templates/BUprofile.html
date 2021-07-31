@@ -1,16 +1,62 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'header-nav.html' %}
-<h1>Business User My Page</h1>
-<ul><h2>메뉴들</h2></ul> 
-<li> 내 정보</li>
-<p>{{buser.name}}</p>
-<p>{{buser.email}}</p>
-<p>{{buser.registration_number}}</p>
-<li> 내 카페</li>
-{% for i in buser.studycafe.all%}
-{{i}}
-<img src="{{i.img}}" alt="" width="250px;">
-{% endfor%}
-<a href="{% url 'cafeupload' user.pk %}">카페 등록하기</a>
+
+<section class="page-wrapper bu-mypage-container">
+    <h2 class="visually-hidden">Business User My Page</h2>
+    <section class="bu-profile-wrapper">
+        <h3 class="bu-page-headers bu-tab-option bu-profile-header">Business Profile</h3> 
+        <article class="bu-page-contents bu-profile-content visually-hidden">
+            <h4>{{buser.name}}</h4>
+            <p>{{buser.email}}</p>
+            <p>{{buser.registration_number}}</p>
+        </article>
+    </section>
+    <section class="bu-manage-wrapper">
+        <h3 class="bu-page-headers bu-tab-option bu-manage-header selected">Manage Cafe</h3>
+        <article class="bu-page-contents bu-manage-content">
+            <ul class="owner-cafe-list">
+            {% for cafe in buser.studycafe.all %}
+                <li class="owner-cafe-item-wrapper">
+                    <a href="{% url 'cafedetail' cafe.pk %}">
+                        <img src="{{cafe.img}}" alt="{{cafe.name}}" width="250px;">
+                        <ul class="owner-cafe-item-desc">
+                            <li>{{cafe.name}}</li>
+                            <li>{{cafe.address}}</li>
+                        </ul>
+                    </a>
+                    
+                </li>
+            {% if forloop.last %}
+                <li class="owner-cafe-item-wrapper">
+                    <a href="{% url 'cafeupload' user.pk %}">
+                        <img src="../static/images/add.png" alt="Add another new cafe link image">
+                        <span class="owner-cafe-item-desc">Host another Cafe</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% empty %}
+                <li class="owner-cafe-item-wrapper">
+                    <a href="{% url 'cafeupload' user.pk %}">
+                        <img src="../static/images/add.png" alt="Add new cafe link image">
+                        <span class="owner-cafe-item-desc">Host your Cafe</span>
+                    </a>
+                </li>
+            {% endfor%}
+            </ul>
+        </article>
+    </section>
+    <section class="bu-reviews-wrapper">
+        <h3 class="bu-page-headers bu-tab-option bu-reviews-header">Reviews/Feedback</h3>
+        <article class="bu-page-contents bu-reviews-contents visually-hidden">
+            <span>A page just for your cafe reviews is coming soon!</span>
+        </article>
+    </section>
+    <section class="bu-accounts-wrapper">
+        <h3 class="bu-page-headers bu-accounts-header">Accounts Center</h3>
+        <article class="pu-page-contents pu-accounts-contents">
+            <span>Control settings for your account can be accessed here.</span>
+        </article>
+    </section>
+</section>
 {% endblock content %}

@@ -48,6 +48,7 @@ button{
     border: 0;
     background: transparent;
 }
+/* COMMON */
 .visually-hidden{
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
@@ -57,6 +58,11 @@ button{
     white-space: nowrap;
     width: 1px;
 }
+.page-wrapper{
+    max-width: 930px;
+    margin: 0 auto;
+    padding: 20px;
+}
 /* ----------------- header -------------------- */
 .header-container{
     background: transparent;
@@ -64,8 +70,6 @@ button{
     box-shadow: 0 3px 5px rgba(176, 176, 176, .7);
 }
 .header-wrapper{
-    max-width: 930px;
-    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
@@ -98,6 +102,46 @@ button{
     width: 100%;
     color: #434343;
 }
+.logged-in-user-status{
+    color:rgb(176, 176, 176);
+    font-size: small;
+    padding: 10px;
+}
+.mobile-menu{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: all 2s;
+}
+#mobile-menu{
+    width: 80px;
+    display: flex;
+    justify-items: baseline;
+    justify-content: space-around;
+    background-color: rgba( 200, 200, 200, .3);
+    border-radius: 21px / 21px;
+    padding: 15px 5px 0 5px;
+    cursor: pointer;
+}
+#mobile-menu i{
+    width: 30px;
+    height: 30px;
+}
+#mobile-menu-profile-img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transform: translate(-25%, -25%);
+}
+.body-background{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
 .header-nav-menu-container{
     box-sizing: border-box;
     display: none;
@@ -138,42 +182,14 @@ button{
 .header-nav-menu-list li:nth-last-of-type(1){
     margin-bottom: 5px;
 }
-.mobile-menu{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    transition: all 2s;
-}
-#mobile-menu{
-    width: 80px;
-    display: flex;
-    justify-items: baseline;
-    justify-content: space-around;
-    background-color: rgba( 200, 200, 200, .3);
-    border-radius: 21px / 21px;
-    padding: 15px 5px 0 5px;
-    cursor: pointer;
-}
-#mobile-menu i{
-    width: 30px;
-    height: 30px;
-}
-#mobile-menu-profile-img{
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    transform: translate(-25%, -25%);
-}
-.logged-in-user-status{
-    color:rgb(176, 176, 176);
-    font-size: small;
-    padding: 10px;
+.body-background.mobile-open{
+    display: block;
+    z-index: 0;
 }
 .mobile-open{
     display: block;
     z-index: 9999;
 }
-
 /* ----------------- index.html -------------------- */
 .visual-wrapper{
     margin: 0 auto;
@@ -184,47 +200,63 @@ button{
     background-size: cover;
     box-shadow: 0 -3px 5px rgba(176, 176, 176, .7);
 }
-.user-info-wrapper, 
-.cafe-wrapper{
-    max-width: 930px;
-    margin: 0 auto;
-    padding: 20px;
-}
-.cafe-wrapper h2{
+.index-page-wrapper  h2{
     font-style: bold;
-    font-size: large;
+    font-size: medium;
     border-bottom: 1px solid black;
     padding-bottom: 5px;
     display: inline-block;
 }
-.cafe-content-list{
+.index-cafe-list{
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    flex-wrap: wrap;
 }
-.cafe-content-list li{
-    border-radius: 10px;
-    border: 1px solid rgba(0,0,0,0.3)
-}
-.cafe-content-list li:hover{
-    box-shadow: inset 0 0 0 2px rgba(0,0,0,0.7);
+.index-cafe-list li:hover{
+    background-color: rgba( 200, 200, 200, .3);
+    /* box-shadow: inset 0 0 0 2px rgba(0,0,0,0.7); */
     /* changed from border to box-shadow to avoid movement of elements upon hover */
     /* border: 2px solid rgba(0,0,0,0.7) */
 }
-.cafe-content-list button{
+.cafe-item-wrapper{
+    margin-top: 20px;
+    width: 250px;
+    height: 250px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.3);
+    z-index: 9999;
+    background-color: transparent;
+}
+.cafe-item-wrapper a{
+    text-decoration: none;
+    color: black;
     width: 100%;
     height: 100%;
-    padding: 50px;
-    border:0;
-    background: transparent;
 }
+.cafe-item-wrapper img{
+    margin: 0 auto;
+    box-sizing: border-box;
+    width: 100%;
+    height: 220px;
+    border-radius: 10px 10px 0 0;
+    z-index: -99;
+    object-fit: cover;
+    overflow-x: hidden;
+}
+.cafe-info-details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cafe-info-details li{
+    padding: 5px;
 
-
+}
+.cafe-info-details li:hover{
+    background-color: transparent;
+}
 /* ------- Login, Personal User and Business User Common------- */
 .auth-page-wrapper{
-    max-width: 930px;
-    margin: 0 auto;
-    padding: 20px;
     position: relative;
 }
 .auth-form-container{

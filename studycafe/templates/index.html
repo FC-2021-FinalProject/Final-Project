@@ -1,26 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'header-nav.html' %}
-<main class="main-container">
-    <section class="visual-wrapper"></section>
-    <section class="cafe-wrapper">
-        <h2>요즘 뜨고 있는 스터디 카페</h2>
-        <ul class="cafe-content-list">
-
+<main>
+    <section class="visual-wrapper">
+        <h2 class="visually-hidden" >Doby is Park Welcome Image</h2>
+    </section>
+    <section class="page-wrapper index-page-wrapper recommend-cafe-wrapper">
+        <h2>Recommended just for you</h2>
+        <ul class="index-cafe-list recommend-cafe-list">
             {% for cafelist in cafelists %}
-
-            <li>
+            <li class="cafe-item-wrapper">
                 <a href="{% url 'cafedetail' cafelist.pk %}">
-                    <img src="{{cafelist.img}}" width="250px;" alt="{{cafelist.name}}">
-                <ul>
-                    <li>카페 이름 : {{cafelist.name}}</li>
-                    <li>시간 당 가격 : {{cafelist.price_per_hour}}</li>
+                <img src="{{cafelist.img}}" width="250px;" alt="{{cafelist.name}}">
+                <ul class="cafe-info-details">
+                    <li>{{cafelist.name}}</li>
                 </ul>
                 </a>
-
             </li>
+            {% endfor %}
         </ul>
-        {% endfor %}
+    </section>
+    <section class="page-wrapper index-page-wrapper nearby-cafe-wrapper">
+        <h2>Explore nearby</h2>
+
+
+
+
+    </section>
+    <section class="page-wrapper index-page-wrapper visited-cafe-wrapper">
+        <h2>Visited Study Cafes</h2>
+
+
+
+
     </section>
 </main>
+
 {% endblock content %}

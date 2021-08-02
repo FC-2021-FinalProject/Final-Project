@@ -293,7 +293,7 @@ def personal_password_edit(request, username):
 
     return redirect('PUprofile', request.user.username)
 
-class BusinessUserDetailView(generic.DeleteView) :
+class BusinessUserDetailView(generic.DetailView) :
     model = BusinessUser
     template_name = 'BUprofile.html'
 
@@ -305,6 +305,27 @@ class BusinessUserDetailView(generic.DeleteView) :
     def post(self, request, *args, **kwargs) :
         return redirect('BUprofile', kwargs['pk'])
 
+class BusinessUserEditView(View) :
+
+    def get(self, request, *args, **kwargs) :
+        buser = BusinessUser.objects.get(user=request.user)
+        context = {'buser':buser}
+
+        return render(request, 'BUedit.html', context)
+
+    def post(self, request, *args, **kwargs) :
+        name = request.POST.get('user_name')
+        email = request.POST.get('email')
+
+        BusinessUser.objects.filter(user=request.user).update(
+            name=name,
+            email=email
+        )
+        User.objects.filter(pk=kwargs['pk']).update(
+            username=request.POST.get('user_name'),
+            email = request.POST.get('email')
+        )
+        return redirect('BUprofile', kwargs['pk'])
 
 class CafeListView(generic.ListView) :
     model = StudyCafe

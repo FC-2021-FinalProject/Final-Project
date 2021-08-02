@@ -14,7 +14,7 @@ import boto3
 from boto3.session import Session
 
 # Imports from Apps
-from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME#, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
+from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
 

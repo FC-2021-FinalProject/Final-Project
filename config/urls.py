@@ -4,7 +4,7 @@ from django.urls.conf import include
 import debug_toolbar
 
 from studycafe import views
-from studycafe.views import CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, ReservationView, personal_signup, business_signup, personal_profile_edit, personal_password_edit, ReviewView, login, kakao_logout, IdPwSearch, IdSearch, PwSearch
+from studycafe.views import BusinessUserEditView, CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, BusinessUserEditView ,ReservationView, personal_signup, business_signup, personal_profile_edit, personal_password_edit, ReviewView, login, kakao_logout, IdPwSearch, IdSearch, PwSearch
 
 
 urlpatterns = [
@@ -35,7 +35,8 @@ urlpatterns = [
     path('PUprofileedit/<slug:username>', views.personal_profile_edit, name='personal_profile_edit'),
         path('PUpasswordedit/<slug:username>', views.personal_password_edit, name='personal_password_edit'),
     path('BUprofile/<int:pk>', BusinessUserDetailView.as_view(), name='BUprofile'),
-    
+    path('BUprofileedit/<int:pk>', BusinessUserEditView.as_view(), name='BUedit'),
+
     # study cafe listings
     path('cafelist', CafeListView.as_view(), name='cafelist'),
     path('cafeupload/<int:pk>', CafeUploadView.as_view(), name='cafeupload'),

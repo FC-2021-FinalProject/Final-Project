@@ -293,7 +293,7 @@ def personal_password_edit(request, username):
 
     return redirect('PUprofile', request.user.username)
 
-class BusinessUserDetailView(generic.DeleteView) :
+class BusinessUserDetailView(generic.DetailView) :
     model = BusinessUser
     template_name = 'BUprofile.html'
 
@@ -305,6 +305,27 @@ class BusinessUserDetailView(generic.DeleteView) :
     def post(self, request, *args, **kwargs) :
         return redirect('BUprofile', kwargs['pk'])
 
+class BusinessUserEditView(View) :
+
+    def get(self, request, *args, **kwargs) :
+        buser = BusinessUser.objects.get(user=request.user)
+        context = {'buser':buser}
+
+        return render(request, 'BUedit.html', context)
+
+    def post(self, request, *args, **kwargs) :
+        name = request.POST.get('user_name')
+        email = request.POST.get('email')
+
+        BusinessUser.objects.filter(user=request.user).update(
+            name=name,
+            email=email
+        )
+        User.objects.filter(pk=kwargs['pk']).update(
+            username=request.POST.get('user_name'),
+            email = request.POST.get('email')
+        )
+        return redirect('BUprofile', kwargs['pk'])
 
 class CafeListView(generic.ListView) :
     model = StudyCafe
@@ -416,42 +437,67 @@ class ReservationView(generic.View) :
         use_time = request.POST['time']
         seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
-        end_time = time(int(int(start_time) + int(use_time)))
+        end_time = int(start_time) + int(use_time)
         
-        if len(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time)))and Date.objects.filter(content=date)) == 0 :
+        if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
+            print('카페 날짜 좌석 중복')
+            if Reservations.objects.filter(hours__start_time__lt=start_time, hours__start_time__lte=end_time, hours__end_time__gte=start_time, hours__end_time__gt=end_time) :
+                print('이용시간 중복 ㄴ')
+            
+                date1 = Date.objects.create(
+                    content = date,
+                    studycafe = studycafe
+                )
 
+                hour = HourTime.objects.create(
+                    studycafe = studycafe,
+                    start_time = start_time,
+                    end_time = end_time,
+                )
+
+                seat1 = Seats.objects.create(
+                    studycafe = studycafe,
+                    content = seat,
+                    available = True
+                )
+
+                Reservations.objects.create(
+                    # personal_user = user,
+                    studycafe = studycafe,
+                    date = date1,
+                    hours = hour,
+                    seat = seat1
+                )
+            else :
+                print('이용시간 중복')
+
+        else :
             date1 = Date.objects.create(
                 content = date,
                 studycafe = studycafe
             )
 
             hour = HourTime.objects.create(
-                date = date1,
-                start_time = time(int(start_time)),
-                use_time = time(int(use_time)),
-                end_time = time(int(int(start_time) + int(use_time))),
-                state = True
+                studycafe = studycafe,
+                start_time = start_time,
+                end_time = end_time,
             )
 
             seat1 = Seats.objects.create(
-                hour_time = hour,
+                studycafe = studycafe,
                 content = seat,
-                state = True
+                available = True
             )
 
             Reservations.objects.create(
-                personal_user = request.user,
+                # personal_user = user,
                 studycafe = studycafe,
                 date = date1,
                 hours = hour,
-                seat = seat1,
+                seat = seat1
             )
-        else :
-            print("사용시간 중복")
-
+    
         return redirect('cafedetail', kwargs['pk'])
-
-
 class ReviewView(generic.View) :
 
     def post(self, request, *args, **kwargs) :

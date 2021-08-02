@@ -1,18 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'header-nav.html' %}
-<main class="main-container">
-<h2>Cafe Upload Page</h2>
-<form action="{% url 'cafeupload' user.pk %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="text" name="name" placeholder="카페 이름">
-    <input type="text" name="address" placeholder="카페 주소">
-    <input type="text" name="introduce" placeholder="카페 소개">
-    <input type="text" name="price_per_hour" placeholder="시간 당 가격">
-    <input type="text" name="business_hour_start" placeholder="영업 오픈 시간">
-    <input type="text" name="business_hour_end" placeholder="영업 마감 시간">
-    <input type="file" name="image" multiple>
-    <button type="submit">업로드</button>
-</form>
+<main class="page-wrapper cafeupload-page-wrapper">
+    <h2>Cafe Upload Page</h2>
+    <form class="cafeupload-form-wrapper" action="{% url 'cafeupload' user.pk %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="name">Operating name</label>
+        <input type="text" name="name" placeholder="카페 이름">
+        <label for="address">Cafe address</label>
+        <input type="text" name="address" placeholder="카페 주소">
+        <label for="introduce">Intro of your cafe</label>
+        <input type="text" name="introduce" placeholder="카페 소개">
+        <label for="price_per_hour">Price per hour</label>
+        <input type="text" name="price_per_hour" placeholder="시간 당 가격">
+        <label for="business_hour_start">Open time</label>
+        <input type="text" name="business_hour_start" placeholder="영업 오픈 시간">
+        <label for="business_hour_end">Closing time</label>
+        <input type="text" name="business_hour_end" placeholder="영업 마감 시간">
+        <label for="image">Cafe images</label>
+        <input type="file" name="image" multiple>
+        <button type="submit">Register my Study Cafe</button>
+    </form>
 </main>
-{% endblock content%}
+{% endblock content %}

@@ -63,7 +63,8 @@ button{
     margin: 0 auto;
     padding: 20px;
 }
-/* ----------------- header -------------------- */
+
+/* ----------------- header-nav.html -------------------- */
 .header-container{
     background: transparent;
     padding: 20px 0;
@@ -82,6 +83,14 @@ button{
     color: #484848;
     font-size: x-large;
     font-weight: 800 ;
+    /* text-shadow: 5px 10px rgb(140,140,140); */
+}
+.header-wrapper h1 a::before{
+    content:"dobby is free";
+    color: transparent;
+    position: absolute;
+    font-size: xx-large;
+    text-shadow: 8px -25px 6px rgba(50, 140, 201,.6);
 }
 .search-form{
     position: absolute;
@@ -509,9 +518,9 @@ button{
 
 
 /* ----------------- PUprofile.html-------------------- */
-.pu-mypage-container{
-    max-width: 930px;
+.page-wrapper.pu-mypage-container{
     margin: 20px auto;
+    padding: 0;
     border: 1px solid rgb(176, 176, 176);
     border-radius: 5px;
     position: relative;
@@ -558,7 +567,8 @@ button{
     position: relative;
     width: 50%;
 }
-.user-profile-info-wrapper > h3{
+.user-profile-info-wrapper > span{
+    display: block;
     font-size: small;
     font-weight: bold;
 }
@@ -877,4 +887,120 @@ button{
     box-sizing: border-box;
     flex-wrap: wrap;
     padding: 20px 45px;
+}
+
+
+/* ----------------- cafedetail.html-------------------- */
+.cafe-basics-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;    
+    align-items:flex-end;
+    border-bottom: 1px solid rgb(140,140,140);
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+.cafe-info-wrapper h3{
+    font-size: x-large;
+    font-weight: bolder;
+    padding-bottom: 10px;
+}
+.cafe-address span:nth-of-type(2){
+    padding: 0 20px;
+}
+.cafedetail-information-wrapper{
+    display: flex;
+}
+.fa-share,
+.fa-bookmark{
+    color: black;
+    padding: 10px;
+}
+.cafedetail-navigation-wrapper{
+    display: flex;
+    flex-direction: column;
+}
+.cafedetail-navigation-wrapper nav{
+    width: 680px;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+}
+.cafe-detail-nav li{
+    width: 150px;
+    display: inline-block;
+    font-size: medium;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid rgb(176, 176, 176);
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    margin-right: 10px;
+    background-color: #fff;
+}
+.cafe-detail-nav li:hover{
+    background-color: rgba(176,176,176,.3);
+    box-shadow: 0 0 5px 3px rgba(176, 176, 176,0.3);
+}
+.cafe-detail-wrapper {
+    /* height: auto; */
+    /* height to be set to auto after styling */
+    height: 400px;
+    padding: 20px 5px;
+    display: flex;
+    flex-direction: column;
+}
+.cafe-detail-wrapper h3{
+    font-size: medium;
+    font-weight: bold;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+.cafe-hours-wrapper h4,
+.cafe-facilities-wrapper h4{
+    font-weight: bold;
+    padding: 5px 0;
+    margin-bottom: 5px;
+}
+.facility-items-wrapper{
+    display: flex;
+}
+.facility-items img{
+    width: 50px;
+    height: 50px;
+}
+
+/* cafe reservation box */
+.cafe-booking-wrapper{    
+    position: sticky;
+    top: 0;
+    width: 250px;
+    height: 350px;
+    border: 1px solid rgb(176, 176, 176);
+    border-radius: 10px 10px 0 0;
+}
+.cafe-booking-wrapper h3{
+    border-bottom: 1px solid rgb(176, 176, 176);
+    font-size: medium;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+.booking-form-wrapper{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+
+
+/* ----------------- cafeupload.html-------------------- */
+.page-wrapper.cafeupload-page-wrapper{
+    padding: 20px;
+}
+
+.cafeupload-form-wrapper{
+    display: flex;
+    flex-direction: column;
 }

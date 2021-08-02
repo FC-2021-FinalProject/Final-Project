@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'header-nav.html' %}
+<h1>비즈니스 유저 정보 변경 페이지</h1>
+<form action="{% url 'BUedit' user.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="user_name" value="{{buser.user}}">
+    <input type="text" name="email" value="{{buser.user.email}}">
+    <button type="submit">수정하기</button>
+</form>
+
+{% endblock content %}

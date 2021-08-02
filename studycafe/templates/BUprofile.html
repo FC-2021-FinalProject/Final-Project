@@ -6,6 +6,12 @@
 {% block content %}
 {% include 'header-nav.html' %}
 
+<h2>개인 정보 수정하기</h2>
+<form action="{% url 'BUedit' user.pk %}">
+    {% csrf_token %}
+    <button type="submit">수정하러 가기</button>
+</form>
+
 <section class="page-wrapper bu-mypage-container">
     <h2 class="visually-hidden">Business User My Page</h2>
     <section class="bu-profile-wrapper">

@@ -9,114 +9,125 @@
 
 <section class="page-wrapper cafedetail-page-wrapper">
     <h2 class="visually-hidden">{{cafe.name}} Detail Page</h2>
+    <section class="cafe-basics-container">
+        <article class="cafe-info-wrapper">
+            <h3>{{cafe.name}}</h3>
+            <address class="cafe-address">
+                <span>{{cafe.address}}</span>
+                <span>phone number: </span>
+            </address>
+        </article>
+        <article class="share-save-wrapper">
+            <a href="#"><i class="fas fa-share fa-lg"></i></a>
+            <a href="#"><i class="fas fa-bookmark fa-lg"></i></a>
+        </article>
+    </section>
+    <section class="cafedetail-information-wrapper">
+        <article class="cafedetail-navigation-wrapper">
+            <nav>
+                <ul class="cafe-detail-nav">
+                    <li>지점 소개</li>
+                    <li>내부 모습</li>
+                    <li>위치</li>
+                    <li>후기</li>
+                </ul>
+            </nav>
 
-    <article class="cafedetail-navigation-wrapper">
-        <nav>
-            <ul class="cafe-detail-nav">
-                <li>지점 소개</li>
-                <li>내부 모습</li>
-                <li>위치</li>
-                <li>후기</li>
-            </ul>
-        </nav>
-
-        <section class="cafedetail-sections-wrapper">
-            <article class="cafe-detail-wrapper cafe-wrapper">
-                <h3>지점소개</h3>
-                <article class="cafe-hours-wrapper">
-                    <h4>이용 시간 및 주소</h4>
-                    <dl>
-                        <dt>평일:</dt>
-                        <dd>{{cafe.business_hour_start}} ~ {{cafe.business_hour_end}}</dd>
-                        <dt>토요일:</dt>
-                        <dd>{{cafe.business_hour_start}} ~ {{cafe.business_hour_end}}</dd>
-                        <dt>일요일:</dt>
-                        <dd>{{cafe.business_hour_start}} ~ {{cafe.business_hour_end}}</dd>
-                        <dt>휴무일:</dt>
-                        <dd>없음</dd>
-                        <dt>카페 주소</dt>
-                        <dd>{{cafe.address}}</dd>
-                    </dl>
+            <section class="cafedetail-sections-wrapper">
+                <article class="cafe-detail-wrapper cafe-wrapper">
+                    <h3>지점소개</h3>
+                    <article class="cafe-hours-wrapper">
+                        <h4>이용 시간</h4>
+                        <dl>
+                            <dt>평일:</dt>
+                            <dd>{{cafe.business_hour_start}} ~ {{cafe.business_hour_end}}</dd>
+                            <dt>토요일:</dt>
+                            <dd>{{cafe.business_hour_start}} ~ {{cafe.business_hour_end}}</dd>
+                            <dt>일요일:</dt>
+                            <dd>{{cafe.business_hour_start}} ~ {{cafe.business_hour_end}}</dd>
+                            <dt>휴무일:</dt>
+                            <dd>없음</dd>
+                        </dl>
+                    </article>
+                    <article class="cafe-facilities-wrapper">
+                        <h4>편의시설 및 서비스</h4>
+                        <ul class="facility-items-wrapper">
+                            <!-- data 가져와서 for loop으로 해당 편의 시설 boolean=true인것만 풀어서 보여주기 (수정)-->
+                            <li class="facility-items">
+                                <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/8/2/11/101324_1501640945689.png" alt="Icon for parking service provided">
+                            </li>
+                            <li class="facility-items">
+                                <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/9/18/11/894778_1505700481751.png" alt="Icon for drink service provided">
+                            </li>
+                            <li class="facility-items">
+                                <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/12/13/15/826670_1513147589625.png" alt="Icon for wifi available on premise">
+                            </li>
+                            <li class="facility-items">
+                                <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/12/13/15/941333_1513148198048.png" alt="Icon for print service provided">
+                            </li>
+                            <li class="facility-items">    
+                                <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/9/15/16/761549_1505459131213.png" alt="Icon for multi-security features on premise">
+                            </li>
+                        </ul>
+                    </article>
                 </article>
-                <article class="cafe-facilities-wrapper">
-                    <h4>편의시설 및 서비스</h4>
-                    <ul class="facility-items-wrapper">
-                        <!-- data 가져와서 for loop으로 해당 편의 시설 boolean=true인것만 풀어서 보여주기 (수정)-->
-                        <li class="facility-items">
-                            <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/8/2/11/101324_1501640945689.png" alt="Icon for parking service provided">
-                        </li>
-                        <li class="facility-items">
-                            <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/9/18/11/894778_1505700481751.png" alt="Icon for drink service provided">
-                        </li>
-                        <li class="facility-items">
-                            <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/12/13/15/826670_1513147589625.png" alt="Icon for wifi available on premise">
-                        </li>
-                        <li class="facility-items">
-                            <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/12/13/15/941333_1513148198048.png" alt="Icon for print service provided">
-                        </li>
-                        <li class="facility-items">    
-                            <img src="https://s3.ap-northeast-2.amazonaws.com/ones.cloud/images/2017/9/15/16/761549_1505459131213.png" alt="Icon for multi-security features on premise">
-                        </li>
-                    </ul>
+
+                <article class="cafe-detail-wrapper gallery-wrapper">
+                    <h3>내부 모습</h3>
+                    <!-- 사진 여러장 받도록 모델 수정/ 순회해서 여러 사진 풀어주기 -->
+                    <img src="{{cafe.img}}" alt="cafe.name" width="250px;">
                 </article>
-            </article>
 
-            <article class="cafe-detail-wrapper gallery-wrapper">
-                <h3>내부 모습</h3>
-                <!-- 사진 여러장 받도록 모델 수정/ 순회해서 여러 사진 풀어주기 -->
-                <img src="{{cafe.img}}" alt="cafe.name" width="250px;">
-            </article>
+                <article class="cafe-detail-wrapper location-wrapper">
+                    <h3>위치</h3>
+                    <p>Google map of study cafe location to be inserted</p>
+                </article>
 
-            <article class="cafe-detail-wrapper location-wrapper">
-                <h3>위치</h3>
-                <p>Google map of study cafe location to be inserted</p>
-            </article>
+                <article class="cafe-detail-wrapper review-wrapper">
+                    <h3>후기/별점</h3>
+                    {% for review in reviews %}
+                    <div class="user-review-wrapper">
+                            {{review.write.avat}}
+                            <div> {{review.writer}}</div>
+                            <div> 작성날짜 (data 받도록 수정) {{review.created_at}}</div>
+                            <div>{{review.content}}</div>
+                    </div>
+                    {% endfor %}
+                    <div>
+                        <form action="{% url 'review' cafe.pk%}" method="POST">
+                            {% csrf_token %}
+                            <label class="visually-hidden" for="review">Review:</label>
+                            <input type="text" id="review" name="review" placeholder="Share your experience here with other users!">
+                            <button>Share review</button>
+                        </form>
+                    </div>
+                </article>
+                
+            </section>
+        
+        </article>
 
-            <article class="cafe-detail-wrapper review-wrapper">
-                <h3>후기/별점</h3>
-                {% for review in reviews %}
-                <div class="user-review-wrapper">
-                        {{review.write.avat}}
-                        <div> {{review.writer}}</div>
-                        <div> 작성날짜 (data 받도록 수정) {{review.created_at}}</div>
-                        <div>{{review.content}}</div>
+
+        <article class="cafe-booking-wrapper">
+        <h3>예약하기</h3>
+        <div>
+            <form class="booking-form-wrapper" action="{% url 'reservation' cafe.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="date-picker">
+
+                    <input class="date-picker-selector" type="text" name="date" placeholder="Select date">
+                    <div class="calendar"></div>
                 </div>
-                {% endfor %}
-                <div>
-                    <form action="{% url 'review' cafe.pk%}" method="POST">
-                        {% csrf_token %}
-                        <label class="visually-hidden" for="review">Review:</label>
-                        <input type="text" id="review" name="review" placeholder="Share your experience here with other users!">
-                        <button>Share review</button>
-                    </form>
-                </div>
-            </article>
-            
-        </section>
-    
-    </article>
-
-
-    <article class="cafe-booking-wrapper">
-    <h3>예약하기</h3>
-    <div>
-        <form class="booking-form-wrapper" action="{% url 'reservation' cafe.pk %}" method="POST">
-            {% csrf_token %}
-            <div class="date-picker">
-
-                <input class="date-picker-selector" type="text" name="date" placeholder="Select date">
-                <div class="calendar"></div>
-            </div>
-            <label for="start_time">Start time:</label>
-            <input type="text" id="start_time" name="start_time" placeholder="시작 시간">
-            <label for="time">Hours needed:</label>
-            <input type="text" id="time" name="time" placeholder="이용 시간">
-            <label for="seat">Choose seat:</label>
-            <input type="text" id="seat" name="seat" placeholder="좌석을 선택하세요">
-            <button class="resev_bt" type="submit" onclick="return confirm('예약하시겠습니까?');">예약하기</button>
-        </form>
-    </div>
-    </article>
-
+                <label for="start_time">Start time:</label>
+                <input type="text" id="start_time" name="start_time" placeholder="시작 시간">
+                <label for="time">Hours needed:</label>
+                <input type="text" id="time" name="time" placeholder="이용 시간">
+                <label for="seat">Choose seat:</label>
+                <input type="text" id="seat" name="seat" placeholder="좌석을 선택하세요">
+                <button class="resev_bt" type="submit" onclick="return confirm('예약하시겠습니까?');">예약하기</button>
+            </form>
+        </div>
+        </article>
+    </section> 
 </section>
 {% endblock content %}

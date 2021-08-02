@@ -63,7 +63,8 @@ button{
     margin: 0 auto;
     padding: 20px;
 }
-/* ----------------- header -------------------- */
+
+/* ----------------- header-nav.html -------------------- */
 .header-container{
     background: transparent;
     padding: 20px 0;
@@ -82,6 +83,14 @@ button{
     color: #484848;
     font-size: x-large;
     font-weight: 800 ;
+    /* text-shadow: 5px 10px rgb(140,140,140); */
+}
+.header-wrapper h1 a::before{
+    content:"dobby is free";
+    color: transparent;
+    position: absolute;
+    font-size: xx-large;
+    text-shadow: 8px -25px 6px rgba(50, 140, 201,.6);
 }
 .search-form{
     position: absolute;
@@ -982,4 +991,16 @@ button{
     display: flex;
     flex-direction: column;
     padding: 5px;
+}
+
+
+
+/* ----------------- cafeupload.html-------------------- */
+.page-wrapper.cafeupload-page-wrapper{
+    padding: 20px;
+}
+
+.cafeupload-form-wrapper{
+    display: flex;
+    flex-direction: column;
 }

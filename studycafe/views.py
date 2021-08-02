@@ -14,7 +14,7 @@ import boto3
 from boto3.session import Session
 
 # Imports from Apps
-from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
+from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME#, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
 from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
 
 
@@ -416,42 +416,67 @@ class ReservationView(generic.View) :
         use_time = request.POST['time']
         seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
-        end_time = time(int(int(start_time) + int(use_time)))
+        end_time = int(start_time) + int(use_time)
         
-        if len(Seats.objects.filter(content=seat).filter(state=True) and HourTime.objects.filter(start_time=time(int(start_time)))and Date.objects.filter(content=date)) == 0 :
+        if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
+            print('카페 날짜 좌석 중복')
+            if Reservations.objects.filter(hours__start_time__lt=start_time, hours__start_time__lte=end_time, hours__end_time__gte=start_time, hours__end_time__gt=end_time) :
+                print('이용시간 중복 ㄴ')
+            
+                date1 = Date.objects.create(
+                    content = date,
+                    studycafe = studycafe
+                )
 
+                hour = HourTime.objects.create(
+                    studycafe = studycafe,
+                    start_time = start_time,
+                    end_time = end_time,
+                )
+
+                seat1 = Seats.objects.create(
+                    studycafe = studycafe,
+                    content = seat,
+                    available = True
+                )
+
+                Reservations.objects.create(
+                    # personal_user = user,
+                    studycafe = studycafe,
+                    date = date1,
+                    hours = hour,
+                    seat = seat1
+                )
+            else :
+                print('이용시간 중복')
+
+        else :
             date1 = Date.objects.create(
                 content = date,
                 studycafe = studycafe
             )
 
             hour = HourTime.objects.create(
-                date = date1,
-                start_time = time(int(start_time)),
-                use_time = time(int(use_time)),
-                end_time = time(int(int(start_time) + int(use_time))),
-                state = True
+                studycafe = studycafe,
+                start_time = start_time,
+                end_time = end_time,
             )
 
             seat1 = Seats.objects.create(
-                hour_time = hour,
+                studycafe = studycafe,
                 content = seat,
-                state = True
+                available = True
             )
 
             Reservations.objects.create(
-                personal_user = request.user,
+                # personal_user = user,
                 studycafe = studycafe,
                 date = date1,
                 hours = hour,
-                seat = seat1,
+                seat = seat1
             )
-        else :
-            print("사용시간 중복")
-
+    
         return redirect('cafedetail', kwargs['pk'])
-
-
 class ReviewView(generic.View) :
 
     def post(self, request, *args, **kwargs) :

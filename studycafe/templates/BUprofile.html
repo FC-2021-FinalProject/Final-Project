@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
+{% block head %}
+<!-- javascript link -->
+<script defer src="../static/src/bu_profile.js"></script>
+{% endblock head%}
 {% block content %}
 {% include 'header-nav.html' %}
 
@@ -48,7 +52,7 @@
     </section>
     <section class="bu-reviews-wrapper">
         <h3 class="bu-page-headers bu-tab-option bu-reviews-header">Reviews/Feedback</h3>
-        <article class="bu-page-contents bu-reviews-contents visually-hidden">
+        <article class="bu-page-contents bu-reviews-content visually-hidden">
             <span>A page just for your cafe reviews is coming soon!</span>
         </article>
     </section>

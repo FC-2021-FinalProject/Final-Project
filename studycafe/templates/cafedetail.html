@@ -58,8 +58,10 @@
         </div>
         <div class="cont_4">
             <h3>내부 모습</h3>
-            <img src="{{cafe.img}}" alt="cafe.name" width="250px;">
-        </div>
+            {% for i in cafes %}
+            {{i.img}}
+                <img src="{{i[2].img}}" alt="{{i.name}}" width="250px;">
+            {% endfor %}
         <div class="cont_5">
             <h3>예약하기</h3>
             <div class="cont_5_1">

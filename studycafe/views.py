@@ -1,5 +1,6 @@
 # Standard Library Imports
 from datetime import datetime, time
+from os import sched_get_priority_max
 import requests, random, string
 
 # Core Django Imports
@@ -338,10 +339,18 @@ class CafeListView(generic.ListView) :
 
 class CafeUploadView(View) :
     def get(self, request, *args, **kwargs) :
-        return render(request, 'cafeupload.html')
+        businessuser = BusinessUser.objects.get(user=request.user)
+        cafe = BusinessUser.objects.filter(studycafe__businessuser=businessuser)
+        context = {'cafe':cafe}
+
+        return render(request, 'cafeupload.html', context)
 
     def post(self, request, *args, **kwargs):
-        file = request.FILES.get('image')
+        file = request.FILES.getlist('image')
+        i = [i for i in file]
+        k = [k for k in range(len(file))]
+        print(k)
+        print('@@@@@@@@@@@@',i[2])
         session = Session(
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
@@ -349,34 +358,39 @@ class CafeUploadView(View) :
         )
         s3 = session.resource('s3')
         now = datetime.now().strftime('%Y%H%M%S')
-        img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
-            Key=now+file.name,
-            Body=file
-        )
+        for j in file :
+            img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+                Key=now+j.name,
+                Body=j.name
+            )
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
         businessuser = BusinessUser.objects.get(user=request.user)
+        
         StudyCafe.objects.create(
             name=request.POST['name'],
             businessuser = businessuser,
             address= request.POST.get('address'),
-            img = s3_url+now+file.name,
+            img = s3_url+now+str(i),
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
         )
-
+        # StudyCafeImage.objects.create(
+        #     studycafe=StudyCafe.objects.filter(businessuser=businessuser),
+        #     img = s3_url+now+i[3].name
+        # )
         return redirect('cafelist')
-
 
 class CafeDetailView(generic.DetailView) :
     model = StudyCafe
     template_name = 'cafedetail.html'
 
     def get(self, request, *args, **kwargs) :
+        cafes = StudyCafe.objects.filter(pk=kwargs['pk'])
         cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
         reviews = Review.objects.filter(studycafe=cafe)
 
-        context = {'cafe':cafe, 'reviews':reviews}
+        context = {'cafe':cafe, 'reviews':reviews, 'cafes':cafes}
 
         return render(request, 'cafedetail.html', context)
 
@@ -393,24 +407,9 @@ class CafeEditView(generic.View) :
         return render(request, 'cafeedit.html', context)
 
     def post(self, request, *args, **kwargs) :
-        file = request.FILES.get('image')
-        session = Session(
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name=AWS_S3_REGION_NAME,
-        )
-        s3 = session.resource('s3')
-        now = datetime.now().strftime('%Y%H%M%S')
-        # img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
-        #     Key=now+file.name,
-        #     Body=file
-        # )
-        s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
-
         StudyCafe.objects.filter(pk=kwargs['pk']).update(
             name=request.POST['name'],
             address= request.POST.get('address'),
-            # img = s3_url+now+file.name,
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],

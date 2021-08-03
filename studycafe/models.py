@@ -1,6 +1,7 @@
 # Standard Library Imports
 from contextlib import contextmanager
 from typing import ContextManager
+from datetime import date
 
 # Core Django Imports
 from django.contrib.auth.models import User
@@ -45,6 +46,12 @@ class StudyCafe(models.Model) :
     business_hour_start = models.CharField(max_length=32)
     business_hour_end = models.CharField(max_length=32)
     img = models.TextField()
+    
+    parking = models.BooleanField(default=False)
+    drinks = models.BooleanField(default=False)
+    wifi = models.BooleanField(default=False)
+    printer = models.BooleanField(default=False)
+    security = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -71,14 +78,16 @@ class Seats(models.Model):
         return self.content
 
 class Reservations(models.Model):
-    # personal_user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='reservation')
+    # relationship
+    personal_user = models.ForeignKey(PersonalUser, on_delete=models.CASCADE,related_name='reservation', null=True, blank=True)
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     hours = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     seat = models.ForeignKey(Seats, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     
 class Review(models.Model):
-# Review model realtionship
+# Review model relationship
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='review')
-    writer = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='writer', null=True, blank=True)
+    writer = models.ForeignKey(PersonalUser, on_delete=models.SET_NULL, related_name='writer', null=True, blank=True)
     content = models.TextField()
+    created_at = models.DateField(auto_now_add=True)

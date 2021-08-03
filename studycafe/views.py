@@ -347,10 +347,8 @@ class CafeUploadView(View) :
 
     def post(self, request, *args, **kwargs):
         file = request.FILES.getlist('image')
-        i = [i for i in file]
-        k = [k for k in range(len(file))]
-        print(k)
-        print('@@@@@@@@@@@@',i[2])
+        m = [i for i in range(len(file))]
+        print(m)
         session = Session(
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
@@ -359,18 +357,20 @@ class CafeUploadView(View) :
         s3 = session.resource('s3')
         now = datetime.now().strftime('%Y%H%M%S')
         for j in file :
+            print(j)
             img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
                 Key=now+j.name,
                 Body=j.name
             )
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
         businessuser = BusinessUser.objects.get(user=request.user)
-        
+        q = [s3_url+now+str(i) for i in file]
+        print(q)
         StudyCafe.objects.create(
             name=request.POST['name'],
             businessuser = businessuser,
             address= request.POST.get('address'),
-            img = s3_url+now+str(i),
+            img = str(q),
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],

@@ -1,6 +1,7 @@
 # Standard Library Imports
 from datetime import datetime, time
 from os import sched_get_priority_max
+from django.db.models.fields.related import ForeignKey
 import requests, random, string
 
 # Core Django Imports
@@ -9,6 +10,7 @@ from django.contrib.auth.models import User
 from django.http import request
 from django.views import generic, View
 from django.shortcuts import get_object_or_404, render, redirect
+from django.db.models import Q
 
 # Third-Party App Imports
 import boto3
@@ -438,11 +440,12 @@ class ReservationView(generic.View) :
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
         end_time = int(start_time) + int(use_time)
         
+        p = Reservations.objects.filter(Q(hours__end_time__gt=start_time, hours__start_time__lt=end_time))
         if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
             print('카페 날짜 좌석 중복')
-            if Reservations.objects.filter(hours__start_time__lt=start_time, hours__start_time__lte=end_time, hours__end_time__gte=start_time, hours__end_time__gt=end_time) :
+            if len(Reservations.objects.filter(Q(hours__end_time__gt=start_time, hours__start_time__lt=end_time))) == 0 :
                 print('이용시간 중복 ㄴ')
-            
+                print(p)
                 date1 = Date.objects.create(
                     content = date,
                     studycafe = studycafe
@@ -469,6 +472,7 @@ class ReservationView(generic.View) :
                 )
             else :
                 print('이용시간 중복')
+                print(p)
 
         else :
             date1 = Date.objects.create(

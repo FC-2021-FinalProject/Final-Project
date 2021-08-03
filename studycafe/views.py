@@ -341,6 +341,7 @@ class CafeUploadView(View) :
         return render(request, 'cafeupload.html')
 
     def post(self, request, *args, **kwargs):
+        # for cafe images
         file = request.FILES.get('image')
         session = Session(
             aws_access_key_id=AWS_ACCESS_KEY_ID,
@@ -518,6 +519,8 @@ class ReservationView(generic.View) :
             )
     
         return redirect('cafedetail', kwargs['pk'])
+
+        
 class ReviewView(generic.View) :
 
     def post(self, request, *args, **kwargs) :
@@ -526,7 +529,7 @@ class ReviewView(generic.View) :
 
         Review.objects.create(
             studycafe = studycafe,
-            writer = request.user,
+            writer = request.user.personal_user,
             content= content
         )
         return redirect('cafedetail', kwargs['pk'])

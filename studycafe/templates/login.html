@@ -9,47 +9,45 @@
 
 {% block content %}
 {% include 'header-nav.html' %}
-<section class="auth-page-wrapper">
-    <section class="login-page-wrapper">
-        <section class="auth-form-container">
-            <h2 class="auth-form-header">Login</h2>
-            <form class="auth-form" action="{% url 'login' %}" method="POST">
-                {% csrf_token %}
-                <div class="auth-input-controls">
-                    <label class="auth-labels auth-input-focused" for="login-name">Username</label>
-                    <input class="auth-input-items" type="text" id="login-name" name="login-name">
-                    {% if error.state %}
-                    <small>{{ error.msg }}</small>
-                    {% else %}
-                    <small class="auth-error-msg error-msg username-input"></small>
-                    {% endif %}
-                </div>
-                <div class="auth-input-controls password-input">
-                    <label class="auth-labels auth-input-focused" for="login-password">Password</label>
-                    <input class="auth-input-items" type="password" id="login-password" name="login-password">
-                    {% if error.state %}
-                    <small>{{ error.msg }}</small>
-                    {% else %}
-                    <small class="auth-error-msg error-msg password-input "></small>
-                    {% endif %}
-                </div>
-                <button class="login-button auth-submit-buttons disabled" type="submit" disabled>Login</button>
-            </form>
-            <article class="idpw-search-container">
-                <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot username?</a>
-                <a href="{% url 'IdPwSearch' %}" class="pw-search">Forgot Password?</a>
-            </article>
-            <article class="social-login-container">
-                <a href="{% url 'kakao_login' %}" class="social-login-wrapper">
-                    <i class="fas fa-comment mr-2"></i>
-                    Login with Kakao Account
-                </a>
-                <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
-                    <i class="fab fa-google"></i>
-                    Login with Google Account
-                </a>
-            </article>
-        </section>
+<main class="page-wrapper auth-page-wrapper">
+    <section class="auth-form-container">
+        <h2 class="auth-form-header">Login</h2>
+        <form class="auth-form" action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            <div class="auth-input-controls">
+                <label class="auth-labels auth-input-focused" for="login-name">Username</label>
+                <input class="auth-input-items" type="text" id="login-name" name="login-name">
+                {% if error.state %}
+                <small>{{ error.msg }}</small>
+                {% else %}
+                <small class="auth-error-msg error-msg username-input"></small>
+                {% endif %}
+            </div>
+            <div class="auth-input-controls password-input">
+                <label class="auth-labels auth-input-focused" for="login-password">Password</label>
+                <input class="auth-input-items" type="password" id="login-password" name="login-password">
+                {% if error.state %}
+                <small>{{ error.msg }}</small>
+                {% else %}
+                <small class="auth-error-msg error-msg password-input "></small>
+                {% endif %}
+            </div>
+            <button class="login-button auth-submit-buttons disabled" type="submit">Login</button>
+        </form>
+        <article class="idpw-search-container">
+            <a href="{% url 'IdPwSearch' %}" class="id-search">Forgot username?</a>
+            <a href="{% url 'IdPwSearch' %}" class="pw-search">Forgot Password?</a>
+        </article>
+        <article class="social-login-container">
+            <a href="{% url 'kakao_login' %}" class="social-login-wrapper">
+                <i class="fas fa-comment mr-2"></i>
+                Login with Kakao Account
+            </a>
+            <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
+                <i class="fab fa-google"></i>
+                Login with Google Account
+            </a>
+        </article>
     </section>
-</section>
+</main>
 {% endblock content%}

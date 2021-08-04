@@ -1,26 +1,29 @@
 {% extends 'base.html' %}
+{% block head %}
+<!-- javascript link -->
+<script defer src="../static/src/bu_profile.js"></script>
+{% endblock head%}
 {% block content %}
 {% include 'header-nav.html' %}
-
-<h2>개인 정보 수정하기</h2>
-<form action="{% url 'BUedit' user.pk %}">
-    {% csrf_token %}
-    <button type="submit">수정하러 가기</button>
-</form>
 
 <section class="page-wrapper bu-mypage-container">
     <h2 class="visually-hidden">Business User My Page</h2>
     <section class="bu-profile-wrapper">
-        <h3 class="bu-page-headers bu-tab-option bu-profile-header">Business Profile</h3> 
-        <article class="bu-page-contents bu-profile-content visually-hidden">
+        <h3 class="bu-page-headers bu-tab-option bu-profile-header selected">Business Profile</h3> 
+        <article class="bu-page-contents bu-profile-content">
             <h4>{{buser.name}}</h4>
             <p>{{buser.email}}</p>
             <p>{{buser.registration_number}}</p>
+
+            <form action="{% url 'BUedit' user.pk %}">
+                {% csrf_token %}
+                <button type="submit">수정하러 가기</button>
+            </form>
         </article>
     </section>
     <section class="bu-manage-wrapper">
-        <h3 class="bu-page-headers bu-tab-option bu-manage-header selected">Manage Cafe</h3>
-        <article class="bu-page-contents bu-manage-content">
+        <h3 class="bu-page-headers bu-tab-option bu-manage-header ">Manage Cafe</h3>
+        <article class="bu-page-contents bu-manage-content visually-hidden">
             <ul class="owner-cafe-list">
             {% for cafe in buser.studycafe.all %}
                 <li class="owner-cafe-item-wrapper">
@@ -54,7 +57,7 @@
     </section>
     <section class="bu-reviews-wrapper">
         <h3 class="bu-page-headers bu-tab-option bu-reviews-header">Reviews/Feedback</h3>
-        <article class="bu-page-contents bu-reviews-contents visually-hidden">
+        <article class="bu-page-contents bu-reviews-content visually-hidden">
             <span>A page just for your cafe reviews is coming soon!</span>
         </article>
     </section>

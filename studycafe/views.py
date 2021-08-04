@@ -368,6 +368,21 @@ class CafeUploadView(View) :
         businessuser = BusinessUser.objects.get(user=request.user)
         q = [s3_url+now+str(i) for i in file]
         print(q)
+
+        features_list = ['parking', 'drinks', 'wifi', 'printer', 'security']
+        features_checked = self.request.POST.getlist('features')
+        cafe_features = {
+            'parking' : False,
+            'drinks': False,
+            'wifi': False,
+            'printer': False,
+            'security': False,
+            }
+
+        for feature in features_list:
+            if feature in features_checked:
+                cafe_features[f'{feature}'] = True
+       
         StudyCafe.objects.create(
             name=request.POST['name'],
             businessuser = businessuser,
@@ -376,6 +391,11 @@ class CafeUploadView(View) :
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
+            parking = cafe_features['parking'],
+            drinks = cafe_features['drinks'],
+            wifi = cafe_features['wifi'],
+            printer = cafe_features['printer'],
+            security = cafe_features['security'],
         )
         # StudyCafeImage.objects.create(
         #     studycafe=StudyCafe.objects.filter(businessuser=businessuser),

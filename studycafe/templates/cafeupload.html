@@ -1,19 +1,50 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'header-nav.html' %}
-<main class="main-container">
-<h2>Cafe Upload Page</h2>
-<form action="{% url 'cafeupload' user.pk %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="text" name="name" placeholder="카페 이름">
-    <input type="text" name="address" placeholder="카페 주소">
-    <input type="text" name="introduce" placeholder="카페 소개">
-    <input type="text" name="price_per_hour" placeholder="시간 당 가격">
-    <input type="text" name="business_hour_start" placeholder="영업 오픈 시간">
-    <input type="text" name="business_hour_end" placeholder="영업 마감 시간">
-    <input type="file" name="image" multiple>
-    <input type="file" name="image" multiple>
-    <button type="submit">업로드</button>
-</form>
+<main class="page-wrapper cafeupload-page-wrapper">
+    <h2>Cafe Upload Page</h2>
+    <form class="cafeupload-form-wrapper" action="{% url 'cafeupload' user.pk %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="name">Operating name</label>
+        <input type="text" name="name" placeholder="카페 이름">
+
+        <label for="address">Cafe address</label>
+        <input type="text" name="address" placeholder="카페 주소">
+
+        <label for="introduce">Intro of your cafe</label>
+        <input type="text" name="introduce" placeholder="카페 소개">
+
+        <label for="price_per_hour">Price per hour</label>
+        <input type="text" name="price_per_hour" placeholder="시간 당 가격">
+        <label for="business_hour_start">Open time</label>
+
+        <input type="text" name="business_hour_start" placeholder="영업 오픈 시간">
+
+        <label for="business_hour_end">Closing time</label>
+        <input type="text" name="business_hour_end" placeholder="영업 마감 시간">
+  
+        <fieldset>
+            <legend>Services provided on premise(Check all that apply)</legend>
+            
+            <input type="checkbox" id="parking" name="features" value="parking">
+            <label for="parking">Parking available</label>
+
+            <input type="checkbox" id="drinks" name="features" value="drinks">
+            <label for="drinks">Drinks included</label>
+
+            <input type="checkbox" id="wifi" name="features" value="wifi">
+            <label for="wifi">Wifi on premise</label>
+
+            <input type="checkbox" id="printer" name="features" value="printer">
+            <label for="printer">Printer available on premise</label>
+
+            <input type="checkbox" id="security" name="features" value="security">
+            <label for="security">Surveilance security</label>
+
+        </fieldset>
+        <label for="image">Cafe images</label>
+        <input type="file" name="image" multiple>
+        <button type="submit">Register my Study Cafe</button>
+    </form>
 </main>
-{% endblock content%}
+{% endblock content %}

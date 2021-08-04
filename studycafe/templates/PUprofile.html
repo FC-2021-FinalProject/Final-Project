@@ -7,99 +7,99 @@
 {% block content %}
 {% include 'header-nav.html' %}
 
-<main class="main-container">
-    <section class="pu-mypage-container">
-        <section class="pu-profile-wrapper">
-            <h2 class="pu-page-headers pu-tab-option pu-profile-header selected">Edit Profile<h2>
-            <article class="pu-page-contents pu-profile-contents ">
-                <div class="user-profile-info-wrapper ">
-                    <h3>{{user.username}}</h3>
+<main class="page-wrapper pu-mypage-container">
+    <h2 class="visually-hidden">Personal User Profile Page for {{user.personal_user.name}}</h2>
+    <section class="pu-profile-wrapper">
+        <h3 class="pu-page-headers pu-tab-option pu-profile-header selected">Edit Profile<h3>
+        <article class="pu-page-contents pu-profile-contents ">
+            <div class="user-profile-info-wrapper ">
+                <span>{{user.username}}</span>
+                <label for="profile-image">
+                    <img class="profile-photo" id="change-photo" for="profile-image" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Change profile photo">
+                </label>
+            </div>
+            <form class="user-profile-edit-form" action="{% url 'personal_profile_edit' user.username %}" method="POST">
+                {% csrf_token %}
+                <div class="edit-control">
                     <label for="profile-image">
-                        <img class="profile-photo" id="change-photo" for="profile-image" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Change profile photo">
+                        Change Profile Photo
                     </label>
+                    <input class="visually-hidden" type="file" id="profile-image" name="profile-image">
                 </div>
-                <form class="user-profile-edit-form" action="{% url 'personal_profile_edit' user.username %}" method="POST">
-                    {% csrf_token %}
-                    <div class="edit-control">
-                        <label for="profile-image">
-                            Change Profile Photo
-                        </label>
-                        <input class="visually-hidden" type="file" id="profile-image" name="profile-image">
-                    </div>
-                    <div class="edit-control">
-                        <label for="profile-name">Name</label>
-                        <input type="text" id="profile-name" name="profile-name" placeholder="Name" value={{request.user.personal_user.name}}>
-                    </div>
-                    <div class="edit-control">
-                        <label for="profile-username">Username</label>
-                        <input type="text" id="profile-username" name="profile-username" placeholder="Username" value={{user.username}}>
-                    </div>
-                    <div class="edit-control">
-                        <label for="profile-email">Email</label>
-                        <input type="email" id="profile-email" name="profile-email" placeholder="Email" value={{user.email}}>
-                    </div>
-                    <div class="edit-control">
-                        <button class="profile-edit-submit disabled" type="submit" disabled>Edit Profile</button>
-                    </div>
-                </form>
-                <div class="status-msg">
-                    {% if profile.updated %}
-                        {{profile.msg}}
-                    {% endif %}
+                <div class="edit-control">
+                    <label for="profile-name">Name</label>
+                    <input type="text" id="profile-name" name="profile-name" placeholder="Name" value={{request.user.personal_user.name}}>
                 </div>
-            </article>
-        </section>
-        <section class="pu-password-wrapper">
-            <h2 class="pu-page-headers pu-tab-option pu-password-header">Change Password<h2>
-            <article class="pu-page-contents pu-password-contents visually-hidden">
-                <div class="user-profile-info-wrapper password-tab">
-                    <h3>{{user.username}}</h3>
-                    <img class="profile-photo" id="profile-pw-photo"  src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Your profile photo">
+                <div class="edit-control">
+                    <label for="profile-username">Username</label>
+                    <input type="text" id="profile-username" name="profile-username" placeholder="Username" value={{user.username}}>
                 </div>
-                <form class="user-password-edit-form" action="{% url 'personal_password_edit' user.username %}" method="POST">
-                    {% csrf_token %}
-                    <div class="edit-control">
-                        <label for="profile-old-password">Old Password</label>
-                        <input type="password" id="profile-old-password" name="profile-old-password">
-                    </div>
-                    <div class="edit-control">
-                        <label for="profile-password">New Password</label>
-                        <input type="password" id="profile-password" name="profile-password">
-                    </div>
-                    <div class="edit-control">
-                        <label for="profile-password-check">Confirm Password</label>
-                        <input type="password" id="profile-password-check" name="profile-password-check">
-                    </div>
-                    <small class="error-msg">
-                        {% if error.state %}
-                        {{ error.msg }}
-                        {% endif %}
-                    </small>
-                    <div class="edit-control">
-                        <button class="profile-edit-submit" type="submit">Change Password</button>
-                    </div>
-                </form>
-            </article>
-        </section>
-        <section class="pu-reservations-wrapper">
-            <h2 class="pu-page-headers pu-tab-option pu-reservations-header">Reservations</h2>
-            <article class="pu-page-contents pu-reservations-contents visually-hidden">
-                <h3>Reservations page coming soon!</h3>
-            </article>
-        </section>
-        <section class="pu-bookmarked-wrapper">
-            <h2 class="pu-page-headers pu-tab-option pu-bookmarked-header">Bookmarked Cafes</h2>
-            <article class="pu-page-contents pu-bookmarked-contents visually-hidden">
-                <h3>Bookmarked Cafes page coming soon!</h3>
-            </article>
-        </section>
-        <section class="pu-accounts-wrapper">
-            <h2 class="pu-page-headers pu-accounts-header">Accounts Center</h2>
-            <article class="pu-page-contents pu-accounts-contents">
-                <p>Control settings for your account can be accessed here.</p>
-            </article>
-        </section>
+                <div class="edit-control">
+                    <label for="profile-email">Email</label>
+                    <input type="email" id="profile-email" name="profile-email" placeholder="Email" value={{user.email}}>
+                </div>
+                <div class="edit-control">
+                    <button class="profile-edit-submit disabled" type="submit" disabled>Edit Profile</button>
+                </div>
+            </form>
+            <div class="status-msg">
+                {% if profile.updated %}
+                    {{profile.msg}}
+                {% endif %}
+            </div>
+        </article>
     </section>
-</main>
+    <section class="pu-password-wrapper">
+        <h3 class="pu-page-headers pu-tab-option pu-password-header">Change Password<h3>
+        <article class="pu-page-contents pu-password-contents visually-hidden">
+            <div class="user-profile-info-wrapper password-tab">
+                <span>{{user.username}}</span>
+                <img class="profile-photo" id="profile-pw-photo"  src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Your profile photo">
+            </div>
+            <form class="user-password-edit-form" action="{% url 'personal_password_edit' user.username %}" method="POST">
+                {% csrf_token %}
+                <div class="edit-control">
+                    <label for="profile-old-password">Old Password</label>
+                    <input type="password" id="profile-old-password" name="profile-old-password">
+                </div>
+                <div class="edit-control">
+                    <label for="profile-password">New Password</label>
+                    <input type="password" id="profile-password" name="profile-password">
+                </div>
+                <div class="edit-control">
+                    <label for="profile-password-check">Confirm Password</label>
+                    <input type="password" id="profile-password-check" name="profile-password-check">
+                </div>
+                <small class="error-msg">
+                    {% if error.state %}
+                    {{ error.msg }}
+                    {% endif %}
+                </small>
+                <div class="edit-control">
+                    <button class="profile-edit-submit" type="submit">Change Password</button>
+                </div>
+            </form>
+        </article>
+    </section>
+    <section class="pu-reservations-wrapper">
+        <h3 class="pu-page-headers pu-tab-option pu-reservations-header">Reservations</h3>
+        <article class="pu-page-contents pu-reservations-contents visually-hidden">
+            <span>Reservations page coming soon!</sp>
+        </article>
+    </section>
+    <section class="pu-bookmarked-wrapper">
+        <h3 class="pu-page-headers pu-tab-option pu-bookmarked-header">Bookmarked Cafes</h3>
+        <article class="pu-page-contents pu-bookmarked-contents visually-hidden">
+            <span>Bookmarked Cafes page coming soon!</span>
+        </article>
+    </section>
+    <section class="pu-accounts-wrapper">
+        <h3 class="pu-page-headers pu-accounts-header">Accounts Center</h3>
+        <article class="pu-page-contents pu-accounts-contents">
+            <span>Control settings for your account can be accessed here.</span>
+        </article>
+    </section>
+</section>
+
 
 {% endblock content %}

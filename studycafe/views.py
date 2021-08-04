@@ -15,7 +15,7 @@ from boto3.session import Session
 
 # Imports from Apps
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
-from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
+from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review, BookmarkedCafe
 
 
 ERROR_MSG = {
@@ -357,6 +357,8 @@ class CafeUploadView(View) :
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
         businessuser = BusinessUser.objects.get(user=request.user)
 
+
+        # for cafe features
         features_list = ['parking', 'drinks', 'wifi', 'printer', 'security']
         features_checked = self.request.POST.getlist('features')
         cafe_features = {
@@ -370,8 +372,8 @@ class CafeUploadView(View) :
         for feature in features_list:
             if feature in features_checked:
                 cafe_features[f'{feature}'] = True
-       
-        StudyCafe.objects.create(
+
+        new_studycafe = StudyCafe.objects.create(
             name=request.POST['name'],
             businessuser = businessuser,
             address= request.POST.get('address'),
@@ -385,24 +387,52 @@ class CafeUploadView(View) :
             printer = cafe_features['printer'],
             security = cafe_features['security'],
         )
+        BookmarkedCafe.objects.create(
+            studycafe=new_studycafe  
+        )
 
         return redirect('cafelist')
 
+def bookmark(request, **kwargs):
+    cafe_pk = kwargs['cafe_pk']
+    target_cafe = StudyCafe.objects.filter(pk=cafe_pk).first()
+    bookmark = BookmarkedCafe.objects.filter(studycafe__pk=target_cafe.pk).first()
 
-class CafeDetailView(generic.DetailView) :
-    model = StudyCafe
-    template_name = 'cafedetail.html'
+    if request.user.personal_user in bookmark.users.all():
+        bookmark.users.remove(request.user.personal_user)
+        return redirect('cafedetail', cafe_pk)
+         
+    bookmark.users.add(request.user.personal_user)
 
-    def get(self, request, *args, **kwargs) :
-        cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
-        reviews = Review.objects.filter(studycafe=cafe)
+    return redirect('cafedetail', cafe_pk)
 
-        context = {'cafe':cafe, 'reviews':reviews}
+def cafedetailview(request, pk):
+    cafe = get_object_or_404(StudyCafe, pk=pk)
+    reviews = Review.objects.filter(studycafe=cafe)
 
-        return render(request, 'cafedetail.html', context)
+    is_bookmarked = False
+    if (request.user.personal_user in cafe.bookmark.users.all()):
+        is_bookmarked = True
 
-    def post(self, request, *args, **kwargs) :
-        return render(request, 'cafedetail.html', kwargs['pk'])
+    context = {'cafe':cafe, 'reviews':reviews, 'is_bookmarked':is_bookmarked,}
+
+    return render(request, 'cafedetail.html', context)
+
+
+# class CafeDetailView(generic.DetailView) :
+#     model = StudyCafe, BookmarkedCafe
+#     template_name = 'cafedetail.html'
+
+#     def get(self, request, *args, **kwargs) :
+#         cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
+#         reviews = Review.objects.filter(studycafe=cafe)
+
+#         context = {'cafe':cafe, 'reviews':reviews,}
+
+#         return render(request, 'cafedetail.html', context)
+
+#     def post(self, request, *args, **kwargs) :
+#         return render(request, 'cafedetail.html', kwargs['pk'])
 
 
 class CafeEditView(generic.View) :

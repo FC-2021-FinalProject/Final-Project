@@ -18,8 +18,18 @@
             </address>
         </article>
         <article class="share-save-wrapper">
-            <a href="#"><i class="fas fa-share fa-lg"></i></a>
-            <a href="#"><i class="fas fa-bookmark fa-lg"></i></a>
+            {% if user.personal_user %}
+            <a href="#">
+                <i class="fas fa-share-alt fa-lg"></i>
+            </a>
+            <a href="{% url 'bookmark' cafe.pk %}">
+                {% if is_bookmarked %}
+                <i class="fas fa-bookmark fa-lg bookmarked"></i>
+                {% else %}
+                <i class="fas fa-bookmark fa-lg gray"></i>
+                {% endif %}
+            </a>
+            {% endif %}
         </article>
     </section>
     <section class="cafedetail-information-wrapper">

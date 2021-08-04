@@ -404,11 +404,6 @@ class CafeUploadView(View) :
 
         return redirect('cafelist')
 
-def bookmark(request, **kwargs):
-    cafe_pk = kwargs['cafe_pk']
-    target_cafe = StudyCafe.objects.filter(pk=cafe_pk).first()
-    bookmark = BookmarkedCafe.objects.filter(studycafe__pk=target_cafe.pk).first()
-
 def cafedetailview(request, pk):
     cafe = get_object_or_404(StudyCafe, pk=pk)
     reviews = Review.objects.filter(studycafe=cafe)

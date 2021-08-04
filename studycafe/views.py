@@ -1,5 +1,6 @@
 # Standard Library Imports
 from datetime import datetime, time
+from os import sched_get_priority_max
 import requests, random, string
 
 # Core Django Imports
@@ -406,11 +407,10 @@ class CafeDetailView(generic.DetailView) :
     template_name = 'cafedetail.html'
 
     def get(self, request, *args, **kwargs) :
-        cafes = StudyCafe.objects.filter(pk=kwargs['pk'])
         cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
         reviews = Review.objects.filter(studycafe=cafe)
 
-        context = {'cafe':cafe, 'reviews':reviews, 'cafes':cafes}
+        context = {'cafe':cafe, 'reviews':reviews}
 
         return render(request, 'cafedetail.html', context)
 

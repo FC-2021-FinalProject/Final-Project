@@ -1,5 +1,6 @@
 # Standard Library Imports
 from datetime import datetime, time
+from os import sched_get_priority_max
 import requests, random, string
 
 # Core Django Imports
@@ -8,6 +9,7 @@ from django.contrib.auth.models import User
 from django.http import request
 from django.views import generic, View
 from django.shortcuts import get_object_or_404, render, redirect
+from django.db.models import Q
 
 # Third-Party App Imports
 import boto3
@@ -338,10 +340,16 @@ class CafeListView(generic.ListView) :
 
 class CafeUploadView(View) :
     def get(self, request, *args, **kwargs) :
-        return render(request, 'cafeupload.html')
+        businessuser = BusinessUser.objects.get(user=request.user)
+        cafe = BusinessUser.objects.filter(studycafe__businessuser=businessuser)
+        context = {'cafe':cafe}
+
+        return render(request, 'cafeupload.html', context)
 
     def post(self, request, *args, **kwargs):
-        file = request.FILES.get('image')
+        file = request.FILES.getlist('image')
+        m = [i for i in range(len(file))]
+        print(m)
         session = Session(
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
@@ -349,12 +357,16 @@ class CafeUploadView(View) :
         )
         s3 = session.resource('s3')
         now = datetime.now().strftime('%Y%H%M%S')
-        img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
-            Key=now+file.name,
-            Body=file
-        )
+        for j in file :
+            print(j)
+            img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+                Key=now+j.name,
+                Body=j.name
+            )
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
         businessuser = BusinessUser.objects.get(user=request.user)
+        q = [s3_url+now+str(i) for i in file]
+        print(q)
 
         features_list = ['parking', 'drinks', 'wifi', 'printer', 'security']
         features_checked = self.request.POST.getlist('features')
@@ -374,7 +386,7 @@ class CafeUploadView(View) :
             name=request.POST['name'],
             businessuser = businessuser,
             address= request.POST.get('address'),
-            img = s3_url+now+file.name,
+            img = str(q),
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
@@ -384,9 +396,11 @@ class CafeUploadView(View) :
             printer = cafe_features['printer'],
             security = cafe_features['security'],
         )
-
+        # StudyCafeImage.objects.create(
+        #     studycafe=StudyCafe.objects.filter(businessuser=businessuser),
+        #     img = s3_url+now+i[3].name
+        # )
         return redirect('cafelist')
-
 
 class CafeDetailView(generic.DetailView) :
     model = StudyCafe
@@ -413,24 +427,9 @@ class CafeEditView(generic.View) :
         return render(request, 'cafeedit.html', context)
 
     def post(self, request, *args, **kwargs) :
-        file = request.FILES.get('image')
-        session = Session(
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name=AWS_S3_REGION_NAME,
-        )
-        s3 = session.resource('s3')
-        now = datetime.now().strftime('%Y%H%M%S')
-        # img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
-        #     Key=now+file.name,
-        #     Body=file
-        # )
-        s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
-
         StudyCafe.objects.filter(pk=kwargs['pk']).update(
             name=request.POST['name'],
             address= request.POST.get('address'),
-            # img = s3_url+now+file.name,
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
@@ -459,11 +458,9 @@ class ReservationView(generic.View) :
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
         end_time = int(start_time) + int(use_time)
         
+        p = Reservations.objects.filter(Q(hours__end_time__gt=start_time, hours__start_time__lt=end_time))
         if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
-            print('카페 날짜 좌석 중복')
-            if Reservations.objects.filter(hours__start_time__lt=start_time, hours__start_time__lte=end_time, hours__end_time__gte=start_time, hours__end_time__gt=end_time) :
-                print('이용시간 중복 ㄴ')
-            
+            if len(Reservations.objects.filter(Q(hours__end_time__gt=start_time, hours__start_time__lt=end_time))) == 0 :
                 date1 = Date.objects.create(
                     content = date,
                     studycafe = studycafe
@@ -488,9 +485,6 @@ class ReservationView(generic.View) :
                     hours = hour,
                     seat = seat1
                 )
-            else :
-                print('이용시간 중복')
-
         else :
             date1 = Date.objects.create(
                 content = date,

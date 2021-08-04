@@ -1,7 +1,5 @@
 # Standard Library Imports
 from datetime import datetime, time
-from os import sched_get_priority_max
-from django.db.models.fields.related import ForeignKey
 import requests, random, string
 
 # Core Django Imports

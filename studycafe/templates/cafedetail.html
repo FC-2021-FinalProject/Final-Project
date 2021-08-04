@@ -18,8 +18,18 @@
             </address>
         </article>
         <article class="share-save-wrapper">
-            <a href="#"><i class="fas fa-share fa-lg"></i></a>
-            <a href="#"><i class="fas fa-bookmark fa-lg"></i></a>
+            {% if user.personal_user %}
+            <a href="#">
+                <i class="fas fa-share-alt fa-lg"></i>
+            </a>
+            <a href="{% url 'bookmark' cafe.pk %}">
+                {% if is_bookmarked %}
+                <i class="fas fa-bookmark fa-lg bookmarked"></i>
+                {% else %}
+                <i class="fas fa-bookmark fa-lg gray"></i>
+                {% endif %}
+            </a>
+            {% endif %}
         </article>
     </section>
     <section class="cafedetail-information-wrapper">
@@ -96,10 +106,11 @@
                     <h3>후기/별점</h3>
                     {% for review in reviews %}
                     <div class="user-review-wrapper">
-                            {{review.write.avat}}
-                            <div> {{review.writer}}</div>
-                            <div> 작성날짜 (data 받도록 수정) {{review.created_at}}</div>
-                            <div>{{review.content}}</div>
+                        <!-- Need to check one s3 for personal user profile picture is set up -->
+                            <div> {{review.write.avat}} </div>
+                            <div> {{review.writer.name}} </div>
+                            <div> {{review.created_at}} </div>
+                            <div> {{review.content}} </div>
                     </div>
                     {% endfor %}
                     <div>

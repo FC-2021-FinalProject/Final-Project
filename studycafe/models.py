@@ -55,7 +55,7 @@ class StudyCafe(models.Model) :
 
     def __str__(self):
         return self.name
-
+    
 class Date(models.Model): 
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='date', null=True, blank=True)
     content = models.DateField()

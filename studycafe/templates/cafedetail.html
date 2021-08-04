@@ -18,8 +18,18 @@
             </address>
         </article>
         <article class="share-save-wrapper">
-            <a href="#"><i class="fas fa-share fa-lg"></i></a>
-            <a href="#"><i class="fas fa-bookmark fa-lg"></i></a>
+            {% if user.personal_user %}
+            <a href="#">
+                <i class="fas fa-share-alt fa-lg"></i>
+            </a>
+            <a href="{% url 'bookmark' cafe.pk %}">
+                {% if is_bookmarked %}
+                <i class="fas fa-bookmark fa-lg bookmarked"></i>
+                {% else %}
+                <i class="fas fa-bookmark fa-lg gray"></i>
+                {% endif %}
+            </a>
+            {% endif %}
         </article>
     </section>
     <section class="cafedetail-information-wrapper">
@@ -84,7 +94,7 @@
                 <article class="cafe-detail-wrapper gallery-wrapper">
                     <h3>내부 모습</h3>
                     <!-- 사진 여러장 받도록 모델 수정/ 순회해서 여러 사진 풀어주기 -->
-                    <img src="{{cafe.img}}" alt="cafe.name" width="250px;">
+                    <img src="{{cafe.img}}" alt="{{cafe.name}}" width="250px;">
                 </article>
 
                 <article class="cafe-detail-wrapper location-wrapper">

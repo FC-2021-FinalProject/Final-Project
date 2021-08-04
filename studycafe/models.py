@@ -22,6 +22,7 @@ class PersonalUser(models.Model):
     def __str__(self):
         return self.name
 
+
 class BusinessUser(models.Model):
     # relationship
     user = models.OneToOneField(User, on_delete=models.SET_NULL, related_name='business_user', null=True, blank=True)
@@ -34,6 +35,7 @@ class BusinessUser(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class StudyCafe(models.Model) :
     #relationship
@@ -55,7 +57,7 @@ class StudyCafe(models.Model) :
 
     def __str__(self):
         return self.name
-
+    
 class Date(models.Model): 
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='date', null=True, blank=True)
     content = models.DateField()
@@ -69,6 +71,7 @@ class HourTime(models.Model):
     def __str__(self) :
         return (f"시작시간:{self.start_time}, 종료시간:{self.end_time}")
 
+
 class Seats(models.Model):
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='seat', null=True, blank=True)
     available = models.BooleanField(default=False)
@@ -76,6 +79,7 @@ class Seats(models.Model):
 
     def __str__(self) :
         return self.content
+
 
 class Reservations(models.Model):
     # relationship
@@ -85,9 +89,15 @@ class Reservations(models.Model):
     hours = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     seat = models.ForeignKey(Seats, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     
+    
 class Review(models.Model):
 # Review model relationship
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='review')
     writer = models.ForeignKey(PersonalUser, on_delete=models.SET_NULL, related_name='writer', null=True, blank=True)
     content = models.TextField()
     created_at = models.DateField(auto_now_add=True)
+
+
+class BookmarkedCafe(models.Model):
+    studycafe = models.OneToOneField(StudyCafe, on_delete=models.CASCADE, related_name='bookmark', null=True, blank=True)
+    users = models.ManyToManyField(PersonalUser, related_name="bookmarked_cafe", blank=True)

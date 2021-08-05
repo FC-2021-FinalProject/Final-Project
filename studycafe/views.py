@@ -1,5 +1,6 @@
 # Standard Library Imports
 from datetime import datetime, time
+import os
 from os import sched_get_priority_max
 import requests, random, string
 
@@ -14,6 +15,7 @@ from django.db.models import Q
 # Third-Party App Imports
 import boto3
 from boto3.session import Session
+from urllib.parse import urlparse
 
 # Imports from Apps
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
@@ -201,7 +203,38 @@ def kakao_callback(request):
 
         target_nickname = kakao_user['properties']['nickname']
         target_email = kakao_user['kakao_account']['email']
+        
+    # S3 USING BOTO3
+        session = Session(
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name=AWS_S3_REGION_NAME,
+        )
+        s3 = session.resource('s3')
+        now = datetime.now().strftime("%Y%H%M%S")
+        s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
 
+    # SAVE PROFILE IMAGE FROM KAKAO PROFILE RESPONSE
+        target_image_url = kakao_user['properties']['thumbnail_image']
+        
+        response = requests.get(target_image_url)
+        if response.status_code == 200:
+            img_data = response.content
+            url_parser = urlparse(target_image_url)
+            file_name = os.path.basename(url_parser.path)
+
+            with open(file_name, 'wb') as new_file:
+                new_file.write(img_data)
+            
+            data = open(file_name, 'rb')
+            img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+                Key=now+file_name,
+                Body=data
+            )
+            data.close()
+            new_file.close()
+            os.remove(file_name)
+    
     # CREATE USER & PERSONAL USER INSTANCES
         user = User.objects.create_user(
             username=f"kakao{target_id}",
@@ -213,6 +246,7 @@ def kakao_callback(request):
             name=target_nickname,
             email_authenticated=True,
             unique_id=target_id,
+            avatar=s3_url+now+file_name,
         )
         user.set_unusable_password()
         user.save()

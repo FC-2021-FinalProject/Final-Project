@@ -18,6 +18,7 @@ class PersonalUser(models.Model):
     email = models.CharField(max_length=64)
     email_authenticated = models.BooleanField(default=False)
     unique_id = models.IntegerField(null=True, blank=True)
+    avatar = models.TextField()
     
     def __str__(self):
         return self.name

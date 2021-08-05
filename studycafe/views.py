@@ -409,9 +409,11 @@ class CafeDetailView(generic.DetailView) :
     def get(self, request, *args, **kwargs) :
         cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
         reviews = Review.objects.filter(studycafe=cafe)
-        cafeimg = StudyCafe.objects.filter(pk=kwargs['pk'])
+        user = User.objects.get(username=request.user)
+        puser = PersonalUser.objects.get(user=user)
+        is_reserv = Reservations.objects.filter(studycafe=cafe, personal_user=puser)
 
-        context = {'cafe':cafe, 'reviews':reviews, 'cafeimg':cafeimg}
+        context = {'cafe':cafe, 'reviews':reviews, 'is_reserv':is_reserv}
 
         return render(request, 'cafedetail.html', context)
 
@@ -516,10 +518,11 @@ class ReviewView(generic.View) :
     def post(self, request, *args, **kwargs) :
         content = request.POST['review']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
+        user = PersonalUser.objects.get(name=User.username)
 
         Review.objects.create(
             studycafe = studycafe,
-            writer = request.user,
+            writer = user,
             content= content
         )
         return redirect('cafedetail', kwargs['pk'])

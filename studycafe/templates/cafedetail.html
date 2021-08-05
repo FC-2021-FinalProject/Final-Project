@@ -106,12 +106,14 @@
                     </div>
                     {% endfor %}
                     <div>
+                        {%if is_reserv%}
                         <form action="{% url 'review' cafe.pk%}" method="POST">
                             {% csrf_token %}
                             <label class="visually-hidden" for="review">Review:</label>
                             <input type="text" id="review" name="review" placeholder="Share your experience here with other users!">
                             <button>Share review</button>
                         </form>
+                        {% endif %}
                     </div>
                 </article>
                 

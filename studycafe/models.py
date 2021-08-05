@@ -58,7 +58,7 @@ class StudyCafe(models.Model) :
     
 class Date(models.Model): 
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='date', null=True, blank=True)
-    content = models.DateField()
+    # content = models.DateField()
 
 
 class HourTime(models.Model):
@@ -79,7 +79,7 @@ class Seats(models.Model):
 
 class Reservations(models.Model):
     # relationship
-    personal_user = models.ForeignKey(PersonalUser, on_delete=models.CASCADE,related_name='reservation', null=True, blank=True)
+    personal_user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='reservation', null=True, blank=True)
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     date = models.ForeignKey(Date, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
     hours = models.ForeignKey(HourTime, on_delete=models.CASCADE, related_name='reservation', null=True, blank=True)
@@ -90,4 +90,4 @@ class Review(models.Model):
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='review')
     writer = models.ForeignKey(PersonalUser, on_delete=models.SET_NULL, related_name='writer', null=True, blank=True)
     content = models.TextField()
-    created_at = models.DateField(auto_now_add=True)
+    # created_at = models.DateField(auto_now_add=True)

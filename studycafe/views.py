@@ -350,6 +350,8 @@ class CafeUploadView(View) :
         file = request.FILES.getlist('image')
         m = [i for i in range(len(file))]
         print(m)
+        m = str(m).split()
+        print(m)
         session = Session(
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
@@ -358,15 +360,13 @@ class CafeUploadView(View) :
         s3 = session.resource('s3')
         now = datetime.now().strftime('%Y%H%M%S')
         for j in file :
-            print(j)
             img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
                 Key=now+j.name,
-                Body=j.name
+                Body=j
             )
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
         businessuser = BusinessUser.objects.get(user=request.user)
         q = [s3_url+now+str(i) for i in file]
-        print(q)
 
         features_list = ['parking', 'drinks', 'wifi', 'printer', 'security']
         features_checked = self.request.POST.getlist('features')
@@ -409,8 +409,9 @@ class CafeDetailView(generic.DetailView) :
     def get(self, request, *args, **kwargs) :
         cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
         reviews = Review.objects.filter(studycafe=cafe)
+        cafeimg = StudyCafe.objects.filter(pk=kwargs['pk'])
 
-        context = {'cafe':cafe, 'reviews':reviews}
+        context = {'cafe':cafe, 'reviews':reviews, 'cafeimg':cafeimg}
 
         return render(request, 'cafedetail.html', context)
 
@@ -440,8 +441,7 @@ class CafeEditView(generic.View) :
 
 def cafedelete(request, cafe_pk) :
     cafe = StudyCafe.objects.filter(pk=cafe_pk)
-    cafe.update(is_deleted=True)
-
+    cafe.delete()
     return redirect('BUprofile', cafe_pk)
 
 
@@ -458,7 +458,6 @@ class ReservationView(generic.View) :
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
         end_time = int(start_time) + int(use_time)
         
-        p = Reservations.objects.filter(Q(hours__end_time__gt=start_time, hours__start_time__lt=end_time))
         if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
             if len(Reservations.objects.filter(Q(hours__end_time__gt=start_time, hours__start_time__lt=end_time))) == 0 :
                 date1 = Date.objects.create(

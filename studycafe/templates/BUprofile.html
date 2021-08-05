@@ -34,8 +34,10 @@
                             <li>{{cafe.address}}</li>
                         </ul>
                     </a>
-                    
                 </li>
+            <form action="{% url 'cafedelete' cafe.pk%}">
+                <button type="submit">카페 삭제하기</button>
+            </form>
             {% if forloop.last %}
                 <li class="owner-cafe-item-wrapper">
                     <a href="{% url 'cafeupload' user.pk %}">

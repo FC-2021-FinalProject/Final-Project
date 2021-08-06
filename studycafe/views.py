@@ -403,13 +403,6 @@ class CafeUploadView(View) :
 
     def post(self, request, *args, **kwargs):
         file = request.FILES.getlist('image')
-        session = Session(
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name=AWS_S3_REGION_NAME,
-        )
-        s3 = session.resource('s3')
-        now = datetime.now().strftime('%Y%H%M%S')
         for j in file :
             img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
                 Key=now+j.name,
@@ -445,6 +438,9 @@ class CafeUploadView(View) :
             wifi = cafe_features['wifi'],
             printer = cafe_features['printer'],
             security = cafe_features['security'],
+        )
+        BookmarkedCafe.objects.create(
+            studycafe=cafe 
         )
         for i in file :
             CafeImage.objects.create(

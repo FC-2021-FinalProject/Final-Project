@@ -99,7 +99,7 @@ class Review(models.Model):
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='review')
     writer = models.ForeignKey(PersonalUser, on_delete=models.SET_NULL, related_name='writer', null=True, blank=True)
     content = models.TextField()
-    # created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
 
 
 class BookmarkedCafe(models.Model):

@@ -90,7 +90,40 @@
     <section class="pu-bookmarked-wrapper">
         <h3 class="pu-page-headers pu-tab-option pu-bookmarked-header">Bookmarked Cafes</h3>
         <article class="pu-page-contents pu-bookmarked-contents visually-hidden">
-            <span>Bookmarked Cafes page coming soon!</span>
+            <ul class="bookmarked-cafe-list">
+            {% for cafe in bookmarked %}
+                <li class="bookmarked-cafe-item-wrapper">
+                    <a href="{% url 'cafedetail' cafe.pk %}">
+                        <img src="{{cafe.studycafe.img}}" alt="{{cafe.studycafe.name}}">
+                        <ul class="bookmarked-cafe-item-desc">
+                            <li>{{cafe.studycafe.name}}</li>
+                            <li>{{cafe.studycafe.address}}</li>
+                        </ul>
+                    </a>
+                </li>
+            {% if forloop.last %}
+                <li class="bookmarked-cafe-item-wrapper">
+                    <a href="{% url 'cafelist' %}">
+                        <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png"  alt="Link to browse cafes">
+                        <ul class="bookmarked-cafe-item-desc">
+                            <li>Browse Cafes</li>
+                            <li>Click here to add more cafes to your bookmark</li>
+                        </ul>
+                    </a>
+                </li>
+            {% endif %}    
+            {% empty %}
+                <li class="bookmarked-cafe-item-wrapper">
+                    <a href="{% url 'cafelist' %}">
+                        <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png"  alt="Link to browse cafes">
+                        <ul class="bookmarked-cafe-item-desc">
+                            <li>Browse Cafes</li>
+                            <li>Click here to add cafes to your bookmark</li>
+                        </ul>
+                    </a>
+                </li>
+            {% endfor%}
+            </ul>
         </article>
     </section>
     <section class="pu-accounts-wrapper">

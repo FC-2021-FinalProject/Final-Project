@@ -14,10 +14,11 @@ from django.db.models import Q
 # Third-Party App Imports
 import boto3
 from boto3.session import Session
+from requests.api import get
 
 # Imports from Apps
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
-from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review
+from studycafe.models import  PersonalUser, BusinessUser, StudyCafe,CafeImage, Date, HourTime, Seats,  Reservations, Review
 
 
 ERROR_MSG = {
@@ -348,10 +349,6 @@ class CafeUploadView(View) :
 
     def post(self, request, *args, **kwargs):
         file = request.FILES.getlist('image')
-        m = [i for i in range(len(file))]
-        print(m)
-        m = str(m).split()
-        print(m)
         session = Session(
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
@@ -366,7 +363,6 @@ class CafeUploadView(View) :
             )
         s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
         businessuser = BusinessUser.objects.get(user=request.user)
-        q = [s3_url+now+str(i) for i in file]
 
         features_list = ['parking', 'drinks', 'wifi', 'printer', 'security']
         features_checked = self.request.POST.getlist('features')
@@ -382,11 +378,10 @@ class CafeUploadView(View) :
             if feature in features_checked:
                 cafe_features[f'{feature}'] = True
        
-        StudyCafe.objects.create(
+        cafe = StudyCafe.objects.create(
             name=request.POST['name'],
             businessuser = businessuser,
             address= request.POST.get('address'),
-            img = str(q),
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
@@ -396,24 +391,27 @@ class CafeUploadView(View) :
             printer = cafe_features['printer'],
             security = cafe_features['security'],
         )
-        # StudyCafeImage.objects.create(
-        #     studycafe=StudyCafe.objects.filter(businessuser=businessuser),
-        #     img = s3_url+now+i[3].name
-        # )
+        for i in file :
+            CafeImage.objects.create(
+                cafe=cafe,
+                img = s3_url+now+i.name
+            )
         return redirect('cafelist')
 
 class CafeDetailView(generic.DetailView) :
-    model = StudyCafe
-    template_name = 'cafedetail.html'
 
     def get(self, request, *args, **kwargs) :
         cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
+        cafe_img = CafeImage.objects.filter(cafe=cafe)
         reviews = Review.objects.filter(studycafe=cafe)
         user = User.objects.get(username=request.user)
-        puser = PersonalUser.objects.get(user=user)
-        is_reserv = Reservations.objects.filter(studycafe=cafe, personal_user=puser)
+        print(user)
+        # puser = PersonalUser.objects.get(user=user)
+        # puser = get_object_or_404(PersonalUser, user=user)
+        # buser = BusinessUser.objects.get(user=user)
+        # is_reserv = Reservations.objects.filter(studycafe=cafe, personal_user=puser)
 
-        context = {'cafe':cafe, 'reviews':reviews, 'is_reserv':is_reserv}
+        context = {'cafe':cafe, 'reviews':reviews, 'cafe_img':cafe_img} #'is_reserv':is_reserv}
 
         return render(request, 'cafedetail.html', context)
 
@@ -459,6 +457,8 @@ class ReservationView(generic.View) :
         seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
         end_time = int(start_time) + int(use_time)
+        user = User.objects.get(username=request.user)
+        puser = PersonalUser.objects.get(user=user)
         
         if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
             if len(Reservations.objects.filter(Q(hours__end_time__gt=start_time, hours__start_time__lt=end_time))) == 0 :
@@ -480,7 +480,7 @@ class ReservationView(generic.View) :
                 )
 
                 Reservations.objects.create(
-                    # personal_user = user,
+                    personal_user = puser,
                     studycafe = studycafe,
                     date = date1,
                     hours = hour,
@@ -505,7 +505,7 @@ class ReservationView(generic.View) :
             )
 
             Reservations.objects.create(
-                # personal_user = user,
+                personal_user = puser,
                 studycafe = studycafe,
                 date = date1,
                 hours = hour,

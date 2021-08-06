@@ -45,7 +45,6 @@ class StudyCafe(models.Model) :
     price_per_hour = models.PositiveIntegerField()
     business_hour_start = models.CharField(max_length=32)
     business_hour_end = models.CharField(max_length=32)
-    img = models.TextField()
     
     parking = models.BooleanField(default=False)
     drinks = models.BooleanField(default=False)
@@ -55,7 +54,11 @@ class StudyCafe(models.Model) :
 
     def __str__(self):
         return self.name
-    
+        
+class CafeImage(models.Model) :
+    cafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='cafe_image')
+    img = models.TextField()
+
 class Date(models.Model): 
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='date', null=True, blank=True)
     content = models.DateField()

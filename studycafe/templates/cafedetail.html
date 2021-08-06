@@ -84,9 +84,9 @@
                 <article class="cafe-detail-wrapper gallery-wrapper">
                     <h3>내부 모습</h3>
                     <!-- 사진 여러장 받도록 모델 수정/ 순회해서 여러 사진 풀어주기 -->
-                    {{cafe.img}}
-                    
-                    <img src="{{cafe.img}}" alt="{{cafe.name}}" width="250px;">
+                    {%for i in cafe_img%}
+                    <img src="{{i.img}}" alt="{{i.name}}" width="250px;">
+                    {% endfor %}
                 </article>
 
                 <article class="cafe-detail-wrapper location-wrapper">
@@ -106,7 +106,7 @@
                     </div>
                     {% endfor %}
                     <div>
-                        {%if is_reserv%}
+                        {% if user == is_reserv %}
                         <form action="{% url 'review' cafe.pk%}" method="POST">
                             {% csrf_token %}
                             <label class="visually-hidden" for="review">Review:</label>

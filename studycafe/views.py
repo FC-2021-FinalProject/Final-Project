@@ -17,9 +17,11 @@ import boto3
 from boto3.session import Session
 from urllib.parse import urlparse
 
+from requests.api import get
+
 # Imports from Apps
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
-from studycafe.models import  PersonalUser, BusinessUser, StudyCafe, Date, HourTime, Seats,  Reservations, Review, BookmarkedCafe
+from studycafe.models import  PersonalUser, BusinessUser, StudyCafe,CafeImage, Date, HourTime, Seats,  Reservations, Review, BookmarkedCafe
 
 
 ERROR_MSG = {
@@ -276,7 +278,6 @@ class PersonalUserDetailView(generic.DeleteView) :
     def get(self, request, *args, **kwargs) :
         puser = PersonalUser.objects.get(user=request.user)
         bookmarked = puser.bookmarked_cafe.all()
-        print(bookmarked)
         context = {'puser': puser, 'bookmarked': bookmarked}
         return render(request, 'PUprofile.html', context)
 
@@ -296,7 +297,6 @@ def personal_profile_edit(request, username):
         
 
         file = request.FILES.get('profile-image')
-        print(file)
         if file:
             s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
                 Key=now+file.name,
@@ -404,20 +404,18 @@ class CafeUploadView(View) :
         return render(request, 'cafeupload.html', context)
 
     def post(self, request, *args, **kwargs):
+        representative_img = request.FILES.get('repre_image')
         file = request.FILES.getlist('image')
-        m = [i for i in range(len(file))]
-        print(m)
         for j in file :
-            print(j)
             img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
                 Key=now+j.name,
-                Body=j.name
+                Body=j
             )
         businessuser = BusinessUser.objects.get(user=request.user)
-        q = [s3_url+now+str(i) for i in file]
-        print(q)
-
-
+        s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+                Key=now+representative_img.name,
+                Body=representative_img
+        )
         # for cafe features
         features_list = ['parking', 'drinks', 'wifi', 'printer', 'security']
         features_checked = self.request.POST.getlist('features')
@@ -432,15 +430,15 @@ class CafeUploadView(View) :
         for feature in features_list:
             if feature in features_checked:
                 cafe_features[f'{feature}'] = True
-
-        new_studycafe = StudyCafe.objects.create(
+       
+        cafe = StudyCafe.objects.create(
             name=request.POST['name'],
             businessuser = businessuser,
             address= request.POST.get('address'),
-            img = str(q),
             price_per_hour = request.POST['price_per_hour'],
             business_hour_start = request.POST['business_hour_start'],
             business_hour_end = request.POST['business_hour_end'],
+            representative_img = s3_url+now+representative_img.name,
             parking = cafe_features['parking'],
             drinks = cafe_features['drinks'],
             wifi = cafe_features['wifi'],
@@ -448,23 +446,38 @@ class CafeUploadView(View) :
             security = cafe_features['security'],
         )
         BookmarkedCafe.objects.create(
-            studycafe=new_studycafe  
+            studycafe=cafe
         )
-
+        for i in file :
+            CafeImage.objects.create(
+                cafe=cafe,
+                img = s3_url+now+i.name
+            )
         return redirect('cafelist')
 
-def cafedetailview(request, pk):
-    cafe = get_object_or_404(StudyCafe, pk=pk)
-    reviews = Review.objects.filter(studycafe=cafe)
+class CafeDetailView(generic.DetailView) :
 
-    is_bookmarked = False
-    if (request.user.personal_user in cafe.bookmark.users.all()):
-        is_bookmarked = True
+    def get(self, request, *args, **kwargs) :
+        cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
+        cafe_img = CafeImage.objects.filter(cafe=cafe)
+        reviews = Review.objects.filter(studycafe=cafe)
+        user = User.objects.get(username=request.user)
+        # puser = get_object_or_404(PersonalUser, user=user)
+        buser = BusinessUser.objects.get(user=user)
 
-    context = {'cafe':cafe, 'reviews':reviews, 'is_bookmarked':is_bookmarked,}
+        try  :
+            puser = PersonalUser.objects.get(user=user)
+            is_reserv = Reservations.objects.filter(studycafe=cafe, personal_user=puser)
+        except :
+            buser = BusinessUser.objects.get(user=user)
 
-    return render(request, 'cafedetail.html', context)
+        is_bookmarked = False
+        # if (request.user.personal_user in cafe.bookmark.users.all()):
+        #     is_bookmarked = True
 
+        context = {'cafe':cafe, 'reviews':reviews, 'cafe_img':cafe_img, 'is_bookmarked':is_bookmarked}
+
+        return render(request ,'cafedetail.html', context)
 
 class CafeEditView(generic.View) :
     model = StudyCafe
@@ -487,9 +500,9 @@ class CafeEditView(generic.View) :
 
 
 def cafedelete(request, cafe_pk) :
-    cafe = StudyCafe.objects.filter(pk=cafe_pk)
-    cafe.update(is_deleted=True)
-
+    StudyCafe.objects.filter(is_deleted=False).update(
+        is_deleted=True
+    )
     return redirect('BUprofile', cafe_pk)
 
 
@@ -505,8 +518,9 @@ class ReservationView(generic.View) :
         seat = request.POST['seat']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
         end_time = int(start_time) + int(use_time)
+        user = User.objects.get(username=request.user)
+        puser = PersonalUser.objects.get(user=user)
         
-        p = Reservations.objects.filter(Q(hours__end_time__gt=start_time, hours__start_time__lt=end_time))
         if len(Reservations.objects.filter(studycafe=studycafe, date__content=date, seat__content=seat)) != 0 :
             if len(Reservations.objects.filter(Q(hours__end_time__gt=start_time, hours__start_time__lt=end_time))) == 0 :
                 date1 = Date.objects.create(
@@ -527,7 +541,7 @@ class ReservationView(generic.View) :
                 )
 
                 Reservations.objects.create(
-                    # personal_user = user,
+                    personal_user = puser,
                     studycafe = studycafe,
                     date = date1,
                     hours = hour,
@@ -552,7 +566,7 @@ class ReservationView(generic.View) :
             )
 
             Reservations.objects.create(
-                # personal_user = user,
+                personal_user = puser,
                 studycafe = studycafe,
                 date = date1,
                 hours = hour,
@@ -567,6 +581,7 @@ class ReviewView(generic.View) :
     def post(self, request, *args, **kwargs) :
         content = request.POST['review']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
+        user = PersonalUser.objects.get(name=User.username)
 
         Review.objects.create(
             studycafe = studycafe,

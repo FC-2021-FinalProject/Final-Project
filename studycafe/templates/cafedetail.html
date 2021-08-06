@@ -96,7 +96,7 @@
                     <h3>내부 모습</h3>
                     <!-- 사진 여러장 받도록 모델 수정/ 순회해서 여러 사진 풀어주기 -->
                     {%for i in cafe_img%}
-                    <img src="{{i.img}}" alt="{{i.name}}">
+                    <img src="{{i.img}}" alt="{{i.name}}" width="250px;">
                     {% endfor %}
                 </article>
 
@@ -118,7 +118,7 @@
                     </div>
                     {% endfor %}
                     <div>
-                        {% if user == is_reserv %}
+                        {% if is_reserv %}
                         <form action="{% url 'review' cafe.pk%}" method="POST">
                             {% csrf_token %}
                             <label class="visually-hidden" for="review">Review:</label>

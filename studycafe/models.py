@@ -48,12 +48,14 @@ class StudyCafe(models.Model) :
     price_per_hour = models.PositiveIntegerField()
     business_hour_start = models.CharField(max_length=32)
     business_hour_end = models.CharField(max_length=32)
+    representative_img = models.TextField()
     
     parking = models.BooleanField(default=False)
     drinks = models.BooleanField(default=False)
     wifi = models.BooleanField(default=False)
     printer = models.BooleanField(default=False)
     security = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

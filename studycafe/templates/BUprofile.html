@@ -27,6 +27,7 @@
         <article class="bu-page-contents bu-manage-content visually-hidden">
             <ul class="owner-cafe-list">
             {% for cafe in buser.studycafe.all %}
+                {% if cafe.is_deleted == False %}
                 <li class="owner-cafe-item-wrapper">
                     <a href="{% url 'cafedetail' cafe.pk %}">
                         <img src="{{cafe.img}}" alt="{{cafe.name}}" width="250px;">
@@ -36,9 +37,10 @@
                         </ul>
                     </a>
                 </li>
-            <form action="{% url 'cafedelete' cafe.pk%}">
-                <button type="submit">카페 삭제하기</button>
-            </form>
+                <form action="{% url 'cafedelete' cafe.pk%}">
+                    <button type="submit">카페 삭제하기</button>
+                </form>
+                {% endif %}
             {% if forloop.last %}
                 <li class="owner-cafe-item-wrapper">
                     <a href="{% url 'cafeupload' user.pk %}">

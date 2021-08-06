@@ -10,8 +10,9 @@
     {% for cafelist in cafelists %}
     <li>카페 이름 : {{cafelist.name}}</li>
     <li>시간 당 가격 : {{cafelist.price_per_hour}}</li>
+    
     <a href="{% url 'cafedetail' cafelist.pk %}">
-        <img src="{{cafelist.img}}" width="250px;" alt="{{cafelist.name}}">
+        <img src="{{cafelist.representative_img}}" width="250px;" alt="{{cafelist.name}}">
     </a>
     {% endfor %}
 </main>

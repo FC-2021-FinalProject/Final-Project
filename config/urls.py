@@ -41,7 +41,6 @@ urlpatterns = [
     path('cafelist', CafeListView.as_view(), name='cafelist'),
     path('cafeupload/<int:pk>', CafeUploadView.as_view(), name='cafeupload'),
     path('cafedetail/<int:pk>', views.cafedetailview, name='cafedetail'),
-    # path('cafedetail/<int:pk>', CafeDetailView.as_view(), name='cafedetail'),
     path('cafeedit/<int:pk>', CafeEditView.as_view(), name='cafeedit'),
     path('cafedelete/<int:cafe_pk>', views.cafedelete, name='cafedelete'),
     path('reserve/<int:pk>',ReservationView.as_view(), name='reservation'),

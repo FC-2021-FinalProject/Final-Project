@@ -21,7 +21,11 @@
             </div>
             <button id="mobile-menu">
                 <i class="fas fa-bars"></i>
-                <img id="mobile-menu-profile-img" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="User profile photo">
+                {% if user.personal_user.avatar %}
+                <img class="profile-photo" id="mobile-menu-profile-img" src="{{request.user.personal_user.avatar}}" alt="profile image">
+                {% else %}
+                <img class="profile-photo" id="mobile-menu-profile-img" src="../static/images/defaultProfile.jpg" alt="profile image">
+                {% endif %}
             </button>
             <div class="header-nav-menu-container">
                 <ul class="header-nav-menu-list">
@@ -46,7 +50,7 @@
 {% elif user.is_anonymous %}
 <header class="header-container">
     <section class="page-wrapper header-wrapper">
-        <h1><a href="{% url 'index' %}">Doby is Park</a></h1>
+        <h1><a href="{% url 'index' %}">dobby is park</a></h1>
         <form class="search-form">
             <fieldset>
                 <legend class="visually-hidden">Search form</legend>
@@ -60,7 +64,7 @@
         <section class="mobile-menu">
             <button id="mobile-menu">
                 <i class="fas fa-bars"></i>
-                <img id="mobile-menu-profile-img" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="User profile photo">
+                <img class="profile-photo" id="mobile-menu-profile-img" src="../static/images/defaultProfile.jpg" alt="profile image">
             </button>
             <div class="header-nav-menu-container">
                 <ul class="header-nav-menu-list">

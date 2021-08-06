@@ -85,12 +85,12 @@ button{
     font-weight: 800 ;
     /* text-shadow: 5px 10px rgb(140,140,140); */
 }
-.header-wrapper h1 a::before{
+.header-wrapper h1 a:hover::before{
     content:"dobby is free";
     color: transparent;
     position: absolute;
     font-size: xx-large;
-    text-shadow: 8px -25px 6px rgba(50, 140, 201,.6);
+    text-shadow: 8px -25px 6px rgba(140, 140, 140,.6);
 }
 .search-form{
     position: absolute;

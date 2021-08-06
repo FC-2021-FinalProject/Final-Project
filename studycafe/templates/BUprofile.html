@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block head %}
+<title>Business Profile | Dobby is Park</title>
 <!-- javascript link -->
 <script defer src="../static/src/bu_profile.js"></script>
 {% endblock head%}
@@ -39,7 +40,7 @@
             {% if forloop.last %}
                 <li class="owner-cafe-item-wrapper">
                     <a href="{% url 'cafeupload' user.pk %}">
-                        <img src="../static/images/add.png" alt="Add another new cafe link image">
+                        <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png" alt="Add another new cafe link image">
                         <span class="owner-cafe-item-desc">Host another Cafe</span>
                     </a>
                 </li>
@@ -47,7 +48,7 @@
             {% empty %}
                 <li class="owner-cafe-item-wrapper">
                     <a href="{% url 'cafeupload' user.pk %}">
-                        <img src="../static/images/add.png" alt="Add new cafe link image">
+                        <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png" alt="Add new cafe link image">
                         <span class="owner-cafe-item-desc">Host your Cafe</span>
                     </a>
                 </li>

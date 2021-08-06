@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block head %}
+<title>User Signup | Dobby is Park</title>
 {% load socialaccount %}
 {% providers_media_js %}
+{% endblock head %}
 {% block content %}
 {% include 'header-nav.html' %}
 <main class="page-wrapper auth-page-wrapper">

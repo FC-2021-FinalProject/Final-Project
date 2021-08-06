@@ -4,7 +4,7 @@ from django.urls.conf import include
 import debug_toolbar
 
 from studycafe import views
-from studycafe.views import BusinessUserEditView, CafeListView, CafeUploadView, CafeDetailView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, BusinessUserEditView ,ReservationView, personal_signup, business_signup, personal_profile_edit, personal_password_edit, ReviewView, login, kakao_logout, IdPwSearch, IdSearch, PwSearch
+from studycafe.views import BusinessUserEditView, CafeDetailView, CafeListView, CafeUploadView, CafeEditView, cafedelete, PersonalUserDetailView, BusinessUserDetailView, BusinessUserEditView ,ReservationView, personal_signup, business_signup, personal_profile_edit, personal_password_edit, ReviewView, login, kakao_logout, IdPwSearch, IdSearch, PwSearch, bookmark
 
 
 urlpatterns = [
@@ -33,7 +33,7 @@ urlpatterns = [
     # user profile pages
     path('PUprofile/<slug:username>', PersonalUserDetailView.as_view(), name='PUprofile'),
     path('PUprofileedit/<slug:username>', views.personal_profile_edit, name='personal_profile_edit'),
-        path('PUpasswordedit/<slug:username>', views.personal_password_edit, name='personal_password_edit'),
+    path('PUpasswordedit/<slug:username>', views.personal_password_edit, name='personal_password_edit'),
     path('BUprofile/<int:pk>', BusinessUserDetailView.as_view(), name='BUprofile'),
     path('BUprofileedit/<int:pk>', BusinessUserEditView.as_view(), name='BUedit'),
 
@@ -45,6 +45,9 @@ urlpatterns = [
     path('cafedelete/<int:cafe_pk>', views.cafedelete, name='cafedelete'),
     path('reserve/<int:pk>',ReservationView.as_view(), name='reservation'),
     path('review/<int:pk>', ReviewView.as_view(), name='review'),
+
+    # features
+    path('bookmarkcafe/<int:cafe_pk>', views.bookmark, name='bookmark'),
 
     # django debugger tool
     path('__debug__/', include(debug_toolbar.urls)),

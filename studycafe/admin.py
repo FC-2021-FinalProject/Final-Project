@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import PersonalUser, BusinessUser, StudyCafe, CafeImage, Reservations, Date, HourTime, Seats, Review
+from .models import PersonalUser, BusinessUser, StudyCafe, CafeImage, Reservations, Date, HourTime, Seats, Review, BookmarkedCafe
 
 class PhotoInline(admin.TabularInline) :
     model = CafeImage
@@ -17,3 +17,4 @@ admin.site.register(Date)
 admin.site.register(HourTime)
 admin.site.register(Seats)
 admin.site.register(Review)
+admin.site.register(BookmarkedCafe)

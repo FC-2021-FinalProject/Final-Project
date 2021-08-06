@@ -85,12 +85,12 @@ button{
     font-weight: 800 ;
     /* text-shadow: 5px 10px rgb(140,140,140); */
 }
-.header-wrapper h1 a::before{
+.header-wrapper h1 a:hover::before{
     content:"dobby is free";
     color: transparent;
     position: absolute;
     font-size: xx-large;
-    text-shadow: 8px -25px 6px rgba(50, 140, 201,.6);
+    text-shadow: 8px -25px 6px rgba(140, 140, 140,.6);
 }
 .search-form{
     position: absolute;
@@ -204,7 +204,7 @@ button{
     margin: 0 auto;
     width: 100%;
     height: 700px;
-    background: center no-repeat url(./images/visual-banner.jpg);
+    background: center no-repeat url("https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/visualBannerImage.jpg");
     background-position: top;
     background-size: cover;
     box-shadow: 0 -3px 5px rgba(176, 176, 176, .7);
@@ -707,6 +707,74 @@ button{
     opacity: .7;
 }
 
+
+/* 4th tab: BOOKMARKED CAFES */
+.pu-bookmarked-contents{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 680px;
+    min-width: 520px;
+}
+.bookmarked-cafe-list{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    width: 100%;
+}
+.bookmarked-cafe-item-wrapper{
+    box-sizing: border-box;
+    margin: 20px 0;
+    width: 100%;
+    height: 230px;
+    border-radius: 10px;
+    position: relative;
+}
+.bookmarked-cafe-item-wrapper a{
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    height: 100%;
+}
+.bookmarked-cafe-item-wrapper a:hover{
+    background-color: rgba(176,176,176,.3);
+    border-radius: 10px;
+}
+.bookmarked-cafe-item-wrapper img{
+    box-sizing: border-box;
+    width: 230px;
+    height: 230px;
+    border-radius: 10px;
+    z-index: -99;
+    object-fit: cover;
+    overflow-x: hidden;
+}
+.bookmarked-cafe-item-desc{
+    position: absolute;
+    margin-left: 20px;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.bookmarked-cafe-item-desc li{
+    box-sizing: border-box;
+    width: calc(100% - 270px);
+    padding: 3px;
+}
+.bookmarked-cafe-item-desc :nth-child(1){
+    font-size: large;
+    font-weight: bold;
+    border-bottom: 2px solid rgb(140,140,140);
+    padding-bottom: 5px;
+}
+
+
 /* BOTTOM LEFT: accounts information section */
 .pu-accounts-wrapper{
     position: absolute;
@@ -999,8 +1067,14 @@ button{
 .page-wrapper.cafeupload-page-wrapper{
     padding: 20px;
 }
-
 .cafeupload-form-wrapper{
     display: flex;
     flex-direction: column;
+}
+.share-save-wrapper a{
+    text-decoration: none;
+    color: black;
+}
+.fa-bookmark.bookmarked{
+    color: rgb(176, 176, 176);
 }

@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block head %}
-{% load static %}
+<title>Profile | Dobby is Park</title>
 <!-- javascript link -->
-<script defer src="{% static 'pu_profile.js' %}"></script>
+<script defer src="../static/src/pu_profile.js"></script>
 {% endblock head%}
 {% block content %}
 {% include 'header-nav.html' %}
@@ -15,10 +15,10 @@
             <div class="user-profile-info-wrapper ">
                 <span>{{user.username}}</span>
                 <label for="profile-image">
-                    <img class="profile-photo" id="change-photo" for="profile-image" src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Change profile photo">
+                    <img class="profile-photo" id="change-photo" for="profile-image" src="{{user.personal_user.avatar}}" alt="Change profile photo">
                 </label>
             </div>
-            <form class="user-profile-edit-form" action="{% url 'personal_profile_edit' user.username %}" method="POST">
+            <form class="user-profile-edit-form" action="{% url 'personal_profile_edit' user.username %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="edit-control">
                     <label for="profile-image">
@@ -39,7 +39,7 @@
                     <input type="email" id="profile-email" name="profile-email" placeholder="Email" value={{user.email}}>
                 </div>
                 <div class="edit-control">
-                    <button class="profile-edit-submit disabled" type="submit" disabled>Edit Profile</button>
+                    <button class="profile-edit-submit disabled" type="submit">Edit Profile</button>
                 </div>
             </form>
             <div class="status-msg">
@@ -54,7 +54,7 @@
         <article class="pu-page-contents pu-password-contents visually-hidden">
             <div class="user-profile-info-wrapper password-tab">
                 <span>{{user.username}}</span>
-                <img class="profile-photo" id="profile-pw-photo"  src="http://k.kakaocdn.net/dn/ynT4Z/btq2Mcevprt/HQxayK5n6oDPfsHzZRGg41/img_640x640.jpg" alt="Your profile photo">
+                <img class="profile-photo" id="profile-pw-photo"  src="{{user.personal_user.avatar}}" alt="Your profile photo">
             </div>
             <form class="user-password-edit-form" action="{% url 'personal_password_edit' user.username %}" method="POST">
                 {% csrf_token %}
@@ -90,7 +90,40 @@
     <section class="pu-bookmarked-wrapper">
         <h3 class="pu-page-headers pu-tab-option pu-bookmarked-header">Bookmarked Cafes</h3>
         <article class="pu-page-contents pu-bookmarked-contents visually-hidden">
-            <span>Bookmarked Cafes page coming soon!</span>
+            <ul class="bookmarked-cafe-list">
+            {% for cafe in bookmarked %}
+                <li class="bookmarked-cafe-item-wrapper">
+                    <a href="{% url 'cafedetail' cafe.pk %}">
+                        <img src="{{cafe.studycafe.img}}" alt="{{cafe.studycafe.name}}">
+                        <ul class="bookmarked-cafe-item-desc">
+                            <li>{{cafe.studycafe.name}}</li>
+                            <li>{{cafe.studycafe.address}}</li>
+                        </ul>
+                    </a>
+                </li>
+            {% if forloop.last %}
+                <li class="bookmarked-cafe-item-wrapper">
+                    <a href="{% url 'cafelist' %}">
+                        <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png"  alt="Link to browse cafes">
+                        <ul class="bookmarked-cafe-item-desc">
+                            <li>Browse Cafes</li>
+                            <li>Click here to add more cafes to your bookmark</li>
+                        </ul>
+                    </a>
+                </li>
+            {% endif %}    
+            {% empty %}
+                <li class="bookmarked-cafe-item-wrapper">
+                    <a href="{% url 'cafelist' %}">
+                        <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png"  alt="Link to browse cafes">
+                        <ul class="bookmarked-cafe-item-desc">
+                            <li>Browse Cafes</li>
+                            <li>Click here to add cafes to your bookmark</li>
+                        </ul>
+                    </a>
+                </li>
+            {% endfor%}
+            </ul>
         </article>
     </section>
     <section class="pu-accounts-wrapper">

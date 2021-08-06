@@ -1,5 +1,6 @@
 # Standard Library Imports
 from datetime import datetime, time
+import os
 from os import sched_get_priority_max
 import requests, random, string
 
@@ -14,11 +15,11 @@ from django.db.models import Q
 # Third-Party App Imports
 import boto3
 from boto3.session import Session
-from requests.api import get
+from urllib.parse import urlparse
 
 # Imports from Apps
 from config.settings import AWS_ACCESS_KEY_ID, AWS_S3_REGION_NAME, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, KAKAO_REST_API_KEY, KAKAO_SECRET_KEY,  KAKAO_APP_ADMIN_KEY, KAKAO_REDIRECT_URI, KAKAO_LOGOUT_REDIRECT_URI
-from studycafe.models import  PersonalUser, BusinessUser, StudyCafe,CafeImage, Date, HourTime, Seats,  Reservations, Review
+from studycafe.models import  PersonalUser, BusinessUser, StudyCafe,CafeImage, Date, HourTime, Seats,  Reservations, Review, BookmarkedCafe
 
 
 ERROR_MSG = {
@@ -31,6 +32,17 @@ ERROR_MSG = {
 SUCCESS_MSG = {
     'PROFILE_UPDATED': 'Profile updated successfully.',
 }
+
+# S3 USING BOTO3
+session = Session(
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name=AWS_S3_REGION_NAME,
+        )
+s3 = session.resource('s3')
+now = datetime.now().strftime("%Y%H%M%S")
+s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
+
 def index(request):
     cafes = StudyCafe.objects.all()
     # print(cafes)
@@ -201,8 +213,29 @@ def kakao_callback(request):
     elif (len(returning_user) == 0):
 
         target_nickname = kakao_user['properties']['nickname']
-        target_email = kakao_user['kakao_account']['email']
+        target_email = kakao_user['kakao_account']['email']        
 
+        # SAVE PROFILE IMAGE FROM KAKAO PROFILE RESPONSE
+        target_image_url = kakao_user['properties']['thumbnail_image']
+        response = requests.get(target_image_url)
+        
+        if response.status_code == 200:
+            img_data = response.content
+            url_parser = urlparse(target_image_url)
+            file_name = os.path.basename(url_parser.path)
+
+            with open(file_name, 'wb') as new_file:
+                new_file.write(img_data)
+            
+            data = open(file_name, 'rb')
+            s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+                Key=now+file_name,
+                Body=data
+            )
+            data.close()
+            new_file.close()
+            os.remove(file_name)
+    
     # CREATE USER & PERSONAL USER INSTANCES
         user = User.objects.create_user(
             username=f"kakao{target_id}",
@@ -214,6 +247,7 @@ def kakao_callback(request):
             name=target_nickname,
             email_authenticated=True,
             unique_id=target_id,
+            avatar=s3_url+now+file_name,
         )
         user.set_unusable_password()
         user.save()
@@ -241,7 +275,8 @@ class PersonalUserDetailView(generic.DeleteView) :
 
     def get(self, request, *args, **kwargs) :
         puser = PersonalUser.objects.get(user=request.user)
-        context = {'puser': puser}
+        bookmarked = puser.bookmarked_cafe.all()
+        context = {'puser': puser, 'bookmarked': bookmarked}
         return render(request, 'PUprofile.html', context)
 
     def post(self, request, *args, **kwargs) :
@@ -258,14 +293,33 @@ def personal_profile_edit(request, username):
         user_email = request.POST['profile-email']
         user = User.objects.filter(username=username)
         
-        PersonalUser.objects.filter(user=request.user).update(
-            name=user_name,
-            email=user_email,
-        )
-        user.update(
-            username=user_username,
-            email=user_email,
-        )
+
+        file = request.FILES.get('profile-image')
+        if file:
+            s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+                Key=now+file.name,
+                Body=file
+            )
+            new_avatar=s3_url+now+file.name
+
+            PersonalUser.objects.filter(user=request.user).update(
+                name=user_name,
+                email=user_email,
+                avatar=new_avatar,
+            )
+            user.update(
+                username=user_username,
+                email=user_email,
+            )
+        else: 
+            PersonalUser.objects.filter(user=request.user).update(
+                name=user_name,
+                email=user_email,
+            )
+            user.update(
+                username=user_username,
+                email=user_email,
+            )
         
         validation_context['profile']['updated'] = True
         validation_context['profile']['msg'] = SUCCESS_MSG['PROFILE_UPDATED']
@@ -361,9 +415,10 @@ class CafeUploadView(View) :
                 Key=now+j.name,
                 Body=j
             )
-        s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
         businessuser = BusinessUser.objects.get(user=request.user)
 
+
+        # for cafe features
         features_list = ['parking', 'drinks', 'wifi', 'printer', 'security']
         features_checked = self.request.POST.getlist('features')
         cafe_features = {
@@ -410,14 +465,13 @@ class CafeDetailView(generic.DetailView) :
         # puser = get_object_or_404(PersonalUser, user=user)
         # buser = BusinessUser.objects.get(user=user)
         # is_reserv = Reservations.objects.filter(studycafe=cafe, personal_user=puser)
+        is_bookmarked = False
+        if (request.user.personal_user in cafe.bookmark.users.all()):
+            is_bookmarked = True
 
-        context = {'cafe':cafe, 'reviews':reviews, 'cafe_img':cafe_img} #'is_reserv':is_reserv}
+        context = {'cafe':cafe, 'reviews':reviews, 'cafe_img':cafe_img, 'is_bookmarked':is_bookmarked}
 
-        return render(request, 'cafedetail.html', context)
-
-    def post(self, request, *args, **kwargs) :
-        return render(request, 'cafedetail.html', kwargs['pk'])
-
+        return render('cafedetail', context)
 
 class CafeEditView(generic.View) :
     model = StudyCafe
@@ -513,6 +567,8 @@ class ReservationView(generic.View) :
             )
     
         return redirect('cafedetail', kwargs['pk'])
+
+        
 class ReviewView(generic.View) :
 
     def post(self, request, *args, **kwargs) :
@@ -522,7 +578,7 @@ class ReviewView(generic.View) :
 
         Review.objects.create(
             studycafe = studycafe,
-            writer = user,
+            writer = request.user.personal_user,
             content= content
         )
         return redirect('cafedetail', kwargs['pk'])
@@ -665,3 +721,17 @@ def PwSearch(request):
             return render ("IdPwSearch.html", result_msg)   
 
     return(request, "IdPwSearch.html", result_msg)
+
+
+def bookmark(request, **kwargs):
+    cafe_pk = kwargs['cafe_pk']
+    target_cafe = StudyCafe.objects.filter(pk=cafe_pk).first()
+    bookmark = BookmarkedCafe.objects.filter(studycafe__pk=target_cafe.pk).first()
+
+    if request.user.personal_user in bookmark.users.all():
+        bookmark.users.remove(request.user.personal_user)
+        return redirect('cafedetail', cafe_pk)
+         
+    bookmark.users.add(request.user.personal_user)
+
+    return redirect('cafedetail', cafe_pk)

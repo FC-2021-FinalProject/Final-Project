@@ -32,6 +32,17 @@ ERROR_MSG = {
 SUCCESS_MSG = {
     'PROFILE_UPDATED': 'Profile updated successfully.',
 }
+
+# S3 USING BOTO3
+session = Session(
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name=AWS_S3_REGION_NAME,
+        )
+s3 = session.resource('s3')
+now = datetime.now().strftime("%Y%H%M%S")
+s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
+
 def index(request):
     cafes = StudyCafe.objects.all()
     # print(cafes)
@@ -202,22 +213,12 @@ def kakao_callback(request):
     elif (len(returning_user) == 0):
 
         target_nickname = kakao_user['properties']['nickname']
-        target_email = kakao_user['kakao_account']['email']
-        
-    # S3 USING BOTO3
-        session = Session(
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name=AWS_S3_REGION_NAME,
-        )
-        s3 = session.resource('s3')
-        now = datetime.now().strftime("%Y%H%M%S")
-        s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
+        target_email = kakao_user['kakao_account']['email']        
 
-    # SAVE PROFILE IMAGE FROM KAKAO PROFILE RESPONSE
+        # SAVE PROFILE IMAGE FROM KAKAO PROFILE RESPONSE
         target_image_url = kakao_user['properties']['thumbnail_image']
-        
         response = requests.get(target_image_url)
+        
         if response.status_code == 200:
             img_data = response.content
             url_parser = urlparse(target_image_url)
@@ -227,7 +228,7 @@ def kakao_callback(request):
                 new_file.write(img_data)
             
             data = open(file_name, 'rb')
-            img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+            s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
                 Key=now+file_name,
                 Body=data
             )
@@ -291,14 +292,34 @@ def personal_profile_edit(request, username):
         user_email = request.POST['profile-email']
         user = User.objects.filter(username=username)
         
-        PersonalUser.objects.filter(user=request.user).update(
-            name=user_name,
-            email=user_email,
-        )
-        user.update(
-            username=user_username,
-            email=user_email,
-        )
+
+        file = request.FILES.get('profile-image')
+        print(file)
+        if file:
+            s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
+                Key=now+file.name,
+                Body=file
+            )
+            new_avatar=s3_url+now+file.name
+
+            PersonalUser.objects.filter(user=request.user).update(
+                name=user_name,
+                email=user_email,
+                avatar=new_avatar,
+            )
+            user.update(
+                username=user_username,
+                email=user_email,
+            )
+        else: 
+            PersonalUser.objects.filter(user=request.user).update(
+                name=user_name,
+                email=user_email,
+            )
+            user.update(
+                username=user_username,
+                email=user_email,
+            )
         
         validation_context['profile']['updated'] = True
         validation_context['profile']['msg'] = SUCCESS_MSG['PROFILE_UPDATED']
@@ -384,20 +405,12 @@ class CafeUploadView(View) :
         file = request.FILES.getlist('image')
         m = [i for i in range(len(file))]
         print(m)
-        session = Session(
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name=AWS_S3_REGION_NAME,
-        )
-        s3 = session.resource('s3')
-        now = datetime.now().strftime('%Y%H%M%S')
         for j in file :
             print(j)
             img_object = s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(
                 Key=now+j.name,
                 Body=j.name
             )
-        s3_url = 'https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/'
         businessuser = BusinessUser.objects.get(user=request.user)
         q = [s3_url+now+str(i) for i in file]
         print(q)

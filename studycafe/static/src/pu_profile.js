@@ -4,19 +4,18 @@ document.addEventListener("DOMContentLoaded", () => {
 //profile edit page -- submit button toggling
 
   //FORM ITEMS
+  $profileInput = document.querySelector('#profile-image')
   $nameInput = document.querySelector('#profile-name')
   $usernameInput = document.querySelector('#profile-username')
   $emailInput = document.querySelector('#profile-email')
   $submitButton = document.querySelector('.profile-edit-submit')
 
+  $profileInput.addEventListener('change', toggleSubmit);
   $nameInput.addEventListener('change', toggleSubmit);
   $usernameInput.addEventListener('change', toggleSubmit);
-  $emailInput.addEventListener('change', () => {
-    toggleSubmit()
-  });
+  $emailInput.addEventListener('change', toggleSubmit);
   function toggleSubmit(){
     $submitButton.classList.remove('disabled');
-    $submitButton.disabled = false;
   };
 
 // profile page tab event
@@ -36,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //EVENTS
   $editProfileTab.addEventListener('click', () => {
     if ($editProfileTab.classList.contains('selected')) {
-      console.log("already selected!")
     } else { 
         $editProfileTab.classList.add('selected')
         $editProfile.classList.remove('visually-hidden')
@@ -56,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $changePasswordTab.addEventListener('click', () => {
     if ($changePasswordTab.classList.contains('selected')) {
-      console.log("already selected!")
     } else { 
         $changePasswordTab.classList.add('selected')
         $changePassword.classList.remove('visually-hidden')
@@ -76,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $reservationsTab.addEventListener('click', () => {
     if ($reservationsTab.classList.contains('selected')) {
-      console.log("already selected!")
     } else { 
         $reservationsTab.classList.add('selected')
         $reservations.classList.remove('visually-hidden')
@@ -96,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $bookmarkedCafesTab.addEventListener('click', () => {
     if ($bookmarkedCafesTab.classList.contains('selected')) {
-      console.log("already selected!")
     } else { 
         $bookmarkedCafesTab.classList.add('selected')
         $bookmarkedCafes.classList.remove('visually-hidden')

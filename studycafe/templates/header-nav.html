@@ -22,9 +22,9 @@
             <button id="mobile-menu">
                 <i class="fas fa-bars"></i>
                 {% if user.personal_user.avatar %}
-                <img id="mobile-menu-profile-img" src="{{request.user.personal_user.avatar}}" alt="profile image">
+                <img class="profile-photo" id="mobile-menu-profile-img" src="{{request.user.personal_user.avatar}}" alt="profile image">
                 {% else %}
-                <img id="mobile-menu-profile-img" src="../static/images/defaultProfile.jpg" alt="profile image">
+                <img class="profile-photo" id="mobile-menu-profile-img" src="../static/images/defaultProfile.jpg" alt="profile image">
                 {% endif %}
             </button>
             <div class="header-nav-menu-container">
@@ -64,7 +64,7 @@
         <section class="mobile-menu">
             <button id="mobile-menu">
                 <i class="fas fa-bars"></i>
-                <img id="mobile-menu-profile-img" src="../static/images/defaultProfile.jpg" alt="profile image">
+                <img class="profile-photo" id="mobile-menu-profile-img" src="../static/images/defaultProfile.jpg" alt="profile image">
             </button>
             <div class="header-nav-menu-container">
                 <ul class="header-nav-menu-list">

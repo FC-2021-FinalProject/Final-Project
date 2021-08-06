@@ -462,18 +462,15 @@ class CafeDetailView(generic.DetailView) :
         cafe_img = CafeImage.objects.filter(cafe=cafe)
         reviews = Review.objects.filter(studycafe=cafe)
         user = User.objects.get(username=request.user)
-        # puser = get_object_or_404(PersonalUser, user=user)
-        buser = BusinessUser.objects.get(user=user)
 
+        is_bookmarked = False
         try  :
             puser = PersonalUser.objects.get(user=user)
             is_reserv = Reservations.objects.filter(studycafe=cafe, personal_user=puser)
+            if (request.user.personal_user in cafe.bookmark.users.all()):
+                is_bookmarked = True
         except :
-            buser = BusinessUser.objects.get(user=user)
-
-        is_bookmarked = False
-        # if (request.user.personal_user in cafe.bookmark.users.all()):
-        #     is_bookmarked = True
+            pass
 
         context = {'cafe':cafe, 'reviews':reviews, 'cafe_img':cafe_img, 'is_bookmarked':is_bookmarked}
 

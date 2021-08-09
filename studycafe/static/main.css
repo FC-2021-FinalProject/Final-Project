@@ -1100,32 +1100,46 @@ button{
 
 
 /* ----------------- cafeupload.html-------------------- */
-.cafeupload-form-container{
-    margin: 0 auto;
-    margin-top: 50px;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
-    border: 1px solid rgb(176, 176, 176);
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 600px;
-    box-shadow: 3px 3px 3px rgb(176, 176, 176);
+.cafeupload-page-body{
+    background-color: rgba(176,176, 176, .1);
+    margin: 0;
+    min-width: 100%;
+    height: 100%;
 }
-.cafeupload-page-wrapper h2{
-    margin: 20px 0;
+.cafeupload-form-container h3{
+    margin: 0 auto;
     font-size: medium;
     font-weight: bold;
     text-align: center;
+    padding: 10px;
 }
 .cafeupload-form{
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+}
+.cafe-info-input-wrapper{
+    box-sizing: border-box;
+    padding: 20px 40px;
+    margin: 10px 0;
+    width: 70%;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid rgb(176, 176, 176);
+    display: flex;
+    flex-direction: column;
+} 
+.cafe-info-input-wrapper > label{
+    font-weight: bold;
+}
+.cafe-info-input-wrapper input{
+    outline: none;
+    border: none;
+    border-bottom: 1px solid rgb(176,176,176);
+    padding: 15px 0 10px 0;
+}
+fieldset > legend {
+    padding-bottom: 15px;
 }
 .cafeupload-submit{
     background: #d80a63;
@@ -1146,4 +1160,3 @@ button{
     background: #d80a63;
     opacity: .7;
 }
-

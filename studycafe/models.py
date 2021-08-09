@@ -18,7 +18,7 @@ class PersonalUser(models.Model):
     email = models.CharField(max_length=64)
     email_authenticated = models.BooleanField(default=False)
     unique_id = models.IntegerField(null=True, blank=True)
-    avatar = models.TextField()
+    avatar = models.TextField(default="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/defaultProfileImage.jpg")
     
     def __str__(self):
         return self.name

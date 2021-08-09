@@ -48,7 +48,7 @@ button{
     border: 0;
     background: transparent;
 }
-/* COMMON */
+/* ----------------- COMMON ----------------- */
 .visually-hidden{
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
@@ -150,7 +150,6 @@ button{
     height: 100%;
     display: none;
 }
-
 .header-nav-menu-container{
     box-sizing: border-box;
     display: none;
@@ -199,6 +198,8 @@ button{
     display: block;
     z-index: 9999;
 }
+
+
 /* ----------------- index.html -------------------- */
 .visual-wrapper{
     margin: 0 auto;
@@ -264,6 +265,8 @@ button{
 .cafe-info-details li:hover{
     background-color: transparent;
 }
+
+
 /* ------- Login, Personal User and Business User Common------- */
 .auth-page-wrapper{
     position: relative;
@@ -346,32 +349,8 @@ button{
     background: #d80a63;
     opacity: .7;
 }
-/* label in lieu of placeholder for auth forms */
 
-/* ----------------- login.html -------------------- */
-#login-name{
-    border-radius: 8px 8px 0 0;
-    border-bottom: transparent;
-
-}
-#login-password{
-    border-radius: 0 0 8px 8px;
-}
-
-/* ----------------- personal_signup.html -------------------- */
-/* ----------------- business_signup.html -------------------- */
-.pu-signup-inputs,
-.bu-signup-inputs{
-    border-bottom: none;
-}
-#signup-name{
-    border-radius: 8px 8px 0 0 ;
-}
-#signup-password-check{
-    border-bottom: 1px solid rgb(176, 176, 176);
-    border-radius: 0 0 8px 8px;
-}
-/* ----------------- forgot id/pw link  -------------------- */
+/* FORGOT ID/PW LINKS */
 .html-wrapper{
     max-width: 930px;
     margin: 0 auto;
@@ -388,7 +367,8 @@ button{
     font-size: x-small;
     color: rgb(140, 140, 140);
 }
-/* ----------------- social logins-------------------- */
+
+/* SOCIAL LOGIN LINKS*/
 .social-login-container{
     display: flex;
     flex-direction: column;
@@ -419,6 +399,32 @@ button{
     left: 20px;
 }
 
+
+/* ----------------- login.html -------------------- */
+#login-name{
+    border-radius: 8px 8px 0 0;
+    border-bottom: transparent;
+}
+#login-password{
+    border-radius: 0 0 8px 8px;
+}
+
+
+/* ----------------- personal_signup.html -------------------- */
+/* ----------------- business_signup.html -------------------- */
+.pu-signup-inputs,
+.bu-signup-inputs{
+    border-bottom: none;
+}
+#signup-name{
+    border-radius: 8px 8px 0 0 ;
+}
+#signup-password-check{
+    border-bottom: 1px solid rgb(176, 176, 176);
+    border-radius: 0 0 8px 8px;
+}
+
+
 /* ----------------- IdPwSearch.html-------------------- */
 .idpw-search-main-container{
     display: block;
@@ -432,7 +438,6 @@ button{
     flex-wrap: nowrap;
     margin: 20px 10px;
 }
-
 .search-list > li {
     display: block;
     padding: 5px 10px;
@@ -441,12 +446,10 @@ button{
     border:1px solid gray;
     opacity: 0.8;
 }
-
 .search-list > li.active {
     border:2px solid rgb(0, 0, 0);
     opacity: 1;
 }
-
 .idpw-search-body{
     flex-wrap: wrap;
     margin-left: 0px;
@@ -477,8 +480,6 @@ button{
     font-size: medium;
     margin-bottom: 10px;
 }
-
-
 .auth-labels{
     position: absolute;
     top: 15px;
@@ -513,8 +514,6 @@ button{
     margin-top: 15px;
     cursor: pointer;
 }
-
-
 
 
 /* ----------------- PUprofile.html-------------------- */
@@ -555,6 +554,7 @@ button{
     border-left: 1px solid rgb(176, 176, 176);
     padding: 20px 40px;
 }
+
 /* 1st tab: EDIT PROFILE  */
 .pu-profile-contents{
     display: flex;
@@ -562,7 +562,6 @@ button{
     align-items: center;
     padding: 25px 20px;
 }
-/* profile image div */
 .user-profile-info-wrapper{
     position: relative;
     width: 50%;
@@ -707,6 +706,8 @@ button{
     opacity: .7;
 }
 
+/* 3rd tab: RESERVATIONS */
+
 
 /* 4th tab: BOOKMARKED CAFES */
 .pu-bookmarked-contents{
@@ -774,7 +775,6 @@ button{
     padding-bottom: 5px;
 }
 
-
 /* BOTTOM LEFT: accounts information section */
 .pu-accounts-wrapper{
     position: absolute;
@@ -807,7 +807,6 @@ button{
     flex-wrap: wrap;
     padding: 20px 45px;
 }
-
 
 
 /* ----------------- BUprofile.html-------------------- */
@@ -849,7 +848,6 @@ button{
     padding: 20px 40px;
 }
 
-
 /* 1st tab: BUSINESS PROFILE  */
 .bu-profile-contents{
     display: flex;
@@ -857,7 +855,6 @@ button{
     align-items: center;
     padding: 25px 20px;
 }
-
 
 /* 2nd tab: MANAGE CAFE */
 .bu-manage-content{
@@ -925,7 +922,6 @@ button{
     padding-bottom: 5px;
 }
 
-
 /* BOTTOM LEFT: accounts information section */
 .bu-accounts-wrapper{
     position: absolute;
@@ -958,7 +954,16 @@ button{
 }
 
 
+/* ----------------- BUedit.html-------------------- */
+
+
+
+
+
+
+
 /* ----------------- cafedetail.html-------------------- */
+/* SECTION 1/2 _BASIC CONTAINER for cafe header info */
 .cafe-basics-container{
     width: 100%;
     display: flex;
@@ -976,13 +981,23 @@ button{
 .cafe-address span:nth-of-type(2){
     padding: 0 20px;
 }
-.cafedetail-information-wrapper{
-    display: flex;
+
+.share-save-wrapper a{
+    text-decoration: none;
+    color: black;
 }
 .fa-share,
 .fa-bookmark{
     color: black;
     padding: 10px;
+}
+.fa-bookmark.bookmarked{
+    color: rgb(176, 176, 176);
+}
+
+/* SECTION 2/2 _BASIC CONTAINER for cafe header info */
+.cafedetail-information-wrapper{
+    display: flex;
 }
 .cafedetail-navigation-wrapper{
     display: flex;
@@ -1013,7 +1028,7 @@ button{
 .cafe-detail-wrapper {
     /* height: auto; */
     /* height to be set to auto after styling */
-    height: 400px;
+    height: auto;
     padding: 20px 5px;
     display: flex;
     flex-direction: column;
@@ -1039,7 +1054,26 @@ button{
     height: 50px;
 }
 
-/* cafe reservation box */
+/* GALLERY WRAPPER */
+.cafe-images-wrapper{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.cafe-images{
+    width: 250px;
+
+}
+
+/* MAP/LOCATION WRAPPER */
+#map{
+    width: 500px;
+    height: 400px;
+}
+
+/* REVIEW WRAPPER */
+
+/* RESERVATION BOX */
 .cafe-booking-wrapper{    
     position: sticky;
     top: 0;
@@ -1062,19 +1096,54 @@ button{
 }
 
 
+/* ----------------- cafeedit.html-------------------- */
+
 
 /* ----------------- cafeupload.html-------------------- */
-.page-wrapper.cafeupload-page-wrapper{
+.cafeupload-form-container{
+    margin: 0 auto;
+    margin-top: 50px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border: 1px solid rgb(176, 176, 176);
+    border-radius: 10px;
     padding: 20px;
-}
-.cafeupload-form-wrapper{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 600px;
+    box-shadow: 3px 3px 3px rgb(176, 176, 176);
 }
-.share-save-wrapper a{
+.cafeupload-page-wrapper h2{
+    margin: 20px 0;
+    font-size: medium;
+    font-weight: bold;
+    text-align: center;
+}
+.cafeupload-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.cafeupload-submit{
+    background: #d80a63;
+    box-sizing: border-box;
     text-decoration: none;
-    color: black;
+    color: #fff;
+    font-size: small;
+    border-radius: 5px;
+    padding: 10px 5px;
+    width: 50%;
+    height: 50px;
+    text-align: center;
+    margin-top: 15px;
+    cursor: pointer;
 }
-.fa-bookmark.bookmarked{
-    color: rgb(176, 176, 176);
+.cafeupload-submit.disabled{
+    pointer-events: none;
+    background: #d80a63;
+    opacity: .7;
 }
+

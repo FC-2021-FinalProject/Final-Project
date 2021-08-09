@@ -94,7 +94,7 @@
             {% for cafe in bookmarked %}
                 <li class="bookmarked-cafe-item-wrapper">
                     <a href="{% url 'cafedetail' cafe.pk %}">
-                        <img src="{{cafe.studycafe.img}}" alt="{{cafe.studycafe.name}}">
+                        <img src="{{cafe.studycafe.representative_img}}" alt="{{cafe.studycafe.name}}">
                         <ul class="bookmarked-cafe-item-desc">
                             <li>{{cafe.studycafe.name}}</li>
                             <li>{{cafe.studycafe.address}}</li>

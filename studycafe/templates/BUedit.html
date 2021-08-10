@@ -28,7 +28,7 @@
             {% for cafe in buser.studycafe.all %}
                 <li class="owner-cafe-item-wrapper">
                     <a href="{% url 'cafedetail' cafe.pk %}">
-                        <img src="{{cafe.img}}" alt="{{cafe.name}}" width="250px;">
+                        <img src="{{cafe.img}}" alt="{{cafe.name}}">
                         <ul class="owner-cafe-item-desc">
                             <li>{{cafe.name}}</li>
                             <li>{{cafe.address}}</li>

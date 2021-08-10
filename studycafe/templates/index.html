@@ -14,7 +14,7 @@
             {% for cafelist in cafelists %}
             <li class="cafe-item-wrapper">
                 <a href="{% url 'cafedetail' cafelist.pk %}">
-                <img src="{{cafelist.img}}" width="250px;" alt="{{cafelist.name}}">
+                <img src="{{cafelist.representative_img}}" alt="{{cafelist.name}}">
                 <ul class="cafe-info-details">
                     <li>{{cafelist.name}}</li>
                 </ul>

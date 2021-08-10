@@ -1,56 +1,67 @@
 {% extends 'base.html' %}
 {% block head %}
-<title>Upload Cafe | Dobby is Park</title>
+<title>Register Cafe | Dobby is Park</title>
 {% endblock head %}
 {% block content %}
 {% include 'header-nav.html' %}
-<main class="page-wrapper cafeupload-page-wrapper">
-    <h2>Cafe Upload Page</h2>
-    <form class="cafeupload-form-wrapper" action="{% url 'cafeupload' user.pk %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <label for="name">Operating name</label>
-        <input type="text" name="name" placeholder="카페 이름">
+<section class="cafeupload-page-body">
+    <section class="page-wrapper cafeupload-page-wrapper">
+        <h2 class="visually-hidden">Cafe Upload Page</h2>
+        <main class="cafeupload-form-container">
+            <h3>Cafe Registration Form</h3>
+            <form class="cafeupload-form" action="{% url 'cafeupload' user.pk %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="cafe-info-input-wrapper">
+                    <label for="name">Operating name:</label>
+                    <input type="text" name="name" placeholder="카페 이름">
+                </div>
+                <div class="cafe-info-input-wrapper">
+                    <label for="address">Cafe address:</label>
+                    <input type="text" name="address" placeholder="카페 주소">
+                </div>
+                <div class="cafe-info-input-wrapper">
+                    <label for="price_per_hour">Price per hour:</label>
+                    <input type="text" name="price_per_hour" placeholder="시간 당 가격">
+                </div>
+                <div class="cafe-info-input-wrapper">
+                    <label for="business_hour_start">Open time:</label>
+                    <input type="text" name="business_hour_start" placeholder="영업 오픈 시간">
+                </div>
+                <div class="cafe-info-input-wrapper">
+                    <label for="business_hour_end">Closing time:</label>
+                    <input type="text" name="business_hour_end" placeholder="영업 마감 시간">
+                </div>
+                <div class="cafe-info-input-wrapper">
+                    <fieldset>
+                        <legend>Services provided on premise(Check all that apply): </legend>
+                        
+                        <input type="checkbox" id="parking" name="features" value="parking">
+                        <label class="features-label" for="parking">Parking available</label>
 
-        <label for="address">Cafe address</label>
-        <input type="text" name="address" placeholder="카페 주소">
+                        <input type="checkbox" id="drinks" name="features" value="drinks">
+                        <label class="features-label" for="drinks">Drinks included</label>
 
-        <label for="introduce">Intro of your cafe</label>
-        <input type="text" name="introduce" placeholder="카페 소개">
+                        <input type="checkbox" id="wifi" name="features" value="wifi">
+                        <label class="features-label" for="wifi">Wifi on premise</label>
 
-        <label for="price_per_hour">Price per hour</label>
-        <input type="text" name="price_per_hour" placeholder="시간 당 가격">
-        <label for="business_hour_start">Open time</label>
+                        <input type="checkbox" id="printer" name="features" value="printer">
+                        <label class="features-label" for="printer">Printer available on premise</label>
 
-        <input type="text" name="business_hour_start" placeholder="영업 오픈 시간">
-
-        <label for="business_hour_end">Closing time</label>
-        <input type="text" name="business_hour_end" placeholder="영업 마감 시간">
-  
-        <fieldset>
-            <legend>Services provided on premise(Check all that apply)</legend>
-            
-            <input type="checkbox" id="parking" name="features" value="parking">
-            <label for="parking">Parking available</label>
-
-            <input type="checkbox" id="drinks" name="features" value="drinks">
-            <label for="drinks">Drinks included</label>
-
-            <input type="checkbox" id="wifi" name="features" value="wifi">
-            <label for="wifi">Wifi on premise</label>
-
-            <input type="checkbox" id="printer" name="features" value="printer">
-            <label for="printer">Printer available on premise</label>
-
-            <input type="checkbox" id="security" name="features" value="security">
-            <label for="security">Surveilance security</label>
-
-        </fieldset>
-        <label for="image">Cafe 대표 이미지</label>
-        <input type="file" name="repre_image" multiple>
-
-        <label for="image">Cafe images</label>
-        <input type="file" name="image" multiple>
-        <button type="submit">Register my Study Cafe</button>
-    </form>
-</main>
+                        <input type="checkbox" id="security" name="features" value="security">
+                        <label class="features-label" for="security">Surveilance security</label>
+                    </fieldset>
+                </div>
+                <div class="cafe-info-input-wrapper">
+                    <label class="image-label" for="repre_image">Cafe 대표 이미지</label>
+                    <input class="visually-hidden" type="file" id="repre_image" name="repre_image" multiple>
+                </div>
+                <div class="cafe-info-input-wrapper">
+                    <label class="image-label" for="image">Cafe images</label>
+                    <input class="visually-hidden" type="file" id="image" name="image" multiple>
+                </div>
+                <button class="cafeupload-submit disabled" type="submit">Register my Study Cafe</button>
+            </form>
+        </main>
+    </section>
+</section>
 {% endblock content %}

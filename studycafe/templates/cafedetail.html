@@ -3,7 +3,7 @@
 <title>Cafe Details | Dobby is Park</title>
 {% load static %}
 <link rel="stylesheet" href="{% static 'calendar.css' %}">
-<script defer type="text/javascript" src="/static/calendar.js"></script>
+<script defer type="text/javascript" src="../static/src/calendar.js"></script>
 {% endblock head %}
 {% block content %}
 {% include 'header-nav.html' %}
@@ -15,14 +15,13 @@
             <h3>{{cafe.name}}</h3>
             <address class="cafe-address">
                 <span>{{cafe.address}}</span>
-                <span>phone number: </span>
             </address>
         </article>
         <article class="share-save-wrapper">
-            {% if user.personal_user %}
             <a href="#">
                 <i class="fas fa-share-alt fa-lg"></i>
             </a>
+            {% if request.user.personal_user %}
             <a href="{% url 'bookmark' cafe.pk %}">
                 {% if is_bookmarked %}
                 <i class="fas fa-bookmark fa-lg bookmarked"></i>
@@ -94,16 +93,17 @@
 
                 <article class="cafe-detail-wrapper gallery-wrapper">
                     <h3>내부 모습</h3>
-                    <!-- 사진 여러장 받도록 모델 수정/ 순회해서 여러 사진 풀어주기 -->
+                    <article class="cafe-images-wrapper">
                     {%for i in cafe_img%}
-                    <img src="{{i.img}}" alt="{{i.name}}" width="250px;">
+                        <img class="cafe-images" src="{{i.img}}" alt="{{i.name}}">
                     {% endfor %}
+                    </article>
                 </article>
 
                 <article class="cafe-detail-wrapper location-wrapper">
                     <h3>위치</h3>
                     <p>Google map of study cafe location to be inserted</p>
-                    <div id="map" style="width:500px;height:400px;"></div> 
+                    <div id="map"></div> 
                 </article>
 
                 <article class="cafe-detail-wrapper review-wrapper">
@@ -111,11 +111,13 @@
                     {% for review in reviews %}
                     <div class="user-review-wrapper">
                         <!-- Need to check one s3 for personal user profile picture is set up -->
-                            <div> {{review.write.avat}} </div>
+                            <div> {{review.write.avatar}} </div>
                             <div> {{review.writer.name}} </div>
                             <div> {{review.created_at}} </div>
                             <div> {{review.content}} </div>
                     </div>
+                    {% empty %}
+                    <div>Be the first to write a review!</div>
                     {% endfor %}
                     <div>
                         {% if is_reserv %}
@@ -140,7 +142,6 @@
             <form class="booking-form-wrapper" action="{% url 'reservation' cafe.pk %}" method="POST">
                 {% csrf_token %}
                 <div class="date-picker">
-
                     <input class="date-picker-selector" type="text" name="date" placeholder="Select date">
                     <div class="calendar"></div>
                 </div>

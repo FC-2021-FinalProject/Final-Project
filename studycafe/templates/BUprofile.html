@@ -63,7 +63,28 @@
     <section class="bu-reviews-wrapper">
         <h3 class="bu-page-headers bu-tab-option bu-reviews-header">Reviews/Feedback</h3>
         <article class="bu-page-contents bu-reviews-content visually-hidden">
-            <span>A page just for your cafe reviews is coming soon!</span>
+        {% for review in target_reviews %}
+            <div class="review-per-cafe-wrapper">
+            {% for detail in review %}
+            {% if forloop.first %}
+            <ul>{{detail.studycafe}}</ul>
+            {% endif%}
+                <li class="review-contents">
+                    <span>{{detail.writer}}</span> 
+                    wrote
+                    <span>"{{detail.content}}"</span>
+                    on 
+                    <span>{{detail.created_at}}</span>
+                </li>
+            {% endfor %}
+            </div>
+        {% endfor %}
+        {% for cafe in no_reviews %}
+            <div class="review-per-cafe-wrapper">
+                <ul>{{cafe.name}}</ul>
+                <li>There are no reviews for this cafe.</li>
+            </div>
+        {% endfor %}
         </article>
     </section>
     <section class="bu-accounts-wrapper">

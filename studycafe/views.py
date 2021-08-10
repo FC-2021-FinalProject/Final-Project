@@ -358,7 +358,18 @@ class BusinessUserDetailView(generic.DetailView) :
 
     def get(self, request, *args, **kwargs) :
         buser = BusinessUser.objects.get(user=request.user)
-        context = {'buser':buser}
+        studycafes = StudyCafe.objects.filter(businessuser=buser)
+
+        target_reviews=[]
+        no_reviews=[]
+        for studycafe in studycafes:
+            reviews = Review.objects.filter(studycafe=studycafe)
+            if (len(reviews)>0):
+                target_reviews.append(reviews)
+            else:
+                no_reviews.append(studycafe)
+
+        context = {'buser':buser, 'studycafes':studycafes,'target_reviews':target_reviews, 'no_reviews':no_reviews}
         return render(request, 'BUprofile.html', context)
 
     def post(self, request, *args, **kwargs) :

@@ -48,7 +48,7 @@ class StudyCafe(models.Model) :
     price_per_hour = models.PositiveIntegerField()
     business_hour_start = models.CharField(max_length=32)
     business_hour_end = models.CharField(max_length=32)
-    representative_img = models.TextField()
+    representative_img = models.TextField(default="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/defaultProfileImage.jpg")
     
     parking = models.BooleanField(default=False)
     drinks = models.BooleanField(default=False)
@@ -62,7 +62,7 @@ class StudyCafe(models.Model) :
         
 class CafeImage(models.Model) :
     cafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='cafe_image')
-    img = models.TextField()
+    img = models.TextField(default="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/defaultProfileImage.jpg")
 
 class Date(models.Model): 
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='date', null=True, blank=True)
@@ -101,7 +101,7 @@ class Review(models.Model):
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='review')
     writer = models.ForeignKey(PersonalUser, on_delete=models.SET_NULL, related_name='writer', null=True, blank=True)
     content = models.TextField()
-    created_at = models.DateField(auto_now_add=True)
+    # created_at = models.DateField(auto_now_add=True)
 
 
 class BookmarkedCafe(models.Model):

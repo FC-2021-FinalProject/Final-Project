@@ -277,8 +277,9 @@ class PersonalUserDetailView(generic.DeleteView) :
 
     def get(self, request, *args, **kwargs) :
         puser = PersonalUser.objects.get(user=request.user)
+        reserv_user = Reservations.objects.filter(personal_user=puser)
         bookmarked = puser.bookmarked_cafe.all()
-        context = {'puser': puser, 'bookmarked': bookmarked}
+        context = {'puser': puser, 'bookmarked': bookmarked, 'reserv':reserv_user}
         return render(request, 'PUprofile.html', context)
 
     def post(self, request, *args, **kwargs) :

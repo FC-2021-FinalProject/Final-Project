@@ -84,7 +84,15 @@
     <section class="pu-reservations-wrapper">
         <h3 class="pu-page-headers pu-tab-option pu-reservations-header">Reservations</h3>
         <article class="pu-page-contents pu-reservations-contents visually-hidden">
-            <span>Reservations page coming soon!</sp>
+            <span>My reservation!</span><br>
+                {% for i in reserv %}
+                유저이름 : {{i.personal_user}}
+                카페 이름 : {{i.studycafe}}
+                날짜 : {{i.date.content}}
+                시작시간 : {{i.hours.start_time}}시
+                종료시간 : {{i.hours.end_time}}시
+                좌석 : {{i.seat}}
+                {%endfor%}
         </article>
     </section>
     <section class="pu-bookmarked-wrapper">

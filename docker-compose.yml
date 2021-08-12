@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+  dev:
+    container_name: dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    command: sh -c "python manage.py runserver 0:9000"
+    volumes:
+      - .:/django/
+    ports:
+      - "9000:9000"
+  nginx:
+    image: nginx:latest
+    container_name: nginx_production
+    ports:
+      - "80:80"
+    volumes:
+      - .:/django
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./static:/static
+    depends_on:
+      - prod
+
+  prod:
+    container_name: prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    command: sh -c "python manage.py runserver 0:8000"
+    volumes:
+      - .:/django/
+    ports:
+      - "8000:8000"

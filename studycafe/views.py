@@ -509,7 +509,7 @@ class CafeEditView(generic.View) :
 
 
 def cafedelete(request, cafe_pk) :
-    StudyCafe.objects.filter(is_deleted=False).update(
+    StudyCafe.objects.filter(pk=cafe_pk).update(
         is_deleted=True
     )
     return redirect('BUprofile', cafe_pk)

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block head %}
-<title>Profile | Dobby is Park</title>
+<title>프로필페이지 | Dobby is Park</title>
 <!-- javascript link -->
 <script defer src="../static/src/pu_profile.js"></script>
 {% endblock head%}
@@ -8,9 +8,9 @@
 {% include 'header-nav.html' %}
 
 <main class="page-wrapper pu-mypage-container">
-    <h2 class="visually-hidden">Personal User Profile Page for {{user.personal_user.name}}</h2>
+    <h2 class="visually-hidden">{{user.personal_user.name}}의 프로필 페이지</h2>
     <section class="pu-profile-wrapper">
-        <h3 class="pu-page-headers pu-tab-option pu-profile-header selected">Edit Profile<h3>
+        <h3 class="pu-page-headers pu-tab-option pu-profile-header selected">프로필 편집<h3>
         <article class="pu-page-contents pu-profile-contents ">
             <div class="user-profile-info-wrapper ">
                 <span>{{user.username}}</span>
@@ -20,26 +20,26 @@
             </div>
             <form class="user-profile-edit-form" action="{% url 'personal_profile_edit' user.username %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="edit-control">
+                <div class="pu-edit-control">
                     <label for="profile-image">
-                        Change Profile Photo
+                        프로필 사진 바꾸기
                     </label>
                     <input class="visually-hidden" type="file" id="profile-image" name="profile-image">
                 </div>
-                <div class="edit-control">
-                    <label for="profile-name">Name</label>
+                <div class="pu-edit-control">
+                    <label for="profile-name">이름</label>
                     <input type="text" id="profile-name" name="profile-name" placeholder="Name" value={{request.user.personal_user.name}}>
                 </div>
-                <div class="edit-control">
-                    <label for="profile-username">Username</label>
+                <div class="pu-edit-control">
+                    <label for="profile-username">사용자 이름</label>
                     <input type="text" id="profile-username" name="profile-username" placeholder="Username" value={{user.username}}>
                 </div>
-                <div class="edit-control">
-                    <label for="profile-email">Email</label>
+                <div class="pu-edit-control">
+                    <label for="profile-email">이메일</label>
                     <input type="email" id="profile-email" name="profile-email" placeholder="Email" value={{user.email}}>
                 </div>
-                <div class="edit-control">
-                    <button class="profile-edit-submit disabled" type="submit">Edit Profile</button>
+                <div class="pu-edit-control">
+                    <button class="pu-edit-submit disabled" type="submit">제출</button>
                 </div>
             </form>
             <div class="status-msg">
@@ -50,7 +50,7 @@
         </article>
     </section>
     <section class="pu-password-wrapper">
-        <h3 class="pu-page-headers pu-tab-option pu-password-header">Change Password<h3>
+        <h3 class="pu-page-headers pu-tab-option pu-password-header">비밀번호 변경<h3>
         <article class="pu-page-contents pu-password-contents visually-hidden">
             <div class="user-profile-info-wrapper password-tab">
                 <span>{{user.username}}</span>
@@ -58,16 +58,12 @@
             </div>
             <form class="user-password-edit-form" action="{% url 'personal_password_edit' user.username %}" method="POST">
                 {% csrf_token %}
-                <div class="edit-control">
-                    <label for="profile-old-password">Old Password</label>
-                    <input type="password" id="profile-old-password" name="profile-old-password">
-                </div>
-                <div class="edit-control">
-                    <label for="profile-password">New Password</label>
+                <div class="pu-edit-control">
+                    <label for="profile-password">새 비밀번호</label>
                     <input type="password" id="profile-password" name="profile-password">
                 </div>
-                <div class="edit-control">
-                    <label for="profile-password-check">Confirm Password</label>
+                <div class="pu-edit-control">
+                    <label for="profile-password-check">새 비밀번호 확인</label>
                     <input type="password" id="profile-password-check" name="profile-password-check">
                 </div>
                 <small class="error-msg">
@@ -75,28 +71,44 @@
                     {{ error.msg }}
                     {% endif %}
                 </small>
-                <div class="edit-control">
-                    <button class="profile-edit-submit" type="submit">Change Password</button>
+                <div class="pu-edit-control">
+                    <button class="pu-edit-submit" type="submit">비밀번호 변경</button>
                 </div>
             </form>
         </article>
     </section>
     <section class="pu-reservations-wrapper">
-        <h3 class="pu-page-headers pu-tab-option pu-reservations-header">Reservations</h3>
+        <h3 class="pu-page-headers pu-tab-option pu-reservations-header">예약 확인</h3>
         <article class="pu-page-contents pu-reservations-contents visually-hidden">
-            <span>My reservation!</span><br>
+            <ul class="reservations-list">
                 {% for i in reserv %}
-                유저이름 : {{i.personal_user}}
-                카페 이름 : {{i.studycafe}}
-                날짜 : {{i.date.content}}
-                시작시간 : {{i.hours.start_time}}시
-                종료시간 : {{i.hours.end_time}}시
-                좌석 : {{i.seat}}
+                <li class="reservation-item-wrapper">
+                    <img src="{{i.studycafe.representative_img}}" alt="Image of {{i.studycafe.name}}">
+                    <ul class="reservation-item-detail">
+                        <li>카페 이름 : {{i.studycafe}}</li>
+                        <li>날짜 : {{i.date.content}}</li>
+                        <li>시작시간 : {{i.hours.start_time}}시</li>
+                        <li>종료시간 : {{i.hours.end_time}}시</li>
+                        <li>좌석 : {{i.seat}}</li>
+                    </ul>
+                </li>
+                {% if forloop.last %}
+                <li class="reservation-item-wrapper">
+                    <a href="{% url 'cafelist' %}">
+                        <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png"  alt="Link to browse cafes">
+                        <ul class="reservation-item-detail">
+                            <li>카페 둘러보기</li>
+                            <li>더 많은 카페 둘러보려면 여기를 클릭하세요!</li>
+                        </ul>
+                    </a>
+                </li>
+            {% endif %}    
                 {%endfor%}
+            </ul>
         </article>
     </section>
     <section class="pu-bookmarked-wrapper">
-        <h3 class="pu-page-headers pu-tab-option pu-bookmarked-header">Bookmarked Cafes</h3>
+        <h3 class="pu-page-headers pu-tab-option pu-bookmarked-header">저장한 카페</h3>
         <article class="pu-page-contents pu-bookmarked-contents visually-hidden">
             <ul class="bookmarked-cafe-list">
             {% for cafe in bookmarked %}
@@ -114,8 +126,8 @@
                     <a href="{% url 'cafelist' %}">
                         <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png"  alt="Link to browse cafes">
                         <ul class="bookmarked-cafe-item-desc">
-                            <li>Browse Cafes</li>
-                            <li>Click here to add more cafes to your bookmark</li>
+                            <li>카페 둘러보기</li>
+                            <li>더 많은 카페 둘러보려면 여기를 클릭하세요!</li>
                         </ul>
                     </a>
                 </li>
@@ -125,8 +137,8 @@
                     <a href="{% url 'cafelist' %}">
                         <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png"  alt="Link to browse cafes">
                         <ul class="bookmarked-cafe-item-desc">
-                            <li>Browse Cafes</li>
-                            <li>Click here to add cafes to your bookmark</li>
+                            <li>카페 둘러보기</li>
+                            <li>더 많은 카페 둘러보려면 여기를 클릭하세요!</li>
                         </ul>
                     </a>
                 </li>
@@ -135,9 +147,9 @@
         </article>
     </section>
     <section class="pu-accounts-wrapper">
-        <h3 class="pu-page-headers pu-accounts-header">Accounts Center</h3>
+        <h3 class="pu-page-headers pu-accounts-header">계정 센터</h3>
         <article class="pu-page-contents pu-accounts-contents">
-            <span>Control settings for your account can be accessed here.</span>
+            <span>프로필 설정을 관리하세요.</span>
         </article>
     </section>
 </section>

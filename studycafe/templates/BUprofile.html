@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block head %}
-<title>Business Profile | Dobby is Park</title>
+<title>비지니스 프로필 | Dobby is Park</title>
 <!-- javascript link -->
 <script defer src="../static/src/bu_profile.js"></script>
 {% endblock head%}
@@ -8,22 +8,34 @@
 {% include 'header-nav.html' %}
 
 <section class="page-wrapper bu-mypage-container">
-    <h2 class="visually-hidden">Business User My Page</h2>
+    <h2 class="visually-hidden">비지니스 프로필 페이지</h2>
     <section class="bu-profile-wrapper">
-        <h3 class="bu-page-headers bu-tab-option bu-profile-header selected">Business Profile</h3> 
+        <h3 class="bu-page-headers bu-tab-option bu-profile-header selected">프로필 편집</h3> 
         <article class="bu-page-contents bu-profile-content">
-            <h4>{{buser.name}}</h4>
-            <p>{{buser.email}}</p>
-            <p>{{buser.registration_number}}</p>
-
-            <form action="{% url 'BUedit' user.pk %}">
+            <div class="bu-profile-info-wrapper">
+                <span>{{buser.name}}</span>
+                <span class="bu-profile-page-image">
+                    <i class="fas fa-crown fa-lg "></i>
+                </span>
+            </div>
+            <form class="bu-profile-edit-form" action="{% url 'BUedit' user.pk %}" method="POST">
                 {% csrf_token %}
-                <button type="submit">수정하러 가기</button>
+                <div class="bu-edit-control">
+                    <label for="user_name">Username</label>
+                    <input type="text" id="user_name" name="user_name" value="{{buser.user}}">
+                </div>     
+                <div class="bu-edit-control">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" value="{{buser.user.email}}">
+                </div> 
+                <div class="pu-edit-control">
+                    <button class="bu-profile-edit-submit disabled" type="submit">프로필 수정하기</button>
+                </div>
             </form>
         </article>
     </section>
     <section class="bu-manage-wrapper">
-        <h3 class="bu-page-headers bu-tab-option bu-manage-header ">Manage Cafe</h3>
+        <h3 class="bu-page-headers bu-tab-option bu-manage-header ">카페 관리하기</h3>
         <article class="bu-page-contents bu-manage-content visually-hidden">
             <ul class="owner-cafe-list">
             {% for cafe in buser.studycafe.all %}
@@ -45,7 +57,7 @@
                 <li class="owner-cafe-item-wrapper">
                     <a href="{% url 'cafeupload' user.pk %}">
                         <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png" alt="Add another new cafe link image">
-                        <span class="owner-cafe-item-desc">Host another Cafe</span>
+                        <span class="owner-cafe-item-desc">카페 추가 등록하기</span>
                     </a>
                 </li>
             {% endif %}
@@ -53,7 +65,7 @@
                 <li class="owner-cafe-item-wrapper">
                     <a href="{% url 'cafeupload' user.pk %}">
                         <img src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/addCafeImage.png" alt="Add new cafe link image">
-                        <span class="owner-cafe-item-desc">Host your Cafe</span>
+                        <span class="owner-cafe-item-desc">내 카페 등록하기</span>
                     </a>
                 </li>
             {% endfor%}
@@ -61,7 +73,7 @@
         </article>
     </section>
     <section class="bu-reviews-wrapper">
-        <h3 class="bu-page-headers bu-tab-option bu-reviews-header">Reviews/Feedback</h3>
+        <h3 class="bu-page-headers bu-tab-option bu-reviews-header">내 카페 후기</h3>
         <article class="bu-page-contents bu-reviews-content visually-hidden">
         {% for review in target_reviews %}
             <div class="review-per-cafe-wrapper">
@@ -70,11 +82,9 @@
             <ul>{{detail.studycafe}}</ul>
             {% endif%}
                 <li class="review-contents">
-                    <span>{{detail.writer}}</span> 
-                    wrote
+                    <span>{{detail.writer}}</span> 님이
                     <span>"{{detail.content}}"</span>
-                    on 
-                    <span>{{detail.created_at}}</span>
+                    남기셨습니다.({{detail.created_at | date:"m/d"}})
                 </li>
             {% endfor %}
             </div>
@@ -82,15 +92,15 @@
         {% for cafe in no_reviews %}
             <div class="review-per-cafe-wrapper">
                 <ul>{{cafe.name}}</ul>
-                <li>There are no reviews for this cafe.</li>
+                <li>이 카페는 후기가 없습니다.</li>
             </div>
         {% endfor %}
         </article>
     </section>
     <section class="bu-accounts-wrapper">
-        <h3 class="bu-page-headers bu-accounts-header">Accounts Center</h3>
+        <h3 class="bu-page-headers bu-accounts-header">계정 센터</h3>
         <article class="pu-page-contents pu-accounts-contents">
-            <span>Control settings for your account can be accessed here.</span>
+            <span>프로필 설정을 관리하세요.</span>
         </article>
     </section>
 </section>

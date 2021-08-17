@@ -92,29 +92,13 @@ button{
     font-size: xx-large;
     text-shadow: 8px -25px 6px rgba(140, 140, 140,.6);
 }
-.search-form{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 180px;
-    transform: translate(-50%, -50%);
-}
-.search-form input{
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid rgb(176, 176, 176);
-    box-sizing: border-box;
-    box-shadow: 0 1px rgb(176, 176, 176);
-    padding-left: 10px;
-    padding-bottom: 5px;
-    outline: none;
-    width: 100%;
-    color: #434343;
-}
 .logged-in-user-status{
-    color:rgb(176, 176, 176);
+    color: rgb(176, 176, 176);;
     font-size: small;
     padding: 10px;
+}
+.logged-in-user-status span{
+    text-decoration: rgb(176, 176, 176) underline;
 }
 .mobile-menu{
     display: flex;
@@ -592,12 +576,12 @@ button{
     position: relative;
     width: 50%;
 }
-.edit-control{
+.pu-edit-control{
     position: relative;
     width: 100%;
     padding: 15px 0;
 }
-.user-profile-edit-form > .edit-control:nth-of-type(1) > label{
+.user-profile-edit-form > .pu-edit-control:nth-of-type(1) > label{
     position: absolute;
     transform: none;
     margin-left: 10px;
@@ -606,7 +590,7 @@ button{
     cursor: pointer;
     color: #d80a63;
 }
-.edit-control > label{
+.pu-edit-control > label{
     position: absolute;
     left: -20px;
     transform: translate(-100%);
@@ -615,14 +599,14 @@ button{
     font-weight: bold;
     word-wrap: normal;
 }
-.edit-control > input{
+.pu-edit-control > input{
     box-sizing: border-box;
     border: 1px solid rgb(176, 176, 176);
     border-radius: 3px;
     width: 100%;
     padding: 10px 0px 10px 10px;
 }
-.profile-edit-submit{
+.pu-edit-submit{
     background: #d80a63;
     text-decoration: none;
     box-sizing: border-box;
@@ -666,12 +650,12 @@ button{
     position: relative;
     width: 50%;
 }
-.edit-control{
+.pu-edit-control{
     position: relative;
     width: 100%;
     padding: 15px 0;
 }
-.edit-control > label{
+.pu-edit-control > label{
     position: absolute;
     left: -20px;
     transform: translate(-100%);
@@ -680,14 +664,14 @@ button{
     font-weight: bold;
     word-wrap: normal;
 }
-.edit-control > input{
+.pu-edit-control > input{
     box-sizing: border-box;
-    border: 1px solid rgb(176, 176, 176);
+    border:  1px solid rgb(176, 176, 176);
     border-radius: 3px;
     width: 100%;
     padding: 10px 0px 10px 10px;
 }
-.profile-edit-submit{
+.pu-edit-submit{
     background: #d80a63;
     text-decoration: none;
     box-sizing: border-box;
@@ -700,14 +684,77 @@ button{
     text-align: center;
     cursor: pointer;
 }
-.profile-edit-submit.disabled{
+.pu-edit-submit.disabled{
     pointer-events: none;
     background: #d80a63;
     opacity: .7;
 }
 
 /* 3rd tab: RESERVATIONS */
-
+.pu-reservations-contents{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 680px;
+    min-width: 520px;
+}
+.reservations-list{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    width: 100%;
+}
+.reservation-item-wrapper{
+    box-sizing: border-box;
+    margin: 20px 0;
+    width: 100%;
+    height: 230px;
+    border-radius: 10px;
+    position: relative;
+}
+.reservation-item-wrapper:hover{
+    background-color: rgba(176,176,176,.3);
+    border-radius: 10px;
+}
+.reservation-item-wrapper a{
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    height: 100%;
+}
+.reservation-item-wrapper img{
+    box-sizing: border-box;
+    width: 230px;
+    height: 230px;
+    border-radius: 10px;
+    z-index: -99;
+    object-fit: cover;
+    overflow-x: hidden;
+}
+.reservation-item-detail{
+    position: absolute;
+    margin-left: 20px;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.reservation-item-detail li{
+    box-sizing: border-box;
+    width: calc(100% - 270px);
+    padding: 3px;
+}
+.reservation-item-detail :nth-child(1){
+    font-size: large;
+    font-weight: bold;
+    border-bottom: 2px solid rgb(140,140,140);
+    padding-bottom: 5px;
+}
 
 /* 4th tab: BOOKMARKED CAFES */
 .pu-bookmarked-contents{
@@ -849,12 +896,97 @@ button{
 }
 
 /* 1st tab: BUSINESS PROFILE  */
-.bu-profile-contents{
+.bu-profile-content{
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 25px 20px;
 }
+
+.bu-profile-info-wrapper{
+    position: relative;
+    width: 50%;
+}
+.bu-profile-info-wrapper > span{
+    display: block;
+    font-size: small;
+    font-weight: bold;
+}
+.bu-profile-page-image{
+    position: absolute;
+    left: -20px;
+    transform: translate(-100%, -50%);
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba( 200, 200, 200, .3);
+}
+.bu-profile-page-image > .fa-crown{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.bu-profile-edit-form{
+    position: relative;
+    width: 50%;
+}
+.bu-edit-control{
+    position: relative;
+    width: 100%;
+    padding: 15px 0;
+}
+.bu-edit-control > label{
+    position: absolute;
+    left: -20px;
+    transform: translate(-100%);
+    padding: 10px;
+    font-size: small;
+    font-weight: bold;
+    word-wrap: normal;
+}
+.bu-edit-control > input{
+    box-sizing: border-box;
+    border: 1px solid rgb(176, 176, 176);
+    border-radius: 3px;
+    width: 100%;
+    padding: 10px 0px 10px 10px;
+}
+.bu-profile-edit-submit{
+    background: #d80a63;
+    text-decoration: none;
+    box-sizing: border-box;
+    color: #fff;
+    font-size: small;
+    border-radius: 3px;
+    border: 1px solid #d80a63;
+    width: 100%;
+    padding: 10px 10px 10px 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* 2nd tab: MANAGE CAFE */
 .bu-manage-content{
@@ -921,6 +1053,27 @@ button{
     border-bottom: 2px solid rgb(140,140,140);
     padding-bottom: 5px;
 }
+/* 3rd tab: REVIEWS/FEEDBACK */
+.review-per-cafe-wrapper{
+    margin: 0 0 20px 0 ;
+    border-radius: 5px;
+    border: 1px solid rgb(176,176,176); 
+}
+.review-per-cafe-wrapper ul{
+    font-size: medium;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: rgba(176,176,176,.3);
+    border-bottom: 1px solid rgb(176,176,176);
+}
+.review-contents{
+    padding: 20px;
+    list-style: none;
+    border-bottom: 1px solid rgb(176,176,176);
+}
+.review-contents span{
+    font-weight: bold;
+}
 
 /* BOTTOM LEFT: accounts information section */
 .bu-accounts-wrapper{
@@ -953,15 +1106,6 @@ button{
     padding: 20px 45px;
 }
 
-
-/* ----------------- BUedit.html-------------------- */
-
-
-
-
-
-
-
 /* ----------------- cafedetail.html-------------------- */
 /* SECTION 1/2 _BASIC CONTAINER for cafe header info */
 .cafe-basics-container{
@@ -982,7 +1126,7 @@ button{
     padding: 0 20px;
 }
 
-.share-save-wrapper a{
+.bookmark-wrapper a{
     text-decoration: none;
     color: black;
 }
@@ -1021,15 +1165,9 @@ button{
     margin-right: 10px;
     background-color: #fff;
 }
-.cafe-detail-nav li:hover{
-    background-color: rgba(176,176,176,.3);
-    box-shadow: 0 0 5px 3px rgba(176, 176, 176,0.3);
-}
 .cafe-detail-wrapper {
-    /* height: auto; */
-    /* height to be set to auto after styling */
     height: auto;
-    padding: 20px 5px;
+    padding: 20px 0px;
     display: flex;
     flex-direction: column;
 }
@@ -1046,12 +1184,28 @@ button{
     padding: 5px 0;
     margin-bottom: 5px;
 }
+
+dt{
+    color: red;
+}
+dd{
+    color: blue;
+}
 .facility-items-wrapper{
     display: flex;
 }
+.facility-items{
+    box-sizing: border-box;
+    object-fit: contain;
+    overflow: hidden;
+}
+.facility-items i{
+    width: 35px;
+    height: 35px;
+}
 .facility-items img{
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
 }
 
 /* GALLERY WRAPPER */
@@ -1061,24 +1215,61 @@ button{
     flex-wrap: wrap;
 }
 .cafe-images{
-    width: 250px;
+    width: 340px;
+    height: 340px;
+    border-radius: 5px;
+    object-fit: cover;
 
 }
 
 /* MAP/LOCATION WRAPPER */
 #map{
-    width: 500px;
+    width: 680px;
     height: 400px;
+    border-radius: 5px;
 }
 
 /* REVIEW WRAPPER */
+.review-contents-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+}
+.user-review-wrapper{
+    padding: 10px 0;
+    width: 340px;
+    height: auto;
+    position: relative;
+}
+.user-review-wrapper > img{
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+}
+.user-review-profile-info{
+    font-size: smaller;
+    height: 35px;
+    position: absolute;
+    top: 10px;
+    left: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+.user-review-profile-info > span:nth-of-type(1){
+    font-size: small;
+    font-weight: bolder;
+} 
+.user-review-content{
+    margin: 10px 0 0 0;
+}
 
 /* RESERVATION BOX */
 .cafe-booking-wrapper{    
     position: sticky;
     top: 0;
     width: 250px;
-    height: 350px;
+    height: 100%;
     border: 1px solid rgb(176, 176, 176);
     border-radius: 10px 10px 0 0;
 }
@@ -1093,10 +1284,32 @@ button{
     display: flex;
     flex-direction: column;
     padding: 5px;
+    color:rgb(140, 140, 140);
 }
-
-
-/* ----------------- cafeedit.html-------------------- */
+.booking-input-control > label{
+    display: inline-block;
+    padding: 3px;
+    margin-bottom: 5px;
+}
+.booking-input-control > input{
+    border: 1px solid rgb(204, 204, 204);
+    padding: 10px;
+    border-radius: 3px;
+}
+.resev_bt{
+    background: #d80a63;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: #fff;
+    font-size: small;
+    border-radius: 5px;
+    padding: 10px 5px;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    margin-top: 15px;
+    cursor: pointer;
+}
 
 
 /* ----------------- cafeupload.html-------------------- */
@@ -1129,7 +1342,8 @@ button{
     display: flex;
     flex-direction: column;
 } 
-.cafe-info-input-wrapper > label{
+.cafe-info-input-wrapper > label,
+.cafe-info-input-wrapper legend{
     font-weight: bold;
 }
 .cafe-info-input-wrapper input{
@@ -1159,4 +1373,75 @@ fieldset > legend {
     pointer-events: none;
     background: #d80a63;
     opacity: .7;
+}
+
+/* ----------------- cafelist.html-------------------- */
+.cafe-list-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cafe-items{
+    position: relative;
+    margin: 20px;
+}
+.cafe-display-info{
+    position: absolute;
+    padding: 10px 0;
+    width: 100%;
+    top: 50%;
+    text-align: center;
+    background-color: rgba(230, 230, 230, .8);
+}
+.cafe-display-info > li{
+    font-size: large;
+    font-weight: bold;
+    margin: 5px;
+}
+.cafe-items > a {
+    width: 900px;
+    height: 600px;
+    display: block;
+    overflow: hidden;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+    box-shadow: 0 3px 5px rgba(176, 176, 176, .7);
+}
+.cafe-items > a:hover{
+    box-shadow: 0 10px 10px rgba(139, 62, 62, 0.7);
+}
+.cafe-items > a > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+}
+
+/* ----------------- footer.html-------------------- */
+
+footer{
+    display: flex;
+    margin: 0 auto; 
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 0 0 0;
+}
+footer a{
+    text-decoration: none;
+    color: #000;
+}
+address{
+    padding: 10px;
+}
+address > div{
+    padding-bottom: 10px;
+    text-align: center;
+}
+address > a{
+    padding: 10px;
+}
+footer article{
+    padding: 10px;
+    bottom: 0;
 }

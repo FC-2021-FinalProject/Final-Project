@@ -1,12 +1,12 @@
 # 프로젝트 소개
 
-<img width="300" alt="스크린샷 2021-08-15 오후 10 03 39" src="https://user-images.githubusercontent.com/77820288/129480838-a4d81c48-eda9-4e13-be70-4235f5cae023.png">
+<img width="1000" alt="스크린샷 2021-08-15 오후 10 03 39" src="https://user-images.githubusercontent.com/77820288/129480838-a4d81c48-eda9-4e13-be70-4235f5cae023.png">
 
-<img width="300" alt="스크린샷 2021-08-15 오후 10 03 57" src="https://user-images.githubusercontent.com/77820288/129480865-1f673d1f-94dd-4e7c-a898-e3fcf2e6feb9.png">
+<img width="1008" alt="스크린샷 2021-08-15 오후 10 03 57" src="https://user-images.githubusercontent.com/77820288/129480865-1f673d1f-94dd-4e7c-a898-e3fcf2e6feb9.png">
 
-<img width="300" alt="스크린샷 2021-08-15 오후 10 04 35" src="https://user-images.githubusercontent.com/77820288/129480870-7f4580de-1b32-456a-8aa8-903874c1d51e.png">
+<img width="1006" alt="스크린샷 2021-08-15 오후 10 04 35" src="https://user-images.githubusercontent.com/77820288/129480870-7f4580de-1b32-456a-8aa8-903874c1d51e.png">
 
-<img width="300" alt="스크린샷 2021-08-15 오후 10 13 34" src="https://user-images.githubusercontent.com/77820288/129480876-176a214f-1af5-4f44-9b8c-beca8c242824.png">
+<img width="663" alt="스크린샷 2021-08-15 오후 10 13 34" src="https://user-images.githubusercontent.com/77820288/129480876-176a214f-1af5-4f44-9b8c-beca8c242824.png">
 
 
 ---

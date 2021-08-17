@@ -55,7 +55,6 @@ class StudyCafe(models.Model) :
     wifi = models.BooleanField(default=False)
     printer = models.BooleanField(default=False)
     security = models.BooleanField(default=False)
-    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -101,8 +100,10 @@ class Review(models.Model):
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='review')
     writer = models.ForeignKey(PersonalUser, on_delete=models.SET_NULL, related_name='writer', null=True, blank=True)
     content = models.TextField()
-    # created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
 
+    def __str__(self) :
+        return (f"{self.writer} 의 {self.studycafe} 리뷰")
 
 class BookmarkedCafe(models.Model):
     studycafe = models.OneToOneField(StudyCafe, on_delete=models.CASCADE, related_name='bookmark', null=True, blank=True)

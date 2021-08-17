@@ -1,19 +1,24 @@
 {% extends 'base.html' %}
 {% block head %}
-<title>Cafes | Dobby is Park</title>
+<title>카페 | Dobby is Park</title>
 {% endblock head %}
 {% block content %}
 {% include 'header-nav.html' %}
-<main class="main-container">
-    <ul><h1>Cafe List</h1></ul>
-    <h2>해당하는 지역의 리스트</h2>
+<main class="page-wrapper cafe-list-wrapper">
+    <h1 class="visually-hidden">Cafe List</h1>
+    <article class="cafe-list">
     {% for cafelist in cafelists %}
-    <li>카페 이름 : {{cafelist.name}}</li>
-    <li>시간 당 가격 : {{cafelist.price_per_hour}}</li>
-    
-    <a href="{% url 'cafedetail' cafelist.pk %}">
-        <img src="{{cafelist.representative_img}}" width="250px;" alt="{{cafelist.name}}">
-    </a>
+    <ul class="cafe-items">
+        <a href="{% url 'cafedetail' cafelist.pk %}">
+            <ul class="cafe-display-info">
+                <li>카페 이름 : {{cafelist.name}}</li> 
+                <li>시간 당 가격 : {{cafelist.price_per_hour}}원</li>
+                <li>클릭하세요</li>
+            </ul>
+            <img src="{{cafelist.representative_img}}" alt="{{cafelist.name}}">
+        </a>
+    </ul>
     {% endfor %}
+    </article>
 </main>
 {% endblock content%}

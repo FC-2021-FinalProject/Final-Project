@@ -32,7 +32,7 @@ ERROR_MSG = {
     'PASSWORD_NOMATCH': '비밀번호가 일치하지 않습니다'
 }
 SUCCESS_MSG = {
-    'PROFILE_UPDATED': 'Profile updated successfully.',
+    'PROFILE_UPDATED': '프로필이 변경되었습니다',
 }
 
 # S3 USING BOTO3
@@ -277,7 +277,7 @@ class PersonalUserDetailView(generic.DeleteView) :
 
     def get(self, request, *args, **kwargs) :
         puser = PersonalUser.objects.get(user=request.user)
-        reserv_user = Reservations.objects.filter(personal_user=puser)
+        reserv_user = Reservations.objects.filter(personal_user=puser).order_by('-date')
         bookmarked = puser.bookmarked_cafe.all()
         context = {'puser': puser, 'bookmarked': bookmarked, 'reserv':reserv_user}
         return render(request, 'PUprofile.html', context)

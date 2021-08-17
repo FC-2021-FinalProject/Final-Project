@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block head%}
-<title>Cafe Details | Dobby is Park</title>
+<title>카페 상세 | Dobby is Park</title>
 {% load static %}
 <link rel="stylesheet" href="{% static 'calendar.css' %}">
 <script defer type="text/javascript" src="../static/src/calendar.js"></script>
@@ -17,10 +17,7 @@
                 <span>{{cafe.address}}</span>
             </address>
         </article>
-        <article class="share-save-wrapper">
-            <a href="#">
-                <i class="fas fa-share-alt fa-lg"></i>
-            </a>
+        <article class="bookmark-wrapper">
             {% if request.user.personal_user %}
             <a href="{% url 'bookmark' cafe.pk %}">
                 {% if is_bookmarked %}
@@ -50,11 +47,20 @@
                         <h4>이용 시간</h4>
                         <dl>
                             <dt>평일:</dt>
-                            <dd>{{cafe.business_hour_start}} ~ {{cafe.business_hour_end}}</dd>
+                            <dd>
+                                <time datetime="{{cafe.business_hour_start}}">{{cafe.business_hour_start}}</time> ~ 
+                                <time datetime="{{cafe.business_hour_end}}">{{cafe.business_hour_end}}</time>
+                            </dd>
                             <dt>토요일:</dt>
-                            <dd>{{cafe.business_hour_start}} ~ {{cafe.business_hour_end}}</dd>
+                            <dd>
+                                <time datetime="{{cafe.business_hour_start}}">{{cafe.business_hour_start}}</time> ~ 
+                                <time datetime="{{cafe.business_hour_end}}">{{cafe.business_hour_end}}</time>
+                            </dd>
                             <dt>일요일:</dt>
-                            <dd>{{cafe.business_hour_start}} ~ {{cafe.business_hour_end}}</dd>
+                            <dd>
+                                <time datetime="{{cafe.business_hour_start}}">{{cafe.business_hour_start}}</time> ~ 
+                                <time datetime="{{cafe.business_hour_end}}">{{cafe.business_hour_end}}</time>
+                            </dd>
                             <dt>휴무일:</dt>
                             <dd>없음</dd>
                         </dl>
@@ -64,22 +70,22 @@
                         <ul class="facility-items-wrapper">
                             {% if cafe.parking %}
                             <li class="facility-items">
-                                <i class="fas fa-parking"></i>
+                                <i class="fas fa-parking fa-2x"></i>
                             </li>
                             {% endif %}
                             {% if cafe.drinks %}
                             <li class="facility-items">
-                                <i class="fas fa-coffee"></i>
+                                <i class="fas fa-coffee fa-2x"></i>
                             </li>
                             {% endif %}
                             {% if cafe.wifi %}
                             <li class="facility-items">
-                                <i class="fas fa-wifi"></i>
+                                <i class="fas fa-wifi fa-2x"></i>
                             </li>
                             {% endif %}
                             {% if cafe.printer %}
                             <li class="facility-items">
-                                <i class="fas fa-print"></i>
+                                <i class="fas fa-print fa-2x"></i>
                             </li>
                             {% endif %}
                             {% if cafe.security %}
@@ -102,33 +108,35 @@
 
                 <article class="cafe-detail-wrapper location-wrapper">
                     <h3>위치</h3>
-                    <p>Google map of study cafe location to be inserted</p>
                     <div id="map"></div> 
                 </article>
 
                 <article class="cafe-detail-wrapper review-wrapper">
                     <h3>후기/별점</h3>
-                    {% for review in reviews %}
-                    <div class="user-review-wrapper">
-                        <!-- Need to check one s3 for personal user profile picture is set up -->
-                            <div> {{review.write.avatar}} </div>
-                            <div> {{review.writer.name}} </div>
-                            <div> {{review.created_at}} </div>
-                            <div> {{review.content}} </div>
-                    </div>
-                    {% empty %}
-                    <div>Be the first to write a review!</div>
-                    {% endfor %}
-                    <div>
-                        {% if is_reserv %}
-                        <form action="{% url 'review' cafe.pk%}" method="POST">
-                            {% csrf_token %}
-                            <label class="visually-hidden" for="review">Review:</label>
-                            <input type="text" id="review" name="review" placeholder="Share your experience here with other users!">
-                            <button>Share review</button>
-                        </form>
-                        {% endif %}
-                    </div>
+                    <article class="review-contents-wrapper">
+                        {% for review in reviews %}
+                        <div class="user-review-wrapper">
+                            <img src="{{review.writer.avatar}}" alt="Profile image of review writer">
+                            <div class="user-review-profile-info">
+                                <span>{{review.writer.name}}</span>
+                                <span>{{review.created_at}}</span>
+                            </div>
+                            <div class="user-review-content">"{{review.content}}"</div>
+                        </div>
+                        {% empty %}
+                        <div>Be the first to write a review!</div>
+                        {% endfor %}
+                        <div>
+                            <!-- {% if is_reserv %} -->
+                            <form action="{% url 'review' cafe.pk%}" method="POST">
+                                {% csrf_token %}
+                                <label class="visually-hidden" for="review">Review:</label>
+                                <input type="text" id="review" name="review" placeholder="Share your experience here with other users!">
+                                <button>Share review</button>
+                            </form>
+                            <!-- {% endif %} -->
+                        </div>
+                    </article>
                 </article>
                 
             </section>
@@ -141,16 +149,23 @@
         <div>
             <form class="booking-form-wrapper" action="{% url 'reservation' cafe.pk %}" method="POST">
                 {% csrf_token %}
-                <div class="date-picker">
-                    <input class="date-picker-selector" type="text" name="date" placeholder="Select date">
+                <div class="booking-input-control date-picker">
+                    <label for="date">예약 날짜:</label>
+                    <input class="date-picker-selector" type="text" name="date" placeholder="날짜를 선택하세요">
                     <div class="calendar"></div>
                 </div>
-                <label for="start_time">Start time:</label>
-                <input type="text" id="start_time" name="start_time" placeholder="시작 시간">
-                <label for="time">Hours needed:</label>
-                <input type="text" id="time" name="time" placeholder="이용 시간">
-                <label for="seat">Choose seat:</label>
-                <input type="text" id="seat" name="seat" placeholder="좌석을 선택하세요">
+                <div class="booking-input-control">
+                    <label for="start_time">시작 시간:</label>
+                    <input type="text" id="start_time" name="start_time" placeholder="시작 시간을 입력하세요">
+                </div>
+                <div class="booking-input-control">
+                    <label for="time">필요한 시간:</label>
+                    <input type="text" id="time" name="time" placeholder="이용 시간을 입력하세요">
+                </div>
+                <div class="booking-input-control">
+                    <label for="seat">좌석 수:</label>
+                    <input type="text" id="seat" name="seat" placeholder="좌석을 선택하세요">
+                </div>
                 <button class="resev_bt" type="submit" onclick="return confirm('예약하시겠습니까?');">예약하기</button>
             </form>
         </div>

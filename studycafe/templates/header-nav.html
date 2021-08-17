@@ -2,27 +2,20 @@
 <header class="header-container">
     <section class="page-wrapper header-wrapper">
         <h1><a href="{% url 'index' %}">dobby is park</a></h1>
-        <form class="search-form">
-            <fieldset>
-                <legend class="visually-hidden">Search form</legend>
-                <div class="search-form">
-                    <label for="searchInput" class="visually-hidden">search input</label>
-                    <input name="searchInput" id="searchInput" type="text" placeholder="search here for freedom"/>
-                </div>
-            </fieldset>
-        </form>
         <section class="mobile-menu">
             <div class="logged-in-user-status">
                 {% if user.business_user %}
-                Logged in as {{user.business_user.name}}
+                <span>{{user.business_user.name}}</span>님이 로그인 중
                 {% elif user.personal_user %}
-                Logged in as {{user.personal_user.name}}
+                <span>{{user.personal_user.name}}</span>님이 로그인 중
                 {% endif %}
             </div>
             <button id="mobile-menu">
                 <i class="fas fa-bars"></i>
                 {% if user.personal_user.avatar %}
                 <img class="profile-photo" id="mobile-menu-profile-img" src="{{request.user.personal_user.avatar}}" alt="profile image">
+                {% elif user.business_user %}
+                <i class="fas fa-crown"></i>
                 {% else %}
                 <img class="profile-photo" id="mobile-menu-profile-img" src="https://django-s3-cj.s3.ap-northeast-2.amazonaws.com/defaultProfileImage.jpg" alt="profile image">
                 {% endif %}
@@ -30,16 +23,15 @@
             <div class="header-nav-menu-container">
                 <ul class="header-nav-menu-list">
                     {% if user.business_user %}
-                        <li><a href="{% url 'BUprofile' user.pk %}" role="button">My Page</a></li>
-                        <li><a href="{% url 'cafeupload' user.pk %}">Host your Cafe</a></li>
-                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                        <li><a href="{% url 'BUprofile' user.pk %}" role="button">프로필</a></li>
+                        <li><a href="{% url 'cafeupload' user.pk %}">카페 등록하기</a></li>
+                        <li><a href="{% url 'logout' %}">로그아웃</a></li>
                     {% elif user.personal_user %}
-                        <li><a href="{% url 'PUprofile' user.username %}" role="button">My Page</a></li>
-                        <li><a href="#" role="button">Reservations</a></li>
+                        <li><a href="{% url 'PUprofile' user.username %}" role="button">프로필</a></li>
                         {% if request.user.personal_user.unique_id %}
-                        <li><a href="{% url 'kakao_logout' %}">Logout</a></li>
+                        <li><a href="{% url 'kakao_logout' %}">로그아웃</a></li>
                         {% else %}
-                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                        <li><a href="{% url 'logout' %}">로그아웃</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -51,7 +43,7 @@
 <header class="header-container">
     <section class="page-wrapper header-wrapper">
         <h1><a href="{% url 'index' %}">dobby is park</a></h1>
-        <form class="search-form">
+        <!-- <form class="search-form">
             <fieldset>
                 <legend class="visually-hidden">Search form</legend>
                 <div class="search-form">
@@ -59,7 +51,7 @@
                     <input name="searchInput" id="searchInput" type="text" placeholder="search here for freedom"/>
                 </div>
             </fieldset>
-        </form>
+        </form> -->
 
         <section class="mobile-menu">
             <button id="mobile-menu">
@@ -68,9 +60,9 @@
             </button>
             <div class="header-nav-menu-container">
                 <ul class="header-nav-menu-list">
-                    <li><a href="{% url 'personal_signup' %}" role="button" class="popup-button">User Signup</a></li>
-                    <li><a href="{% url 'business_signup' %}" role="button" class="popup-button">Business Signup</a></li>
-                    <li><a href="{% url 'login' %}" role="button" class="popup-button">Login</a></li>
+                    <li><a href="{% url 'personal_signup' %}" role="button" class="popup-button">개인 회원가입</a></li>
+                    <li><a href="{% url 'business_signup' %}" role="button" class="popup-button">기업 회원가입</a></li>
+                    <li><a href="{% url 'login' %}" role="button" class="popup-button">로그인</a></li>
                 </ul>
             </div>
         </section>

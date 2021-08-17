@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block head%}
-<title>Home | Dobby is Park</title>
+<title>홈 | Dobby is Park</title>
 {% endblock head%}
 {% block content %}
 {% include 'header-nav.html' %}
 <main>
     <section class="visual-wrapper">
-        <h2 class="visually-hidden" >Doby is Park Welcome Image</h2>
+        <h2 class="visually-hidden">Doby is Park 배너 이미지</h2>
     </section>
     <section class="page-wrapper index-page-wrapper recommend-cafe-wrapper">
-        <h2>Recommended just for you</h2>
+        <h2>추천 카페</h2>
         <ul class="index-cafe-list recommend-cafe-list">
             {% for cafelist in cafelists %}
             <li class="cafe-item-wrapper">
@@ -23,20 +23,6 @@
             {% endfor %}
         </ul>
     </section>
-    <section class="page-wrapper index-page-wrapper nearby-cafe-wrapper">
-        <h2>Explore nearby</h2>
-
-
-
-
-    </section>
-    <section class="page-wrapper index-page-wrapper visited-cafe-wrapper">
-        <h2>Visited Study Cafes</h2>
-
-
-
-
-    </section>
 </main>
-
+{% include 'footer.html' %}
 {% endblock content %}

@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $nameInput = document.querySelector('#profile-name')
   $usernameInput = document.querySelector('#profile-username')
   $emailInput = document.querySelector('#profile-email')
-  $submitButton = document.querySelector('.profile-edit-submit')
+  $submitButton = document.querySelector('.pu-edit-submit')
 
   $profileInput.addEventListener('change', toggleSubmit);
   $nameInput.addEventListener('change', toggleSubmit);

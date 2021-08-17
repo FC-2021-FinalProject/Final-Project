@@ -6,6 +6,7 @@ from datetime import date
 # Core Django Imports
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.expressions import F
 from django.db.models.fields import BooleanField
 
 
@@ -56,6 +57,8 @@ class StudyCafe(models.Model) :
     printer = models.BooleanField(default=False)
     security = models.BooleanField(default=False)
 
+    is_deleted = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name
         
@@ -100,7 +103,7 @@ class Review(models.Model):
     studycafe = models.ForeignKey(StudyCafe, on_delete=models.CASCADE, related_name='review')
     writer = models.ForeignKey(PersonalUser, on_delete=models.SET_NULL, related_name='writer', null=True, blank=True)
     content = models.TextField()
-    created_at = models.DateField(auto_now_add=True)
+    # created_at = models.DateField(auto_now_add=True)
 
     def __str__(self) :
         return (f"{self.writer} 의 {self.studycafe} 리뷰")

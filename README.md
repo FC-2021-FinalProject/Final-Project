@@ -1,13 +1,29 @@
 # 프로젝트 소개
 
-<img width="1000" alt="스크린샷 2021-08-15 오후 10 03 39" src="https://user-images.githubusercontent.com/77820288/129480838-a4d81c48-eda9-4e13-be70-4235f5cae023.png">
+<img width="1395" alt="스크린샷 2021-08-17 오후 2 04 31" src="https://user-images.githubusercontent.com/77820288/129667335-44416785-d910-4d24-86e1-9c77e5507f24.png">
+
 
 <img width="1008" alt="스크린샷 2021-08-15 오후 10 03 57" src="https://user-images.githubusercontent.com/77820288/129480865-1f673d1f-94dd-4e7c-a898-e3fcf2e6feb9.png">
 
 <img width="1006" alt="스크린샷 2021-08-15 오후 10 04 35" src="https://user-images.githubusercontent.com/77820288/129480870-7f4580de-1b32-456a-8aa8-903874c1d51e.png">
 
-<img width="663" alt="스크린샷 2021-08-15 오후 10 13 34" src="https://user-images.githubusercontent.com/77820288/129480876-176a214f-1af5-4f44-9b8c-beca8c242824.png">
+<img width="510" alt="스크린샷 2021-08-17 오후 2 14 28" src="https://user-images.githubusercontent.com/77820288/129667449-18bbd8a4-7bad-41e7-98c9-d4f6b7a6cfd1.png">
 
+<img width="739" alt="스크린샷 2021-08-17 오후 2 05 34" src="https://user-images.githubusercontent.com/77820288/129667475-461c3c70-378a-41b8-8c7e-331ceaddc254.png">
+
+<img width="711" alt="스크린샷 2021-08-17 오후 2 05 41" src="https://user-images.githubusercontent.com/77820288/129667501-918e524f-143b-4ca1-a4b5-f45025eb9c43.png">
+
+<img width="713" alt="스크린샷 2021-08-17 오후 2 05 48" src="https://user-images.githubusercontent.com/77820288/129667526-556037c8-3871-436d-b4e6-3505c6bcb0a4.png">
+
+<img width="714" alt="스크린샷 2021-08-17 오후 2 05 55" src="https://user-images.githubusercontent.com/77820288/129667541-cc6a5caa-49ae-4342-8d42-e0221c0ce99b.png">
+
+<img width="465" alt="스크린샷 2021-08-17 오후 2 06 38" src="https://user-images.githubusercontent.com/77820288/129667574-1bd6ef21-9c2d-49e0-a6c6-a93341c30fe6.png">
+
+<img width="762" alt="스크린샷 2021-08-17 오후 2 11 22" src="https://user-images.githubusercontent.com/77820288/129667662-24d443b9-31e6-438a-b885-4f776e20cec8.png">
+
+<img width="503" alt="스크린샷 2021-08-17 오후 2 12 14" src="https://user-images.githubusercontent.com/77820288/129667697-3e4e0956-41c6-4d42-81f3-ce6653386c5e.png">
+
+<img width="756" alt="스크린샷 2021-08-17 오후 2 11 36" src="https://user-images.githubusercontent.com/77820288/129667745-0f426a06-8943-4fc6-818c-11d45125d1b6.png">
 
 ---
 

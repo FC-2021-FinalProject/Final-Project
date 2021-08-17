@@ -113,6 +113,14 @@
 
                 <article class="cafe-detail-wrapper review-wrapper">
                     <h3>후기/별점</h3>
+                    {% if is_reserv %}
+                            <form action="{% url 'review' cafe.pk%}" method="POST">
+                                {% csrf_token %}
+                                <label class="visually-hidden" for="review">Review:</label>
+                                <input type="text" id="review" name="review" placeholder="Share your experience here with other users!">
+                                <button>Share review</button>
+                            </form>
+                            {% endif %}
                     <article class="review-contents-wrapper">
                         {% for review in reviews %}
                         <div class="user-review-wrapper">
@@ -127,14 +135,6 @@
                         <div>Be the first to write a review!</div>
                         {% endfor %}
                         <div>
-                            <!-- {% if is_reserv %} -->
-                            <form action="{% url 'review' cafe.pk%}" method="POST">
-                                {% csrf_token %}
-                                <label class="visually-hidden" for="review">Review:</label>
-                                <input type="text" id="review" name="review" placeholder="Share your experience here with other users!">
-                                <button>Share review</button>
-                            </form>
-                            <!-- {% endif %} -->
                         </div>
                     </article>
                 </article>

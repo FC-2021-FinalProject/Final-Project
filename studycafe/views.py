@@ -484,7 +484,7 @@ class CafeDetailView(generic.DetailView) :
         except :
             pass
 
-        context = {'cafe':cafe, 'reviews':reviews, 'cafe_img':cafe_img, 'is_bookmarked':is_bookmarked}
+        context = {'cafe':cafe, 'reviews':reviews, 'cafe_img':cafe_img, 'is_bookmarked':is_bookmarked, 'is_reserv':is_reserv}
 
         return render(request ,'cafedetail.html', context)
 
@@ -590,7 +590,7 @@ class ReviewView(generic.View) :
     def post(self, request, *args, **kwargs) :
         content = request.POST['review']
         studycafe = StudyCafe.objects.get(pk=kwargs['pk'])
-        user = PersonalUser.objects.get(name=User.username)
+        # user = PersonalUser.objects.get(name=User.username)
 
         Review.objects.create(
             studycafe = studycafe,

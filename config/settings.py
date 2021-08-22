@@ -6,11 +6,10 @@ env = environ.Env()
 environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 SECRET_KEY=env('SECRET_KEY')
 
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = False
+ALLOWED_HOSTS = ['0.0.0.0', 'production']
 
 
 # Application definition
@@ -110,10 +109,15 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
+ROOT_DIR = os.path.dirname(BASE_DIR)
 
-STATIC_URL = '/static/'
-STATIC_ROOT = './static'
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+STATIC_URL = '/home/ubuntu/Final-Project/static/'
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 
 # Default primary key field type

@@ -468,23 +468,24 @@ class CafeUploadView(View) :
         return redirect('cafelist')
 
 class CafeDetailView(generic.DetailView) :
-
     def get(self, request, *args, **kwargs) :
         cafe = get_object_or_404(StudyCafe, pk=kwargs['pk'])
         cafe_img = CafeImage.objects.filter(cafe=cafe)
         reviews = Review.objects.filter(studycafe=cafe)
         user = User.objects.get(username=request.user)
+        
 
         is_bookmarked = False
+        is_puser = False
+        is_reserv = False
         try  :
-            puser = PersonalUser.objects.get(user=user)
-            is_reserv = Reservations.objects.filter(studycafe=cafe, personal_user=puser)
+            if (request.user.personal_user) in PersonalUser.objects.all() :
+                is_puser = True
             if (request.user.personal_user in cafe.bookmark.users.all()):
                 is_bookmarked = True
         except :
             pass
-
-        context = {'cafe':cafe, 'reviews':reviews, 'cafe_img':cafe_img, 'is_bookmarked':is_bookmarked, 'is_reserv':is_reserv}
+        context = {'cafe':cafe, 'reviews':reviews, 'cafe_img':cafe_img, 'is_bookmarked':is_bookmarked, 'is_puser':is_puser}
 
         return render(request ,'cafedetail.html', context)
 

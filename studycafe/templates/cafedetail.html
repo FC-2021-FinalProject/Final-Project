@@ -3,11 +3,11 @@
 <title>카페 상세 | Dobby is Park</title>
 {% load static %}
 <link rel="stylesheet" href="{% static 'calendar.css' %}">
-<script defer type="text/javascript" src="../static/src/calendar.js"></script>
+<script defer type="text/javascript" src="{% static '/src/calendar.js' %}"></script>
+<script defer type="text/javascript" src="{% static '/src/reservation.js' %}"></script>
 {% endblock head %}
 {% block content %}
 {% include 'header-nav.html' %}
-
 <section class="page-wrapper cafedetail-page-wrapper">
     <h2 class="visually-hidden">{{cafe.name}} Detail Page</h2>
     <section class="cafe-basics-container">
@@ -113,14 +113,14 @@
 
                 <article class="cafe-detail-wrapper review-wrapper">
                     <h3>후기/별점</h3>
-                    {% if is_reserv %}
+                    {% if is_puser %}
                             <form action="{% url 'review' cafe.pk%}" method="POST">
                                 {% csrf_token %}
                                 <label class="visually-hidden" for="review">Review:</label>
                                 <input type="text" id="review" name="review" placeholder="Share your experience here with other users!">
                                 <button>Share review</button>
                             </form>
-                            {% endif %}
+                    {% endif %}
                     <article class="review-contents-wrapper">
                         {% for review in reviews %}
                         <div class="user-review-wrapper">
@@ -142,9 +142,8 @@
             </section>
         
         </article>
-
-
         <article class="cafe-booking-wrapper">
+        {% if is_puser %}
         <h3>예약하기</h3>
         <div>
             <form class="booking-form-wrapper" action="{% url 'reservation' cafe.pk %}" method="POST">
@@ -156,20 +155,62 @@
                 </div>
                 <div class="booking-input-control">
                     <label for="start_time">시작 시간:</label>
-                    <input type="text" id="start_time" name="start_time" placeholder="시작 시간을 입력하세요">
+                    <select name="start_time">
+                        <option value='' selected>-- 선택 --</option>
+                        <option value='9'>9시</option>
+                        <option value='10'>10시</option>
+                        <option value='11'>11시</option>
+                        <option value='12'>12시</option>
+                        <option value='13'>13시</option>
+                        <option value='14'>14시</option>
+                        <option value='15'>15시</option>
+                        <option value='16'>16시</option>
+                        <option value='17'>17시</option>
+                        <option value='18'>18시</option>
+                        <option value='19'>19시</option>
+                        <option value='20'>20시</option>
+                        <option value='21'>21시</option>
+                        <option value='22'>22시</option>
+                      </select>
                 </div>
                 <div class="booking-input-control">
-                    <label for="time">필요한 시간:</label>
-                    <input type="text" id="time" name="time" placeholder="이용 시간을 입력하세요">
+                    <label for="time">이용 시간:</label>
+                    <select name="time">
+                        <option value='' selected>-- 선택 --</option>
+                        <option value='2'>2시간</option>
+                        <option value='3'>3시간</option>
+                        <option value='4'>4시간</option>
+                        <option value='5'>5시간</option>
+                        <option value='6'>6시간</option>
+                        <option value='7'>7시간</option>
+                        <option value='8'>8시간</option>
+                        <option value='9'>9시간</option>
+                        <option value='10'>10시간</option>
+                        <option value='11'>11시간</option>
+                        <option value='12'>12시간</option>
+                      </select>
                 </div>
                 <div class="booking-input-control">
-                    <label for="seat">좌석 수:</label>
-                    <input type="text" id="seat" name="seat" placeholder="좌석을 선택하세요">
+                    <label for="seat">좌석 번호:</label>
+                    <select name="seat">
+                        <option value='' selected>-- 선택 --</option>
+                        <option value='1'>1번 좌석</option>
+                        <option value='2'>2번 좌석</option>
+                        <option value='3'>3번 좌석</option>
+                        <option value='4'>4번 좌석</option>
+                        <option value='5'>5번 좌석</option>
+                        <option value='6'>6번 좌석</option>
+                        <option value='7'>7번 좌석</option>
+                        <option value='8'>8번 좌석</option>
+                        <option value='9'>9번 좌석</option>
+                        <option value='10'>10번 좌석</option>
+                    </select>
                 </div>
                 <button class="resev_bt" type="submit" onclick="return confirm('예약하시겠습니까?');">예약하기</button>
             </form>
         </div>
-        </article>
+        {% endif %}
+    </article>
     </section> 
 </section>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c83c94a17ffac06dca220c2b969e1980"></script> 

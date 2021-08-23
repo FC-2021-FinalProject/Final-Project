@@ -8,8 +8,8 @@ environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY=env('SECRET_KEY')
 
-DEBUG = False
-ALLOWED_HOSTS = ['0.0.0.0', 'production']
+DEBUG = True
+ALLOWED_HOSTS = ['0.0.0.0', 'production','127.0.0.1']
 
 
 # Application definition

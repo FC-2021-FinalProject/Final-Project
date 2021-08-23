@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load static %}
 {% block head %}
 <title>비지니스 프로필 | Dobby is Park</title>
 <!-- javascript link -->
-<script defer src="../static/src/bu_profile.js"></script>
+<script defer src="{% static '/src/bu_profile.js' %}"></script>
 {% endblock head%}
 {% block content %}
 {% include 'header-nav.html' %}

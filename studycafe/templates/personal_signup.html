@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load static %}
 {% load static %}
 {% block head %}
 <title>회원가입 | Dobby is Park</title>
@@ -43,9 +43,9 @@
                 <i class="fas fa-comment mr-2"></i>
                 Login with Kakao Account
             </a>
-            <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
+            <!-- <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
                 <i class="fab fa-google"></i>
-                Login with Google Account
+                Login with Google Account -->
             </a>
         </article>
     </section>

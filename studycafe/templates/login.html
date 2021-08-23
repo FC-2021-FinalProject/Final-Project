@@ -5,7 +5,7 @@
 {% load socialaccount %}
 {% providers_media_js %}
 <!-- javascript link -->
-<script defer src="../static/src/login.js"></script>
+<script defer src="{% static '/src/login.js' %}"></script>
 {% endblock head %}
 
 {% block content %}
@@ -44,9 +44,9 @@
                 <i class="fas fa-comment mr-2"></i>
                 Login with Kakao Account
             </a>
-            <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
+            <!-- <a href="{% provider_login_url 'google' %}" class="social-login-wrapper">
                 <i class="fab fa-google"></i>
-                Login with Google Account
+                Login with Google Account -->
             </a>
         </article>
     </section>
